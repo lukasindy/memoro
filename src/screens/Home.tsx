@@ -77,20 +77,6 @@ export function Home({ data, go }: ScreenProps) {
           </Pressable>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`Inventar${data.boosters ? `, ${data.boosters} Booster bereit` : ''}`}
-            onPress={() => go({ name: 'inventory' })}
-            hitSlop={8}
-            style={({ pressed }) => ({ width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: t.surface, borderWidth: 1, borderColor: t.line, opacity: pressed ? 0.8 : 1 })}
-          >
-            <Ionicons name="bag-handle-outline" size={20} color={t.ink} />
-            {data.boosters > 0 && (
-              <View style={{ position: 'absolute', top: -3, right: -3, minWidth: 18, height: 18, borderRadius: 9, backgroundColor: '#E8742C', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 }}>
-                <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: '900' }}>{data.boosters}</Text>
-              </View>
-            )}
-          </Pressable>
-          <Pressable
-            accessibilityRole="button"
             accessibilityLabel="Einstellungen"
             onPress={() => go({ name: 'settings' })}
             hitSlop={8}
@@ -142,6 +128,39 @@ export function Home({ data, go }: ScreenProps) {
           </View>
         </View>
       </View>
+
+      {/* Inventar */}
+      <Pressable accessibilityRole="button" accessibilityLabel="Inventar öffnen" onPress={() => go({ name: 'inventory' })} style={({ pressed }) => ({ transform: [{ scale: pressed ? 0.98 : 1 }] })}>
+        <View style={{ backgroundColor: t.surface, borderRadius: 20, borderWidth: 2, borderColor: t.card, padding: 14, gap: 12 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: t.card, alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="bag-handle" size={20} color={t.onCard} />
+            </View>
+            <Text style={{ flex: 1, color: t.ink, fontSize: 18, fontWeight: '900' }}>Inventar</Text>
+            {data.screenUntil > Date.now() && (
+              <View style={{ backgroundColor: '#D6457A', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 }}>
+                <Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: '800' }}>Timer läuft</Text>
+              </View>
+            )}
+            <Ionicons name="chevron-forward" size={20} color={t.muted} />
+          </View>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            {[
+              { icon: 'snow' as const, color: '#4A9BD9', value: `${data.freezes}/3`, label: 'Schutz' },
+              { icon: 'rocket' as const, color: '#E8742C', value: data.boost > 0 ? 'aktiv' : String(data.boosters), label: 'Booster' },
+              { icon: 'phone-portrait' as const, color: '#D6457A', value: `${data.screenMinutes} Min.`, label: 'Social' },
+            ].map((x) => (
+              <View key={x.label} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: t.bg, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 8 }}>
+                <Ionicons name={x.icon} size={18} color={x.color} />
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: t.ink, fontSize: 15, fontWeight: '900' }}>{x.value}</Text>
+                  <Text style={{ color: t.muted, fontSize: 11 }} numberOfLines={1}>{x.label}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      </Pressable>
 
       {!has ? (
         <Panel style={{ gap: 16 }}>
@@ -311,7 +330,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.0 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.3 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }

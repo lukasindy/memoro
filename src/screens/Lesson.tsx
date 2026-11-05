@@ -78,6 +78,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
       freezes: gx.freezes - st.used,
       boost: gx.boost,
       boosters: gx.boosters,
+      screenMinutes: gx.screenMinutes,
       streak: st.streak,
       courses: d.courses.map((x) => {
         if (x.id !== id) return x;
@@ -438,7 +439,13 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, dat
               <Text style={{ color: t.onCard, fontSize: 15 }}>+1 XP-Booster im Inventar (doppelte XP für 3 Lektionen)</Text>
             </View>
           )}
-          {up.freezes === 0 && !up.boost && <Text style={{ color: t.onCard, fontSize: 15 }}>Streak-Schutz ist schon voll (max. 3).</Text>}
+          {up.minutes > 0 && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="phone-portrait" size={18} color={t.onCard} />
+              <Text style={{ color: t.onCard, fontSize: 15, fontWeight: '800' }}>+{up.minutes} Minuten Social-Media-Zeit</Text>
+            </View>
+          )}
+          {up.freezes === 0 && <Text style={{ color: t.onCard, fontSize: 13, opacity: 0.8 }}>Streak-Schutz ist schon voll (max. 3).</Text>}
         </View>
       )}
       <View style={{ gap: 6 }}>

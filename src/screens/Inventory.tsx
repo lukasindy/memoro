@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenProps } from '../nav';
 import { Btn, H1, H2, P, Panel, Progress, TopBar, useTheme } from '../ui';
@@ -7,12 +7,33 @@ import { BOOST_LESSONS, MAX_FREEZES, levelInfo, upcomingRewards } from '../engin
 
 const FREEZE_BLUE = '#4A9BD9';
 const BOOST_ORANGE = '#E8742C';
+const SOCIAL_PINK = '#D6457A';
+
+const fmt = (ms: number) => {
+  const s = Math.max(0, Math.round(ms / 1000));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+};
 
 export function Inventory({ data, update, back }: ScreenProps) {
   const t = useTheme();
   const lv = levelInfo(data.xp);
   const rewards = upcomingRewards(lv.level, 5);
   const canActivate = data.boosters > 0 && data.boost === 0;
+
+  // Countdown für eingelöste Social-Media-Zeit
+  const [now, setNow] = useState(Date.now());
+  const running = data.screenUntil > now;
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [running]);
+  const redeem = (min: number) =>
+    update((d) => {
+      const take = Math.min(min, d.screenMinutes);
+      const start = Math.max(Date.now(), d.screenUntil);
+      return { ...d, screenMinutes: d.screenMinutes - take, screenUntil: start + take * 60000 };
+    });
 
   const item = (opts: {
     icon: keyof typeof Ionicons.glyphMap;
@@ -106,6 +127,50 @@ export function Inventory({ data, update, back }: ScreenProps) {
           ),
       })}
 
+      {item({
+        icon: 'phone-portrait',
+        color: SOCIAL_PINK,
+        title: 'Social-Media-Zeit',
+        count: running ? `Läuft · noch ${fmt(data.screenUntil - now)} · ${data.screenMinutes} Min. übrig` : `${data.screenMinutes} Minuten Guthaben`,
+        text: 'Zeit für TikTok, Instagram & Co., die du dir mit Lernen verdienst: +5 Minuten pro Level, +10 bei jedem 5. Level, +30 bei jedem 10. Level.',
+        children: (
+          <View style={{ gap: 10 }}>
+            {running && <Progress value={Math.min(1, (data.screenUntil - now) / (30 * 60000))} color={SOCIAL_PINK} />}
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+              {[5, 10, 15, 30].map((m) => (
+                <Pressable
+                  key={m}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${m} Minuten einlösen`}
+                  disabled={data.screenMinutes < m}
+                  onPress={() => redeem(m)}
+                  style={({ pressed }) => ({ paddingHorizontal: 14, paddingVertical: 9, borderRadius: 999, borderWidth: 2, borderColor: SOCIAL_PINK, opacity: data.screenMinutes < m ? 0.35 : pressed ? 0.7 : 1 })}
+                >
+                  <Text style={{ color: SOCIAL_PINK, fontWeight: '800', fontSize: 14 }}>{m} Min.</Text>
+                </Pressable>
+              ))}
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Alles einlösen"
+                disabled={data.screenMinutes === 0}
+                onPress={() => redeem(data.screenMinutes)}
+                style={({ pressed }) => ({ paddingHorizontal: 14, paddingVertical: 9, borderRadius: 999, backgroundColor: SOCIAL_PINK, opacity: data.screenMinutes === 0 ? 0.35 : pressed ? 0.8 : 1 })}
+              >
+                <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 14 }}>Alles</Text>
+              </Pressable>
+            </View>
+            {running && (
+              <Pressable accessibilityRole="button" onPress={() => update((d) => ({ ...d, screenUntil: 0 }))} style={{ alignSelf: 'flex-start' }}>
+                <Text style={{ color: t.muted, fontSize: 14 }}>Timer beenden (Restzeit verfällt)</Text>
+              </Pressable>
+            )}
+            <P muted style={{ fontSize: 13 }}>
+              In der Web-Version ist das ein Timer zur Selbstkontrolle. In der App-Version für iPhone und Android soll er deine Bildschirmzeit-Sperre für die gewählten Apps direkt freischalten.
+            </P>
+          </View>
+        ),
+      })}
+
       <Panel style={{ gap: 12 }}>
         <H2>Nächste Belohnungen</H2>
         {rewards.map((r) => (
@@ -117,6 +182,10 @@ export function Inventory({ data, update, back }: ScreenProps) {
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <Ionicons name="snow" size={16} color={FREEZE_BLUE} />
                 <Text style={{ color: t.ink, fontSize: 14 }}>Streak-Schutz</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <Ionicons name="phone-portrait" size={16} color={SOCIAL_PINK} />
+                <Text style={{ color: t.ink, fontSize: 14, fontWeight: r.minutes > 5 ? '800' : '400' }}>+{r.minutes} Min.</Text>
               </View>
               {r.booster && (
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
