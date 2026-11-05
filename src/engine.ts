@@ -303,7 +303,10 @@ export function buildPath(c: Course): Section[] {
 
   return names.map((name, si) => {
     const words = sorted.slice(si * per, (si + 1) * per);
-    const lessons = chunk(words, c.wordsPerLesson, Math.min(3, c.wordsPerLesson));
+    // Bereits gelernte Wörter zuerst, damit erledigte Lektionen beim Umbauen erledigt bleiben
+    const rank = (w: Word) => (w.se ? 3 : w.ut ? 2 : w.lp ? 1 : 0);
+    const inOrder = [...words].sort((x, y) => rank(y) - rank(x));
+    const lessons = chunk(inOrder, c.wordsPerLesson, Math.min(3, c.wordsPerLesson));
     const unitGroups = chunk(lessons, c.lessonsPerUnit, 2);
     let lessonNo = 0;
     const units: PathUnit[] = unitGroups.map((group, ui) => {
@@ -438,18 +441,23 @@ export function levelInfo(xp: number) {
   return { level, into: xp - base, need, progress: (xp - base) / need };
 }
 
-export type LevelUp = { from: number; to: number; freezes: number; boost: boolean };
+export type LevelUp = { from: number; to: number; freezes: number; boost: boolean; minutes: number };
+
+// Social-Media-Zeit pro Level: normal 5, jedes 5. Level 10, jedes 10. Level 30 Minuten
+export function levelMinutes(level: number) {
+  return level % 10 === 0 ? 30 : level % 5 === 0 ? 10 : 5;
+}
 
 // Nächste Level-Belohnungen für die Vorschau im Inventar
 export function upcomingRewards(level: number, count = 5) {
   return Array.from({ length: count }, (_, k) => {
     const l = level + 1 + k;
-    return { level: l, booster: l % 5 === 0 };
+    return { level: l, booster: l % 5 === 0, minutes: levelMinutes(l) };
   });
 }
 
 // XP gutschreiben (mit Booster doppelt) und Level-Boni vergeben
-export function gainXp(d: { xp: number; freezes: number; boost: number; boosters?: number }, base: number) {
+export function gainXp(d: { xp: number; freezes: number; boost: number; boosters?: number; screenMinutes?: number }, base: number) {
   const boosted = d.boost > 0 && base > 0;
   const gained = boosted ? base * 2 : base;
   const from = levelInfo(d.xp).level;
@@ -457,9 +465,11 @@ export function gainXp(d: { xp: number; freezes: number; boost: number; boosters
   let freezes = d.freezes;
   const boost = boosted ? d.boost - 1 : d.boost;
   let boosters = d.boosters ?? 0;
+  let minutes = 0;
   let freezeGain = 0;
   let boostGain = false;
   for (let l = from + 1; l <= to; l++) {
+    minutes += levelMinutes(l);
     if (freezes < MAX_FREEZES) {
       freezes++;
       freezeGain++;
@@ -469,6 +479,6 @@ export function gainXp(d: { xp: number; freezes: number; boost: number; boosters
       boostGain = true;
     }
   }
-  const up: LevelUp | null = to > from ? { from, to, freezes: freezeGain, boost: boostGain } : null;
-  return { xp: d.xp + gained, gained, boosted, freezes, boost, boosters, up };
+  const up: LevelUp | null = to > from ? { from, to, freezes: freezeGain, boost: boostGain, minutes } : null;
+  return { xp: d.xp + gained, gained, boosted, freezes, boost, boosters, screenMinutes: (d.screenMinutes ?? 0) + minutes, up };
 }

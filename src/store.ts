@@ -50,6 +50,8 @@ export type AppData = {
   freezes: number; // Streak-Schutz: rettet einen verpassten Tag
   boost: number; // Lektionen mit doppelten XP (aktiver Booster)
   boosters: number; // XP-Booster im Inventar, noch nicht aktiviert
+  screenMinutes: number; // Social-Media-Zeit-Guthaben in Minuten
+  screenUntil: number; // Ende der eingelösten Social-Media-Zeit (Zeitstempel)
   premium: boolean; // Testschalter, später In-App-Kauf
 };
 
@@ -63,6 +65,8 @@ export const emptyData = (): AppData => ({
   freezes: 0,
   boost: 0,
   boosters: 0,
+  screenMinutes: 0,
+  screenUntil: 0,
   premium: false,
 });
 
