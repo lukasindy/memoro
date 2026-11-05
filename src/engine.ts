@@ -1,4 +1,4 @@
-import { Course, LessonDef, Mix, Unit, Word, uid } from './store';
+import { Course, Mix, Word, uid } from './store';
 import { Pair } from './parser';
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -50,20 +50,6 @@ export function effective(w: Word) {
 
 export function newWord(p: Pair): Word {
   return { id: uid(), a: p.a, b: p.b, base: estimateDifficulty(p.a, p.b), box: 0, due: 0, right: 0, wrong: 0 };
-}
-
-// ---------- Stufen Leicht / Mittel / Schwer ----------
-
-export type Level = { name: string; words: Word[]; learned: number };
-
-export function levels(c: Course): Level[] {
-  const sorted = [...c.words].sort((x, y) => x.base - y.base);
-  const third = Math.ceil(sorted.length / 3);
-  const names = ['Leicht', 'Mittel', 'Schwer'];
-  return names.map((name, i) => {
-    const words = sorted.slice(i * third, (i + 1) * third);
-    return { name, words, learned: words.filter((w) => w.box >= 2).length };
-  });
 }
 
 export function boxCounts(c: Course) {
@@ -222,72 +208,156 @@ export function buildReview(c: Course): Exercise[] {
   return buildMixed(c, words, { ...c.mix, ab: Math.min(c.mix.ab, 2) });
 }
 
-export function buildFromDef(c: Course, def: LessonDef): Exercise[] {
-  const words = def.wordIds.map((id) => c.words.find((w) => w.id === id)).filter(Boolean) as Word[];
-  return def.kind === 'test' ? buildTest(c, words) : buildMixed(c, words, c.mix);
-}
-
-// ---------- Lernpfad ----------
-
-export function makeUnit(title: string, words: Word[], perLesson: number): Unit {
-  const sorted = [...words].sort((x, y) => x.base - y.base);
-  const chunks: Word[][] = [];
-  for (let k = 0; k < sorted.length; k += perLesson) chunks.push(sorted.slice(k, k + perLesson));
-  // Zu kleinen Rest an die vorige Lektion hängen
-  if (chunks.length > 1 && chunks[chunks.length - 1].length < Math.min(3, perLesson)) {
-    const last = chunks.pop()!;
-    chunks[chunks.length - 1].push(...last);
+// Abschnittsprüfung: feste Anzahl Fragen, genau halb in jede Richtung
+export function buildExam(c: Course, words: Word[], count: number): Exercise[] {
+  const n = Math.min(count, words.length * 2);
+  const half = Math.ceil(n / 2);
+  const ba = shuffle(words).slice(0, half).map((w) => choice(c, w, 'ba', false));
+  const ab = shuffle(words).slice(0, n - half).map((w) => choice(c, w, 'ab', false));
+  // Gleiche Wörter nicht direkt hintereinander
+  const out = shuffle([...ba, ...ab]);
+  for (let k = 1; k < out.length; k++) {
+    const prev = out[k - 1], cur = out[k];
+    if (prev.kind !== 'pairs' && cur.kind !== 'pairs' && prev.word.id === cur.word.id) {
+      const j = (k + 2) % out.length;
+      [out[k], out[j]] = [out[j], out[k]];
+    }
   }
-  const lessons: LessonDef[] = chunks.map((ch) => ({ id: uid(), kind: 'lesson', wordIds: ch.map((w) => w.id), done: false, best: 0 }));
-  if (sorted.length >= MIN_WORDS && chunks.length > 1) {
-    lessons.push({ id: uid(), kind: 'test', wordIds: sorted.map((w) => w.id), done: false, best: 0 });
-  }
-  return { id: uid(), title, lessons };
-}
-
-// Wörter ohne Einheit (z. B. aus Version 0.1) in eine Einheit packen
-export function ensureUnits(c: Course): Course {
-  const inUnit = new Set(c.units.flatMap((u) => u.lessons.flatMap((l) => l.wordIds)));
-  const loose = c.words.filter((w) => !inUnit.has(w.id));
-  if (loose.length === 0) return c;
-  return { ...c, units: [...c.units, makeUnit(`Einheit ${c.units.length + 1}`, loose, c.wordsPerLesson)] };
-}
-
-export function removeWordFromPath(c: Course, wordId: string): Course {
-  const units = c.units
-    .map((u) => ({
-      ...u,
-      lessons: u.lessons
-        .map((l) => ({ ...l, wordIds: l.wordIds.filter((id) => id !== wordId) }))
-        .filter((l) => l.wordIds.length > 0),
-    }))
-    .filter((u) => u.lessons.length > 0);
-  return { ...c, units };
-}
-
-export type PathNode = { unit: Unit; lesson: LessonDef; index: number; status: 'done' | 'current' | 'locked' };
-
-export function pathNodes(c: Course): PathNode[] {
-  const out: PathNode[] = [];
-  let open = true;
-  c.units.forEach((unit) =>
-    unit.lessons.forEach((lesson) => {
-      const status = lesson.done ? 'done' : open ? 'current' : 'locked';
-      if (!lesson.done) open = false;
-      out.push({ unit, lesson, index: out.length, status });
-    }),
-  );
   return out;
 }
 
-export function markLesson(c: Course, lessonId: string, pct: number): Course {
-  return {
-    ...c,
-    units: c.units.map((u) => ({
-      ...u,
-      lessons: u.lessons.map((l) => (l.id === lessonId ? { ...l, done: l.done || l.kind === 'lesson' || pct >= 50, best: Math.max(l.best, pct) } : l)),
-    })),
+export function wordsByIds(c: Course, ids: string[]) {
+  return ids.map((id) => c.words.find((w) => w.id === id)).filter(Boolean) as Word[];
+}
+
+// ---------- Lernpfad: Abschnitte → Einheiten → Lektionen ----------
+
+export type NodeKind = 'lesson' | 'unitTest' | 'exam';
+export type Status = 'done' | 'current' | 'locked';
+
+export type PathNode = {
+  key: string;
+  kind: NodeKind;
+  title: string;
+  wordIds: string[];
+  section: number;
+  status: Status;
+};
+
+export type PathUnit = { index: number; nodes: PathNode[]; wordIds: string[] };
+
+export type Section = {
+  index: number;
+  name: string;
+  level: 0 | 1 | 2; // Farbe: leicht, mittel, schwer
+  wordIds: string[];
+  units: PathUnit[];
+  exam: PathNode | null;
+  examSize: number;
+  status: Status;
+  done: number;
+  total: number;
+};
+
+const EXAM_SIZE = [10, 20, 30];
+
+function chunk<T>(arr: T[], size: number, minLast: number): T[][] {
+  const out: T[][] = [];
+  for (let k = 0; k < arr.length; k += size) out.push(arr.slice(k, k + size));
+  if (out.length > 1 && out[out.length - 1].length < minLast) {
+    const last = out.pop()!;
+    out[out.length - 1].push(...last);
+  }
+  return out;
+}
+
+export function buildPath(c: Course): Section[] {
+  const n = c.words.length;
+  if (n === 0) return [];
+  const sorted = c.words
+    .map((w, i) => ({ w, i }))
+    .sort((x, y) => x.w.base - y.w.base || x.i - y.i)
+    .map((x) => x.w);
+
+  const count = n >= 15 ? 3 : n >= 8 ? 2 : 1;
+  const names = count === 3 ? ['Leicht', 'Mittel', 'Schwer'] : count === 2 ? ['Leicht', 'Schwer'] : ['Grundlagen'];
+  const levelsOf: (0 | 1 | 2)[] = count === 3 ? [0, 1, 2] : count === 2 ? [0, 2] : [0];
+  const per = Math.ceil(n / count);
+  const flags = (ids: string[], f: 'lp' | 'ut' | 'se') => ids.every((id) => c.words.find((w) => w.id === id)?.[f]);
+
+  let open = true; // erster nicht erledigter Knoten wird „aktuell“
+  const status = (done: boolean): Status => {
+    if (done) return 'done';
+    if (open) {
+      open = false;
+      return 'current';
+    }
+    return 'locked';
   };
+
+  return names.map((name, si) => {
+    const words = sorted.slice(si * per, (si + 1) * per);
+    const lessons = chunk(words, c.wordsPerLesson, Math.min(3, c.wordsPerLesson));
+    const unitGroups = chunk(lessons, c.lessonsPerUnit, 2);
+    let lessonNo = 0;
+    const units: PathUnit[] = unitGroups.map((group, ui) => {
+      const unitIds = group.flat().map((w) => w.id);
+      const nodes: PathNode[] = group.map((ws) => {
+        lessonNo++;
+        const ids = ws.map((w) => w.id);
+        return { key: `s${si}u${ui}l${lessonNo}`, kind: 'lesson', title: `Lektion ${lessonNo}`, wordIds: ids, section: si, status: status(flags(ids, 'lp')) };
+      });
+      if (unitIds.length >= MIN_WORDS) {
+        nodes.push({ key: `s${si}u${ui}t`, kind: 'unitTest', title: 'Einheitstest', wordIds: unitIds, section: si, status: status(flags(unitIds, 'ut')) });
+      }
+      return { index: ui, nodes, wordIds: unitIds };
+    });
+    const ids = words.map((w) => w.id);
+    const examSize = EXAM_SIZE[levelsOf[si]];
+    const exam: PathNode | null =
+      ids.length >= MIN_WORDS
+        ? { key: `s${si}e`, kind: 'exam', title: 'Abschnittsprüfung', wordIds: ids, section: si, status: status(flags(ids, 'se')) }
+        : null;
+    const all = [...units.flatMap((u) => u.nodes), ...(exam ? [exam] : [])];
+    const done = all.filter((x) => x.status === 'done').length;
+    const secStatus: Status = done === all.length ? 'done' : all.some((x) => x.status === 'current') ? 'current' : 'locked';
+    return { index: si, name, level: levelsOf[si], wordIds: ids, units, exam, examSize, status: secStatus, done, total: all.length };
+  });
+}
+
+export function findNode(c: Course, key: string): PathNode | undefined {
+  for (const s of buildPath(c)) {
+    for (const u of s.units) for (const n of u.nodes) if (n.key === key) return n;
+    if (s.exam?.key === key) return s.exam;
+  }
+  return undefined;
+}
+
+export const PASS = 50; // Prozent für Einheitstest und Abschnittsprüfung
+export const SKIP_PASS = 80; // Prozent zum Überspringen eines Abschnitts
+
+// Fortschritt nach einer Lektion, einem Test oder einer Prüfung auf die Wörter schreiben
+export function markProgress(c: Course, kind: NodeKind | 'skip', wordIds: string[], pct: number, key?: string): Course {
+  let ids = new Set(wordIds);
+  let flags: ('lp' | 'ut' | 'se')[] = [];
+  if (kind === 'lesson') flags = ['lp'];
+  if (kind === 'unitTest' && pct >= PASS) flags = ['lp', 'ut'];
+  if (kind === 'exam' && pct >= PASS) flags = ['lp', 'ut', 'se'];
+  if (kind === 'skip' && pct >= SKIP_PASS) {
+    // Springen schaltet auch alle früheren Abschnitte frei
+    const sections = buildPath(c);
+    const target = sections.find((s) => s.wordIds.some((id) => ids.has(id)));
+    ids = new Set(sections.filter((s) => target && s.index <= target.index).flatMap((s) => s.wordIds));
+    flags = ['lp', 'ut', 'se'];
+  }
+  const words = c.words.map((w) => {
+    if (!ids.has(w.id) || flags.length === 0) return w;
+    const nw = { ...w };
+    flags.forEach((f) => (nw[f] = true));
+    return nw;
+  });
+  const best = key ? { ...c.best, [key]: Math.max(c.best[key] ?? 0, pct) } : c.best;
+  return { ...c, words, best };
 }
 
 // ---------- Auswertung ----------

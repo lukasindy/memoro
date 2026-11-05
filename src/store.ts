@@ -9,6 +9,9 @@ export type Word = {
   due: number; // Zeitstempel der nächsten Wiederholung
   right: number;
   wrong: number;
+  lp?: boolean; // im Lernpfad in einer Lektion gelernt
+  ut?: boolean; // Einheitstest bestanden
+  se?: boolean; // Abschnittsprüfung bestanden
 };
 
 // Wie oft jede Übung in einer Lektion vorkommt
@@ -22,19 +25,7 @@ export type Mix = {
 export const DEFAULT_MIX: Mix = { ab: 3, ba: 4, pairs: 2, spelling: 2 };
 export const DEFAULT_WORDS_PER_LESSON = 5;
 
-export type LessonDef = {
-  id: string;
-  kind: 'lesson' | 'test';
-  wordIds: string[];
-  done: boolean;
-  best: number; // beste Prozentzahl, 0 = noch nicht gemacht
-};
-
-export type Unit = {
-  id: string;
-  title: string;
-  lessons: LessonDef[];
-};
+export const DEFAULT_LESSONS_PER_UNIT = 4;
 
 export type Course = {
   id: string;
@@ -42,9 +33,10 @@ export type Course = {
   langA: string;
   langB: string;
   words: Word[];
-  units: Unit[];
   mix: Mix;
   wordsPerLesson: number;
+  lessonsPerUnit: number;
+  best: Record<string, number>; // beste Prozentzahl je Lernpfad-Knoten
   lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
 };
@@ -67,18 +59,36 @@ export const emptyData = (): AppData => ({
   premium: false,
 });
 
-// Ältere Daten (ohne Lernpfad) auf das aktuelle Format bringen
+// Ältere Daten auf das aktuelle Format bringen
 export function migrate(d: AppData): AppData {
   return {
     ...emptyData(),
     ...d,
-    courses: (d.courses ?? []).map((c: any) => ({
-      ...c,
-      mix: { ...DEFAULT_MIX, ...(c.mix ?? {}) },
-      wordsPerLesson: c.wordsPerLesson ?? DEFAULT_WORDS_PER_LESSON,
-      units: c.units ?? [],
-      lessons: c.lessons ?? 0,
-    })),
+    courses: (d.courses ?? []).map((c: any) => {
+      // Version 0.2: Fortschritt aus den alten Einheiten auf die Wörter übertragen
+      const learned = new Set<string>();
+      const tested = new Set<string>();
+      (c.units ?? []).forEach((u: any) =>
+        (u.lessons ?? []).forEach((l: any) => {
+          if (!l.done) return;
+          (l.wordIds ?? []).forEach((id: string) => (l.kind === 'test' ? tested : learned).add(id));
+        }),
+      );
+      const { units, ...rest } = c;
+      return {
+        ...rest,
+        words: (c.words ?? []).map((w: Word) => ({
+          ...w,
+          lp: w.lp || learned.has(w.id) || tested.has(w.id),
+          ut: w.ut || tested.has(w.id),
+        })),
+        mix: { ...DEFAULT_MIX, ...(c.mix ?? {}) },
+        wordsPerLesson: c.wordsPerLesson ?? DEFAULT_WORDS_PER_LESSON,
+        lessonsPerUnit: c.lessonsPerUnit ?? DEFAULT_LESSONS_PER_UNIT,
+        best: c.best ?? {},
+        lessons: c.lessons ?? 0,
+      };
+    }),
   };
 }
 

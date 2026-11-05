@@ -16,6 +16,9 @@ export const light = {
   rightBg: '#DDF1E5',
   wrong: '#C2413D',
   wrongBg: '#F8E0DE',
+  // Abschnittsfarben: leicht, mittel, schwer
+  lvl: ['#2E8B5E', '#B9770E', '#8E3B46'],
+  onLvl: '#FFFFFF',
 };
 
 export const dark: typeof light = {
@@ -32,6 +35,8 @@ export const dark: typeof light = {
   rightBg: '#1E3A2C',
   wrong: '#EE7E78',
   wrongBg: '#41221F',
+  lvl: ['#3E9E6E', '#C98A1E', '#A84B58'],
+  onLvl: '#FFFFFF',
 };
 
 export type Theme = typeof light;
