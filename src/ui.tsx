@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { Platform, Pressable, StyleSheet, Text, TextInput, TextInputProps, View, ViewStyle, Alert } from 'react-native';
-import { BOXES } from './engine';
+import { Ionicons } from '@expo/vector-icons';
+import { BOXES, levelInfo } from './engine';
 
 export const light = {
   bg: '#EEF1EC',
@@ -163,6 +164,37 @@ export function CardBox({ counts, compact }: { counts: number[]; compact?: boole
             </View>
           ))}
         </View>
+      )}
+    </View>
+  );
+}
+
+// Kompakte Anzeige von Streak, XP und Level (z. B. in der Kursleiste)
+export function StatPills({ streak, xp, freezes, boost }: { streak: number; xp: number; freezes: number; boost: number }) {
+  const t = useTheme();
+  const lv = levelInfo(xp);
+  const pill = (children: React.ReactNode, label: string) => (
+    <View accessibilityLabel={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: t.surface, borderWidth: 1, borderColor: t.line, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 5 }}>
+      {children}
+    </View>
+  );
+  return (
+    <View style={{ flexDirection: 'row', gap: 6 }}>
+      {pill(
+        <>
+          <Ionicons name="flame" size={15} color={streak > 0 ? '#E8742C' : t.muted} />
+          <Text style={{ color: t.ink, fontWeight: '800', fontSize: 14 }}>{streak}</Text>
+          {freezes > 0 && <Ionicons name="snow" size={13} color="#4A9BD9" />}
+        </>,
+        `${streak} Tage in Folge${freezes ? `, ${freezes} Streak-Schutz` : ''}`,
+      )}
+      {pill(
+        <>
+          <Ionicons name={boost > 0 ? 'rocket' : 'flash'} size={15} color="#D99A00" />
+          <Text style={{ color: t.ink, fontWeight: '800', fontSize: 14 }}>{xp}</Text>
+          <Text style={{ color: t.muted, fontWeight: '700', fontSize: 12 }}>· Lv {lv.level}</Text>
+        </>,
+        `${xp} XP, Level ${lv.level}${boost ? `, Booster für ${boost} Lektionen` : ''}`,
       )}
     </View>
   );

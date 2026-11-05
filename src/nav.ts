@@ -1,5 +1,5 @@
 import { AppData } from './store';
-import type { NodeKind } from './engine';
+import type { LevelUp, NodeKind } from './engine';
 import type { CourseTab } from './screens/Course';
 
 export type LessonRef = { key: string; kind: NodeKind | 'skip'; wordIds: string[]; section: number };
@@ -11,7 +11,7 @@ export type Route =
   | { name: 'course'; id: string; tab?: CourseTab; sec?: number }
   | { name: 'add'; id: string }
   | { name: 'lesson'; id: string; node?: LessonRef } // ohne node = Wiederholung
-  | { name: 'result'; id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean }
+  | { name: 'result'; id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean; boosted?: boolean; up?: LevelUp | null }
   | { name: 'settings' }
   | { name: 'premium'; reason: string };
 
