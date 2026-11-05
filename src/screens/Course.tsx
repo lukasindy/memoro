@@ -31,7 +31,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
     <View style={{ flex: 1 }}>
       <ScrollView key={tab} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} keyboardShouldPersistTaps="handled">
         <View style={{ width: '100%', maxWidth: 620, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 40, gap: 20 }}>
-          <TopBar onBack={back} right={<StatPills streak={data.streak.count} xp={data.xp} freezes={data.freezes} boost={data.boost} />} />
+          <TopBar onBack={back} right={<StatPills streak={data.streak.count} xp={data.xp} freezes={data.freezes} boost={data.boost} onPress={() => go({ name: 'inventory' })} />} />
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
           {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} data={data} update={update} />}
           {tab === 'stats' && <StatsTab c={c} />}

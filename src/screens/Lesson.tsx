@@ -1,8 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Animated, Easing, Platform, Pressable, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
-import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, wordsByIds } from '../engine';
+import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, similarity, wordsByIds } from '../engine';
+import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
 import { Ionicons } from '@expo/vector-icons';
 import type { LevelUp } from '../engine';
@@ -32,7 +33,25 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   const results = useRef(new Map<string, boolean>());
   const score = useRef({ firstTry: 0, xp: 0 });
 
+  // Neue Wörter vor der Lektion spielerisch kennenlernen
+  const introWords = useMemo(
+    () => (c && node?.kind === 'lesson' ? wordsByIds(c, node.wordIds).filter((w) => !w.lp && w.right + w.wrong === 0) : []),
+    [],
+  );
+  const [intro, setIntro] = useState(introWords.length > 0);
+
   if (!c || initial.length === 0) return <TopBar onBack={back} />;
+  if (intro) {
+    return (
+      <IntroView
+        words={introWords}
+        langA={c.langA}
+        langB={c.langB}
+        onDone={() => setIntro(false)}
+        onQuit={() => confirm('Lektion abbrechen?', back)}
+      />
+    );
+  }
 
   const ex = queue[pos];
   const total = initial.length;
@@ -58,6 +77,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
       xp: gx.xp,
       freezes: gx.freezes - st.used,
       boost: gx.boost,
+      boosters: gx.boosters,
       streak: st.streak,
       courses: d.courses.map((x) => {
         if (x.id !== id) return x;
@@ -182,6 +202,123 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   );
 }
 
+// Karteikarten zum Umdrehen: Wort vorne, Bedeutung mit Infobox hinten
+function IntroView({ words, langA, langB, onDone, onQuit }: { words: Word[]; langA: string; langB: string; onDone: () => void; onQuit: () => void }) {
+  const t = useTheme();
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const scale = useRef(new Animated.Value(1)).current;
+  const w = words[idx];
+  const last = idx === words.length - 1;
+  const easy = similarity(w.a, w.b) >= 0.6;
+
+  const flip = () => {
+    const native = Platform.OS !== 'web';
+    Animated.timing(scale, { toValue: 0, duration: 140, easing: Easing.in(Easing.quad), useNativeDriver: native }).start(() => {
+      setFlipped((f) => !f);
+      Animated.timing(scale, { toValue: 1, duration: 160, easing: Easing.out(Easing.quad), useNativeDriver: native }).start();
+    });
+  };
+
+  const next = () => {
+    if (last) return onDone();
+    setFlipped(false);
+    setIdx(idx + 1);
+  };
+
+  return (
+    <View style={{ gap: 22, flex: 1 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+        <Pressable onPress={onQuit} accessibilityRole="button" accessibilityLabel="Lektion abbrechen" hitSlop={12}>
+          <Text style={{ color: t.muted, fontSize: 26, fontWeight: '600' }}>×</Text>
+        </Pressable>
+        <View style={{ flex: 1, flexDirection: 'row', gap: 6 }}>
+          {words.map((_, k) => (
+            <View key={k} style={{ flex: 1, height: 8, borderRadius: 4, backgroundColor: k < idx || (k === idx && flipped) ? t.card : t.line }} />
+          ))}
+        </View>
+      </View>
+
+      <View style={{ gap: 4 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Ionicons name="sparkles" size={18} color="#D99A00" />
+          <Text style={{ color: t.ink, fontSize: 20, fontWeight: '900' }}>Neue Wörter kennenlernen</Text>
+        </View>
+        <P muted>
+          Wort {idx + 1} von {words.length} · {flipped ? 'Präg es dir kurz ein.' : 'Tippe auf die Karte, um sie umzudrehen.'}
+        </P>
+      </View>
+
+      <Pressable accessibilityRole="button" accessibilityLabel={flipped ? `${w.a} heißt ${w.b}` : `${w.a}, Karte umdrehen`} onPress={flip}>
+        <Animated.View
+          style={{
+            transform: [{ scaleX: scale }, { rotate: flipped ? '1deg' : '-1.5deg' }],
+            backgroundColor: flipped ? t.surface : t.card,
+            borderRadius: 14,
+            borderWidth: flipped ? 2 : 0,
+            borderColor: t.card,
+            minHeight: 210,
+            padding: 22,
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 12,
+            shadowColor: '#000',
+            shadowOpacity: 0.15,
+            shadowRadius: 12,
+            shadowOffset: { width: 0, height: 6 },
+            elevation: 4,
+          }}
+        >
+          <Text style={{ color: flipped ? t.muted : t.onCard, fontSize: 13, fontWeight: '800', letterSpacing: 1 }}>
+            {(flipped ? langB : langA).toUpperCase()}
+          </Text>
+          <Text style={{ color: flipped ? t.ink : t.onCard, fontSize: 34, fontWeight: '900', textAlign: 'center', letterSpacing: -0.5 }}>
+            {flipped ? w.b : w.a}
+          </Text>
+          {!flipped && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, opacity: 0.75 }}>
+              <Ionicons name="sync" size={16} color={t.onCard} />
+              <Text style={{ color: t.onCard, fontSize: 14, fontWeight: '700' }}>Tippen zum Umdrehen</Text>
+            </View>
+          )}
+        </Animated.View>
+      </Pressable>
+
+      {flipped && (
+        <View style={{ gap: 10 }}>
+          <View style={{ flexDirection: 'row', gap: 12, backgroundColor: t.rightBg, borderRadius: 16, padding: 14, alignItems: 'flex-start' }}>
+            <Ionicons name="information-circle" size={22} color={t.right} />
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text style={{ color: t.ink, fontSize: 15, fontWeight: '800' }}>
+                {w.a} auf {langB}
+              </Text>
+              <Text style={{ color: t.ink, fontSize: 15 }}>„{w.a}“ bedeutet „{w.b}“.</Text>
+            </View>
+          </View>
+          {easy && (
+            <View style={{ flexDirection: 'row', gap: 12, backgroundColor: t.surface, borderWidth: 1, borderColor: t.line, borderRadius: 16, padding: 14, alignItems: 'flex-start' }}>
+              <Ionicons name="bulb" size={22} color="#D99A00" />
+              <Text style={{ flex: 1, color: t.ink, fontSize: 15 }}>
+                Merktipp: Das Wort ähnelt dem {langB}-Wort. Das merkst du dir leicht!
+              </Text>
+            </View>
+          )}
+        </View>
+      )}
+
+      <View style={{ flex: 1 }} />
+      {flipped ? (
+        <Btn label={last ? 'Lektion starten' : 'Nächstes Wort'} onPress={next} />
+      ) : (
+        <Btn label="Umdrehen" onPress={flip} />
+      )}
+      <Pressable accessibilityRole="button" onPress={onDone} style={{ alignSelf: 'center', paddingVertical: 4 }}>
+        <Text style={{ color: t.muted, fontSize: 14 }}>Überspringen und direkt loslegen</Text>
+      </Pressable>
+    </View>
+  );
+}
+
 function PairsView({ ex, onMistake, onDone }: { ex: Extract<Exercise, { kind: 'pairs' }>; onMistake: (id: string) => void; onDone: (clean: boolean) => void }) {
   const t = useTheme();
   const right = useMemo(() => [...ex.words].sort(() => Math.random() - 0.5), [ex]);
@@ -298,7 +435,7 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, dat
           {up.boost && (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Ionicons name="rocket" size={18} color={t.onCard} />
-              <Text style={{ color: t.onCard, fontSize: 15 }}>XP-Booster: doppelte XP für 3 Lektionen</Text>
+              <Text style={{ color: t.onCard, fontSize: 15 }}>+1 XP-Booster im Inventar (doppelte XP für 3 Lektionen)</Text>
             </View>
           )}
           {up.freezes === 0 && !up.boost && <Text style={{ color: t.onCard, fontSize: 15 }}>Streak-Schutz ist schon voll (max. 3).</Text>}

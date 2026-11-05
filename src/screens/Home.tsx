@@ -77,6 +77,20 @@ export function Home({ data, go }: ScreenProps) {
           </Pressable>
           <Pressable
             accessibilityRole="button"
+            accessibilityLabel={`Inventar${data.boosters ? `, ${data.boosters} Booster bereit` : ''}`}
+            onPress={() => go({ name: 'inventory' })}
+            hitSlop={8}
+            style={({ pressed }) => ({ width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: t.surface, borderWidth: 1, borderColor: t.line, opacity: pressed ? 0.8 : 1 })}
+          >
+            <Ionicons name="bag-handle-outline" size={20} color={t.ink} />
+            {data.boosters > 0 && (
+              <View style={{ position: 'absolute', top: -3, right: -3, minWidth: 18, height: 18, borderRadius: 9, backgroundColor: '#E8742C', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 }}>
+                <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: '900' }}>{data.boosters}</Text>
+              </View>
+            )}
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
             accessibilityLabel="Einstellungen"
             onPress={() => go({ name: 'settings' })}
             hitSlop={8}
