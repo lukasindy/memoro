@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Memoro",
+    "slug": "memoro",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.memoro.vokabeln"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1F5E4E",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "app.memoro.vokabeln"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "name": "Memoro",
+      "themeColor": "#1F5E4E",
+      "backgroundColor": "#EEF1EC"
+    },
+    "experiments": {
+      "baseUrl": "/memoro"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Memoro nutzt deine Fotos, um Vokabellisten daraus zu lesen.",
+          "cameraPermission": "Memoro nutzt die Kamera, um Vokabellisten abzufotografieren."
+        }
+      ]
+    ],
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1F5E4E"
+    }
+  }
+}
