@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Pressable, Switch, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
-import { Btn, CardBox, Field, H1, H2, P, Panel, TopBar, confirm, notify, useTheme } from '../ui';
-import { boxCounts, dueCount } from '../engine';
+import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
+import { buildPath } from '../engine';
 import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
 import { exportBackup, pickBackupFile } from '../platform';
 import { Platform } from 'react-native';
@@ -37,8 +37,10 @@ export function Home({ data, go }: ScreenProps) {
       ) : (
         <View style={{ gap: 12 }}>
           {data.courses.map((c) => {
-            const due = dueCount(c);
-            const fresh = c.words.filter((w) => w.box === 0).length;
+            const path = buildPath(c);
+            const done = path.reduce((n, x) => n + x.done, 0);
+            const total = path.reduce((n, x) => n + x.total, 0);
+            const current = path.find((x) => x.status === 'current');
             return (
               <Pressable
                 key={c.id}
@@ -51,11 +53,10 @@ export function Home({ data, go }: ScreenProps) {
                     <H2>{c.name}</H2>
                     <P muted>{c.langA} – {c.langB}</P>
                   </View>
-                  <CardBox counts={boxCounts(c)} compact />
+                  <Progress value={total ? done / total : 0} color={current ? t.lvl[current.level] : t.primary} />
                   <P muted>
                     {c.words.length} Wörter
-                    {due > 0 ? `, ${due} zur Wiederholung` : ''}
-                    {fresh > 0 ? `, ${fresh} neu` : ''}
+                    {current ? ` · Abschnitt ${current.name}` : total ? ' · alles geschafft' : ''}
                   </P>
                 </Panel>
               </Pressable>
@@ -164,7 +165,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.3 – Testversion</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.4 – Testversion</P>
     </View>
   );
 }

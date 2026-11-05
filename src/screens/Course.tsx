@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Route, ScreenProps } from '../nav';
-import { Btn, CardBox, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
-import { MIN_WORDS, PathNode, SKIP_PASS, Section, boxCounts, buildPath, dueCount, effective, estimateDifficulty } from '../engine';
+import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
+import { MIN_WORDS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty } from '../engine';
 import { Course as CourseT, DEFAULT_MIX, Mix } from '../store';
 
 function useCourse(data: ScreenProps['data'], id: string) {
@@ -18,10 +18,8 @@ export function Course({ data, go, back, id }: ScreenProps & { id: string }) {
   const t = useTheme();
   const c = useCourse(data, id);
   if (!c) return <TopBar onBack={back} />;
-  const due = dueCount(c);
   const sections = buildPath(c);
   const canLearn = c.words.length >= MIN_WORDS;
-  const reviewable = c.words.some((w) => w.box > 0);
   const current = sections.flatMap((s) => [...s.units.flatMap((u) => u.nodes), ...(s.exam ? [s.exam] : [])]).find((n) => n.status === 'current');
   const currentSection = current ? sections[current.section] : undefined;
 
@@ -53,23 +51,9 @@ export function Course({ data, go, back, id }: ScreenProps & { id: string }) {
       ) : (
         <Panel>
           <H2>Kurs abgeschlossen</H2>
-          <P muted>Alle Abschnitte geschafft. Halte die Wörter im Karteikasten frisch oder füge neue hinzu.</P>
+          <P muted>Alle Abschnitte geschafft. Schlag die Vokabeln jederzeit nach oder füge neue hinzu.</P>
         </Panel>
       )}
-
-      <Panel>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <H2>Karteikasten</H2>
-          <P muted>{due > 0 ? `${due} fällig` : 'nichts fällig'}</P>
-        </View>
-        <CardBox counts={boxCounts(c)} compact />
-        <Btn
-          kind={due > 0 ? 'primary' : 'secondary'}
-          label={due > 0 ? `${due} ${due === 1 ? 'Wort' : 'Wörter'} wiederholen` : 'Schwächste Wörter üben'}
-          disabled={!reviewable || !canLearn}
-          onPress={() => go({ name: 'lesson', id })}
-        />
-      </Panel>
 
       {canLearn && (
         <View style={{ gap: 12 }}>
@@ -81,9 +65,9 @@ export function Course({ data, go, back, id }: ScreenProps & { id: string }) {
       )}
 
       <View style={{ gap: 10 }}>
+        <Btn kind="secondary" label={`Vokabeln (${c.words.length})`} onPress={() => go({ name: 'words', id })} disabled={!c.words.length} />
         <Btn kind="secondary" label="Wörter hinzufügen" onPress={() => go({ name: 'add', id })} />
         <Btn kind="secondary" label="Lektionen einstellen" onPress={() => go({ name: 'lessonSettings', id })} />
-        <Btn kind="secondary" label={`Wortliste (${c.words.length})`} onPress={() => go({ name: 'words', id })} disabled={!c.words.length} />
         <Btn
           kind="secondary"
           label="Statistik"
@@ -316,6 +300,8 @@ export function LessonSettings({ data, update, back, id }: ScreenProps & { id: s
 export function Words({ data, update, back, id }: ScreenProps & { id: string }) {
   const t = useTheme();
   const c = useCourse(data, id);
+  const [open, setOpen] = useState<Set<string>>(new Set());
+  const [showAll, setShowAll] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [a, setA] = useState('');
   const [b, setB] = useState('');
@@ -324,72 +310,128 @@ export function Words({ data, update, back, id }: ScreenProps & { id: string }) 
 
   const setCourse = (fn: (c: CourseT) => CourseT) =>
     update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? fn(x) : x)) }));
+  const toggle = (wid: string) =>
+    setOpen((o) => {
+      const n = new Set(o);
+      n.has(wid) ? n.delete(wid) : n.add(wid);
+      return n;
+    });
 
-  const sectionOf = new Map<string, string>();
-  buildPath(c).forEach((sec) => sec.wordIds.forEach((wid) => sectionOf.set(wid, sec.name)));
   const q = query.trim().toLowerCase();
-  const list = [...c.words]
-    .filter((w) => !q || w.a.toLowerCase().includes(q) || w.b.toLowerCase().includes(q))
-    .sort((x, y) => x.base - y.base || x.a.localeCompare(y.a));
+  const match = (wid: string) => {
+    const w = c.words.find((x) => x.id === wid)!;
+    return !q || w.a.toLowerCase().includes(q) || w.b.toLowerCase().includes(q);
+  };
+  const sections = buildPath(c).map((sec) => ({ sec, ids: sec.wordIds.filter(match) })).filter((x) => x.ids.length);
 
   return (
     <View style={{ gap: 18 }}>
       <TopBar onBack={back} title={c.name} />
-      <H1>Wortliste</H1>
-      <Field value={query} onChangeText={setQuery} placeholder="Suchen" />
-      <View style={{ gap: 8 }}>
-        {list.map((w) =>
-          editing === w.id ? (
-            <Panel key={w.id} style={{ padding: 14 }}>
-              <Field label={c.langA} value={a} onChangeText={setA} />
-              <Field label={c.langB} value={b} onChangeText={setB} />
-              <View style={{ flexDirection: 'row', gap: 10 }}>
-                <Btn
-                  label="Speichern"
-                  style={{ flex: 1 }}
-                  disabled={!a.trim() || !b.trim()}
-                  onPress={() => {
-                    setCourse((x) => ({
-                      ...x,
-                      words: x.words.map((y) => (y.id === w.id ? { ...y, a: a.trim(), b: b.trim(), base: estimateDifficulty(a, b) } : y)),
-                    }));
-                    setEditing(null);
-                  }}
-                />
-                <Btn kind="secondary" label="Abbrechen" style={{ flex: 1 }} onPress={() => setEditing(null)} />
-              </View>
-              <Btn
-                kind="danger"
-                label="Wort löschen"
-                onPress={() =>
-                  confirm(`„${w.a}“ löschen?`, () => {
-                    setCourse((x) => ({ ...x, words: x.words.filter((y) => y.id !== w.id) }));
-                    setEditing(null);
-                  })
-                }
-              />
-            </Panel>
-          ) : (
-            <Pressable
-              key={w.id}
-              accessibilityRole="button"
-              accessibilityLabel={`${w.a}, ${w.b}, bearbeiten`}
-              onPress={() => {
-                setEditing(w.id);
-                setA(w.a);
-                setB(w.b);
-              }}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderColor: t.line }}
-            >
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: t.ink, fontSize: 16, fontWeight: '600' }}>{w.a}</Text>
-                <Text style={{ color: t.muted, fontSize: 15 }}>{w.b}</Text>
-              </View>
-              <Text style={{ color: t.muted, fontSize: 13, textAlign: 'right' }}>{sectionOf.get(w.id)}{'\n'}{w.box === 0 ? 'neu' : `Fach ${w.box}`}</Text>
-            </Pressable>
-          ),
-        )}
+      <View style={{ gap: 4 }}>
+        <H1>Vokabeln</H1>
+        <P muted>{c.words.length} Wörter · {c.langA} – {c.langB}</P>
       </View>
+      <Field value={query} onChangeText={setQuery} placeholder={`Suchen auf ${c.langA} oder ${c.langB}`} />
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: showAll }}
+        onPress={() => setShowAll((v) => !v)}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, alignSelf: 'flex-start', paddingVertical: 4 }}
+      >
+        <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: t.primary, backgroundColor: showAll ? t.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+          {showAll && <Text style={{ color: t.onPrimary, fontWeight: '800', fontSize: 13 }}>✓</Text>}
+        </View>
+        <Text style={{ color: t.ink, fontSize: 16 }}>Alle Übersetzungen zeigen</Text>
+      </Pressable>
+
+      {sections.length === 0 && <P muted>Kein Wort gefunden.</P>}
+
+      {sections.map(({ sec, ids }) => (
+        <View key={sec.index} style={{ gap: 8 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: t.lvl[sec.level] }} />
+            <Text style={{ color: t.ink, fontSize: 18, fontWeight: '800' }}>{sec.name}</Text>
+            <Text style={{ color: t.muted, fontSize: 14 }}>{ids.length} Wörter</Text>
+          </View>
+          <View style={{ backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, overflow: 'hidden' }}>
+            {ids.map((wid, k) => {
+              const w = c.words.find((x) => x.id === wid)!;
+              const visible = showAll || open.has(w.id);
+              return (
+                <View key={w.id} style={{ borderTopWidth: k ? 1 : 0, borderColor: t.line, paddingHorizontal: 14, paddingVertical: 12, gap: 8 }}>
+                  {editing === w.id ? (
+                    <View style={{ gap: 10 }}>
+                      <Field label={c.langA} value={a} onChangeText={setA} />
+                      <Field label={c.langB} value={b} onChangeText={setB} />
+                      <View style={{ flexDirection: 'row', gap: 10 }}>
+                        <Btn
+                          label="Speichern"
+                          style={{ flex: 1 }}
+                          disabled={!a.trim() || !b.trim()}
+                          onPress={() => {
+                            setCourse((x) => ({
+                              ...x,
+                              words: x.words.map((y) => (y.id === w.id ? { ...y, a: a.trim(), b: b.trim(), base: estimateDifficulty(a, b) } : y)),
+                            }));
+                            setEditing(null);
+                          }}
+                        />
+                        <Btn kind="secondary" label="Abbrechen" style={{ flex: 1 }} onPress={() => setEditing(null)} />
+                      </View>
+                      <Btn
+                        kind="danger"
+                        label="Wort löschen"
+                        onPress={() =>
+                          confirm(`„${w.a}“ löschen?`, () => {
+                            setCourse((x) => ({ ...x, words: x.words.filter((y) => y.id !== w.id) }));
+                            setEditing(null);
+                          })
+                        }
+                      />
+                    </View>
+                  ) : (
+                    <>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                        <Text style={{ flex: 1, color: t.ink, fontSize: 17, fontWeight: '700' }}>{w.a}</Text>
+                        {w.lp && <Text style={{ color: t.right, fontSize: 13, fontWeight: '700' }}>gelernt</Text>}
+                        <Pressable
+                          accessibilityRole="button"
+                          accessibilityLabel={visible ? `Übersetzung von ${w.a} ausblenden` : `Was heißt ${w.a} auf ${c.langB}?`}
+                          onPress={() => toggle(w.id)}
+                          hitSlop={8}
+                          style={{ width: 34, height: 34, borderRadius: 17, borderWidth: 2, borderColor: t.primary, backgroundColor: visible ? t.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                          <Text style={{ color: visible ? t.onPrimary : t.primary, fontSize: 17, fontWeight: '800', fontStyle: 'italic' }}>i</Text>
+                        </Pressable>
+                      </View>
+                      {visible && (
+                        <View style={{ backgroundColor: t.bg, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                          <View style={{ flex: 1 }}>
+                            <Text style={{ color: t.muted, fontSize: 12, fontWeight: '700' }}>{c.langB.toUpperCase()}</Text>
+                            <Text style={{ color: t.ink, fontSize: 16 }}>{w.b}</Text>
+                          </View>
+                          <Pressable
+                            accessibilityRole="button"
+                            onPress={() => {
+                              setEditing(w.id);
+                              setA(w.a);
+                              setB(w.b);
+                            }}
+                            hitSlop={8}
+                          >
+                            <Text style={{ color: t.primary, fontWeight: '700', fontSize: 14 }}>Bearbeiten</Text>
+                          </Pressable>
+                        </View>
+                      )}
+                    </>
+                  )}
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      ))}
+
       <Btn
         kind="danger"
         label="Kurs löschen"
@@ -411,7 +453,8 @@ export function Stats({ data, back, id }: ScreenProps & { id: string }) {
   if (!c) return <TopBar onBack={back} />;
   const right = c.words.reduce((s, w) => s + w.right, 0);
   const wrong = c.words.reduce((s, w) => s + w.wrong, 0);
-  const sure = c.words.filter((w) => w.box >= 4).length;
+  const learned = c.words.filter((w) => w.lp).length;
+  const sections = buildPath(c).filter((x) => x.status === 'done').length;
   const hardest = c.words
     .filter((w) => w.wrong > 0)
     .sort((x, y) => effective(y) - effective(x))
@@ -433,8 +476,8 @@ export function Stats({ data, back, id }: ScreenProps & { id: string }) {
         {tile(right + wrong ? `${Math.round((right / (right + wrong)) * 100)} %` : '–', 'Trefferquote')}
       </View>
       <View style={{ flexDirection: 'row', gap: 12 }}>
-        {tile(String(sure), 'Wörter in Fach 4–5')}
-        {tile(String(c.words.filter((w) => w.box === 0).length), 'Noch nicht gelernt')}
+        {tile(`${learned} / ${c.words.length}`, 'Wörter gelernt')}
+        {tile(String(sections), 'Abschnitte geschafft')}
       </View>
       <Panel>
         <H2>Deine schwierigsten Wörter</H2>
