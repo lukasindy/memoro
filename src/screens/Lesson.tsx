@@ -1,8 +1,10 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Platform, Pressable, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
-import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, scaledMix, similarity, todayKey, wordsByIds } from '../engine';
+import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, oldWordsFor, scaledMix, similarity, todayKey, wordsByIds } from '../engine';
+import { canSpeak, speak } from '../platform';
+import { clozeFor } from '../data/generate';
 import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,7 +15,14 @@ type Item = Exercise & { retry?: boolean };
 function build(c: NonNullable<ScreenProps['data']['courses'][number]>, node?: LessonRef): Exercise[] {
   if (!node) return buildReview(c);
   const words = wordsByIds(c, node.wordIds);
-  if (node.kind === 'lesson') return buildMixed(c, words, scaledMix(c.mix, words.length));
+  if (node.kind === 'lesson') {
+    const oldCount = Math.min(3, Math.max(1, Math.round(words.length / 4)));
+    return buildMixed(c, words, scaledMix(c.mix, words.length), {
+      canListen: canSpeak(c.langA),
+      cloze: c.gen ? (w) => clozeFor(c, w) : undefined,
+      old: oldWordsFor(c, words, oldCount),
+    });
+  }
   if (node.kind === 'unitTest') return buildTest(c, words);
   const size = buildPath(c)[node.section]?.examSize ?? 10;
   return buildExam(c, words, size);
@@ -101,7 +110,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   const answer = (opt: string) => {
     if (picked || ex.kind === 'pairs') return;
     setPicked(opt);
-    const ok = opt === ex.answer;
+    const ok = ex.kind === 'build' ? opt.trim().toLowerCase() === ex.answer.toLowerCase() : opt === ex.answer;
     mark(ex.word.id, ok);
     if (ok && !ex.retry) {
       score.current.firstTry++;
@@ -112,7 +121,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
 
   const quit = () => confirm('Lektion abbrechen? Der Fortschritt dieser Lektion geht verloren.', back);
 
-  const correct = picked !== null && ex.kind !== 'pairs' && picked === ex.answer;
+  const correct = picked !== null && ex.kind !== 'pairs' && (ex.kind === 'build' ? picked.trim().toLowerCase() === ex.answer.toLowerCase() : picked === ex.answer);
 
   return (
     <View style={{ gap: 22, flex: 1 }}>
@@ -137,24 +146,51 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
             setPairsDone(true);
           }}
         />
+      ) : ex.kind === 'build' ? (
+        <BuildView key={pos} ex={ex} langA={c.langA} picked={picked} onSubmit={answer} retry={!!ex.retry} />
       ) : (
         <View style={{ gap: 22 }}>
           <View style={{ gap: 8 }}>
-            <P muted>
-              {ex.retry
-                ? 'Noch einmal'
-                : isTest && pos === 0
-                  ? `${kind === 'unitTest' ? 'Mini-Prüfung' : kind === 'skip' ? 'Einstufungsprüfung' : 'Abschlussprüfung'}: ${total} Fragen, bestanden ab ${kind === 'skip' ? SKIP_PASS : PASS} %.`
-                : ex.kind === 'spelling'
-                  ? `Wie schreibt man das auf ${c.langA}?`
-                  : ex.dir === 'ab'
-                    ? ex.isNew ? `Neues Wort. Was heißt das auf ${c.langB}?` : `Was heißt das auf ${c.langB}?`
-                    : `Was heißt das auf ${c.langA}?`}
-            </P>
-            {/* Die Karteikarte */}
-            <View style={{ backgroundColor: t.card, borderRadius: 6, paddingVertical: 34, paddingHorizontal: 20, alignItems: 'center', transform: [{ rotate: '-1deg' }] }}>
-              <Text style={{ color: t.onCard, fontSize: 30, fontWeight: '800', textAlign: 'center', letterSpacing: -0.5 }}>{ex.prompt}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              {ex.kind === 'choice' && ex.old && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: t.surface, borderWidth: 1, borderColor: t.line, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 2 }}>
+                  <Ionicons name="refresh" size={12} color={t.muted} />
+                  <Text style={{ color: t.muted, fontSize: 12, fontWeight: '800' }}>Wiederholung</Text>
+                </View>
+              )}
+              <P muted style={{ flex: 1 }}>
+                {ex.retry
+                  ? 'Noch einmal'
+                  : isTest && pos === 0
+                    ? `${kind === 'unitTest' ? 'Mini-Prüfung' : kind === 'skip' ? 'Einstufungsprüfung' : 'Abschlussprüfung'}: ${total} Fragen, bestanden ab ${kind === 'skip' ? SKIP_PASS : PASS} %.`
+                    : ex.kind === 'spelling'
+                      ? `Wie schreibt man das auf ${c.langA}?`
+                      : ex.kind === 'listen'
+                        ? `Hör genau hin. Was bedeutet das auf ${c.langB}?`
+                        : ex.kind === 'cloze'
+                          ? 'Vervollständige den Satz.'
+                          : ex.dir === 'ab'
+                            ? ex.isNew ? `Neues Wort. Was heißt das auf ${c.langB}?` : `Was heißt das auf ${c.langB}?`
+                            : `Was heißt das auf ${c.langA}?`}
+              </P>
             </View>
+            {ex.kind === 'listen' ? (
+              <ListenCard key={pos} text={ex.prompt} lang={c.langA} reveal={!!picked} />
+            ) : ex.kind === 'cloze' ? (
+              <View style={{ backgroundColor: t.card, borderRadius: 6, paddingVertical: 26, paddingHorizontal: 20, gap: 10, transform: [{ rotate: '-1deg' }] }}>
+                <Text style={{ color: t.onCard, fontSize: 24, fontWeight: '800', textAlign: 'center', lineHeight: 34 }}>
+                  {ex.before}
+                  <Text style={{ textDecorationLine: picked ? 'none' : 'underline' }}>{picked ? ex.answer : ' _______ '}</Text>
+                  {ex.after}
+                </Text>
+                <Text style={{ color: t.onCard, opacity: 0.75, fontSize: 15, textAlign: 'center' }}>{ex.translation}</Text>
+              </View>
+            ) : (
+              /* Die Karteikarte */
+              <View style={{ backgroundColor: t.card, borderRadius: 6, paddingVertical: 34, paddingHorizontal: 20, alignItems: 'center', transform: [{ rotate: '-1deg' }] }}>
+                <Text style={{ color: t.onCard, fontSize: 30, fontWeight: '800', textAlign: 'center', letterSpacing: -0.5 }}>{ex.prompt}</Text>
+              </View>
+            )}
           </View>
           <View style={{ gap: 10 }}>
             {ex.options.map((o) => {
@@ -193,13 +229,114 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
           </Text>
           {ex.kind !== 'pairs' && !correct && (
             <P>
-              {ex.kind === 'spelling' ? `Richtig geschrieben: ${ex.answer}` : `${ex.prompt} = ${ex.answer}`}
+              {ex.kind === 'spelling' || ex.kind === 'build'
+                ? `Richtig: ${ex.kind === 'build' ? ex.prefix : ''}${ex.answer}`
+                : ex.kind === 'cloze'
+                  ? `Richtig: ${ex.before}${ex.answer}${ex.after}`
+                  : `${ex.prompt} = ${ex.answer}`}
               {'\n'}Das Wort kommt am Ende noch einmal.
             </P>
           )}
           <Btn label={pos + 1 >= queue.length ? 'Lektion abschließen' : 'Weiter'} onPress={next} />
         </Panel>
       )}
+    </View>
+  );
+}
+
+// Hörübung: Lautsprecher-Karte, spielt das Wort beim Öffnen und auf Tippen ab
+function ListenCard({ text, lang, reveal }: { text: string; lang: string; reveal: boolean }) {
+  const t = useTheme();
+  useEffect(() => {
+    const id = setTimeout(() => speak(text, lang), 250);
+    return () => clearTimeout(id);
+  }, [text]);
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Nochmal anhören"
+      onPress={() => speak(text, lang)}
+      style={({ pressed }) => ({ backgroundColor: t.card, borderRadius: 6, paddingVertical: 26, alignItems: 'center', gap: 8, transform: [{ rotate: '-1deg' }, { scale: pressed ? 0.97 : 1 }] })}
+    >
+      <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: t.onCard, alignItems: 'center', justifyContent: 'center' }}>
+        <Ionicons name="volume-high" size={36} color={t.card} />
+      </View>
+      <Text style={{ color: t.onCard, fontSize: reveal ? 24 : 14, fontWeight: reveal ? '800' : '700' }}>{reveal ? text : 'Tippen zum Anhören'}</Text>
+    </Pressable>
+  );
+}
+
+// Buchstaben-Puzzle: Wort aus Kacheln zusammensetzen
+function BuildView({ ex, langA, picked, onSubmit, retry }: { ex: Extract<Exercise, { kind: 'build' }>; langA: string; picked: string | null; onSubmit: (s: string) => void; retry: boolean }) {
+  const t = useTheme();
+  const [used, setUsed] = useState<number[]>([]);
+  const typed = used.map((i) => ex.tiles[i]).join('');
+  const done = picked !== null;
+  const ok = done && picked!.trim().toLowerCase() === ex.answer.toLowerCase();
+  const tap = (i: number) => {
+    if (done || used.includes(i)) return;
+    const nu = [...used, i];
+    setUsed(nu);
+    if (nu.length === ex.tiles.length) onSubmit(nu.map((k) => ex.tiles[k]).join(''));
+  };
+  return (
+    <View style={{ gap: 22 }}>
+      <View style={{ gap: 8 }}>
+        <P muted>{retry ? 'Noch einmal' : `Setz das Wort auf ${langA} zusammen.`}</P>
+        <View style={{ backgroundColor: t.card, borderRadius: 6, paddingVertical: 28, paddingHorizontal: 20, alignItems: 'center', transform: [{ rotate: '-1deg' }] }}>
+          <Text style={{ color: t.onCard, fontSize: 28, fontWeight: '800', textAlign: 'center' }}>{ex.prompt}</Text>
+        </View>
+      </View>
+      <View
+        style={{
+          minHeight: 58,
+          borderRadius: 14,
+          borderWidth: 2,
+          borderColor: done ? (ok ? t.right : t.wrong) : t.line,
+          backgroundColor: done ? (ok ? t.rightBg : t.wrongBg) : t.surface,
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 14,
+          gap: 8,
+        }}
+      >
+        {ex.prefix ? <Text style={{ color: t.muted, fontSize: 22, fontWeight: '700' }}>{ex.prefix.trim()}</Text> : null}
+        <Text style={{ flex: 1, color: t.ink, fontSize: 24, fontWeight: '800', letterSpacing: 2 }}>{typed || ' '}</Text>
+        {!done && used.length > 0 && (
+          <Pressable accessibilityRole="button" accessibilityLabel="Letzten Buchstaben löschen" hitSlop={10} onPress={() => setUsed(used.slice(0, -1))}>
+            <Ionicons name="backspace-outline" size={26} color={t.muted} />
+          </Pressable>
+        )}
+      </View>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+        {ex.tiles.map((ch, i) => {
+          const isUsed = used.includes(i);
+          return (
+            <Pressable
+              key={i}
+              accessibilityRole="button"
+              accessibilityLabel={ch === ' ' ? 'Leerzeichen' : ch}
+              onPress={() => tap(i)}
+              disabled={isUsed || done}
+              style={({ pressed }) => ({
+                width: 46,
+                height: 52,
+                borderRadius: 12,
+                borderWidth: 2,
+                borderBottomWidth: 5,
+                borderColor: t.line,
+                backgroundColor: t.surface,
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: isUsed ? 0.2 : 1,
+                transform: [{ translateY: pressed ? 2 : 0 }],
+              })}
+            >
+              <Text style={{ color: t.ink, fontSize: 22, fontWeight: '800' }}>{ch === ' ' ? '␣' : ch}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }

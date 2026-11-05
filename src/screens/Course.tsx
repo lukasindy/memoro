@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
 import { MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
+import { canSpeak } from '../platform';
 import { AppData, Course as CourseT, DEFAULT_MIX, FREE_WORD_LIMIT, Mix } from '../store';
 
 export type CourseTab = 'learn' | 'vocab' | 'stats' | 'settings';
@@ -350,6 +351,7 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
   const [a, setA] = useState('');
   const [b, setB] = useState('');
   const [query, setQuery] = useState('');
+  const [limit, setLimit] = useState(150);
   const toggle = (wid: string) =>
     setOpen((o) => {
       const n = new Set(o);
@@ -435,7 +437,7 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
             <P muted>Kein Wort gefunden.</P>
           ) : (
             <View style={{ backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, overflow: 'hidden' }}>
-              {ids.map((wid, k) => {
+              {ids.slice(0, limit).map((wid, k) => {
                 const w = c.words.find((x) => x.id === wid)!;
                 const visible = showAll || open.has(w.id);
                 if (editing === w.id) {
@@ -515,6 +517,7 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
               })}
             </View>
           )}
+          {ids.length > limit && <Btn kind="secondary" label={`Weitere ${Math.min(150, ids.length - limit)} von ${ids.length - limit} anzeigen`} onPress={() => setLimit(limit + 150)} />}
           <P muted style={{ fontSize: 13, textAlign: 'center' }}>Tippen zeigt die Übersetzung, gedrückt halten zum Bearbeiten.</P>
         </>
       )}
@@ -638,13 +641,13 @@ function StatsTab({ c }: { c: CourseT }) {
 
 const scaledTotal = (m: Mix, words: number) => {
   const s = scaledMix(m, words);
-  return s.ab + s.ba + s.pairs + s.spelling;
+  return s.ab + s.ba + s.pairs + s.spelling + s.listen + s.build + s.cloze;
 };
 
 const PRESETS: { name: string; note: string; mix: Mix }[] = [
   { name: 'Gemischt', note: 'Alle Übungen ausgewogen', mix: DEFAULT_MIX },
-  { name: 'Aktiv', note: 'Mehr in die Lernsprache', mix: { ab: 2, ba: 6, pairs: 1, spelling: 3 } },
-  { name: 'Kurz', note: 'Schnelle Lektionen', mix: { ab: 2, ba: 2, pairs: 1, spelling: 1 } },
+  { name: 'Aktiv', note: 'Mehr in die Lernsprache', mix: { ab: 2, ba: 4, pairs: 1, spelling: 2, listen: 1, build: 2, cloze: 1 } },
+  { name: 'Kurz', note: 'Schnelle Lektionen', mix: { ab: 2, ba: 2, pairs: 1, spelling: 0, listen: 1, build: 1, cloze: 0 } },
 ];
 
 function Stepper({ label, hint, value, min, max, onChange }: { label: string; hint?: string; value: number; min: number; max: number; onChange: (v: number) => void }) {
@@ -677,7 +680,7 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
   const t = useTheme();
   const setMix = (k: keyof Mix, v: number) => setCourse((x) => ({ ...x, mix: { ...x.mix, [k]: v } }));
   const m = c.mix;
-  const total = m.ab + m.ba + m.pairs + m.spelling;
+  const total = m.ab + m.ba + m.pairs + m.spelling + m.listen + m.build + m.cloze;
   const active = PRESETS.find((p) => (Object.keys(p.mix) as (keyof Mix)[]).every((k) => p.mix[k] === m[k]));
 
   return (
@@ -722,6 +725,9 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
         <Stepper label={`${c.langB} → ${c.langA}`} hint="Wort in der Lernsprache wählen" value={m.ba} min={0} max={10} onChange={(v) => setMix('ba', v)} />
         <Stepper label="Paare finden" hint="Je bis zu 4 Wortpaare zuordnen" value={m.pairs} min={0} max={5} onChange={(v) => setMix('pairs', v)} />
         <Stepper label="Schreibweise" hint="Richtig geschriebenes Wort wählen" value={m.spelling} min={0} max={10} onChange={(v) => setMix('spelling', v)} />
+        <Stepper label="Hörübung" hint={canSpeak(c.langA) ? 'Wort hören, Bedeutung wählen' : `Für ${c.langA} gibt es keine Sprachausgabe`} value={m.listen} min={0} max={10} onChange={(v) => setMix('listen', v)} />
+        <Stepper label="Buchstaben-Puzzle" hint="Wort aus Buchstaben zusammensetzen" value={m.build} min={0} max={10} onChange={(v) => setMix('build', v)} />
+        <Stepper label="Lückensatz" hint={c.gen ? 'Satz mit bekannten Wörtern vervollständigen' : 'Nur in automatisch erstellten Kursen'} value={m.cloze} min={0} max={10} onChange={(v) => setMix('cloze', v)} />
         <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.' : `Gilt für ${MIX_BASE_WORDS} Wörter. Bei ${c.wordsPerLesson} Wörtern pro Lektion rechnet Memoro automatisch auf ${scaledTotal(m, c.wordsPerLesson)} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
       </Panel>
 

@@ -4,8 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
 import { buildPath, levelInfo } from '../engine';
+import { GEN_LANGS, GEN_MAX, LangCode, generateWords, langName } from '../data/generate';
 import { releasePending } from '../engine';
-import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
+import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, FREE_WORD_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
 import { exportBackup, pickBackupFile } from '../platform';
 import { BUILD_ID } from '../update';
 import { Platform } from 'react-native';
@@ -214,40 +215,153 @@ export function Home({ data, go }: ScreenProps) {
 }
 
 export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
+  const t = useTheme();
+  const [mode, setMode] = useState<'own' | 'auto'>('own');
   const [name, setName] = useState('');
   const [langA, setLangA] = useState('');
   const [langB, setLangB] = useState('Deutsch');
+  const [genA, setGenA] = useState<LangCode>('en');
+  const [genB, setGenB] = useState<LangCode>('de');
+  const max = GEN_MAX();
+  const [count, setCount] = useState(Math.min(FREE_WORD_LIMIT, max));
   const limitReached = !data.premium && data.courses.length >= FREE_COURSE_LIMIT;
+  const amount = data.premium ? count : Math.min(FREE_WORD_LIMIT, max);
+  const thirds = [0, 1, 2].map((i) => Math.round((amount * (i + 1)) / 3) - Math.round((amount * i) / 3));
+
+  const blocked = () => {
+    if (!limitReached) return false;
+    replace({ name: 'premium', reason: 'In der Gratis-Version ist ein Kurs möglich. Mit Premium legst du beliebig viele an.' });
+    return true;
+  };
+
+  const base = { pending: [], mix: { ...DEFAULT_MIX }, wordsPerLesson: DEFAULT_WORDS_PER_LESSON, lessonsPerUnit: DEFAULT_LESSONS_PER_UNIT, best: {}, lessons: 0, createdAt: Date.now() };
 
   const create = () => {
-    if (limitReached) {
-      replace({ name: 'premium', reason: 'In der Gratis-Version ist ein Kurs möglich. Mit Premium legst du beliebig viele an.' });
-      return;
-    }
+    if (blocked()) return;
     const id = uid();
     update((d) => ({
       ...d,
-      courses: [...d.courses, { id, name: name.trim(), langA: langA.trim() || 'Fremdsprache', langB: langB.trim() || 'Deutsch', words: [], pending: [], mix: { ...DEFAULT_MIX }, wordsPerLesson: DEFAULT_WORDS_PER_LESSON, lessonsPerUnit: DEFAULT_LESSONS_PER_UNIT, best: {}, lessons: 0, createdAt: Date.now() }],
+      courses: [...d.courses, { id, name: name.trim(), langA: langA.trim() || 'Fremdsprache', langB: langB.trim() || 'Deutsch', words: [], ...base }],
     }));
     replace({ name: 'course', id });
     go({ name: 'add', id });
   };
 
+  const generate = () => {
+    if (blocked()) return;
+    const id = uid();
+    const words = generateWords(genA, genB, amount);
+    update((d) => ({
+      ...d,
+      courses: [...d.courses, { id, name: `${langName(genA)} Grundwortschatz`, langA: langName(genA), langB: langName(genB), words, gen: { a: genA, b: genB }, ...base }],
+    }));
+    replace({ name: 'course', id });
+  };
+
+  const chips = (value: LangCode, set: (c: LangCode) => void, exclude: LangCode) => (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+      {GEN_LANGS.filter((l) => l.code !== exclude).map((l) => {
+        const on = l.code === value;
+        return (
+          <Pressable
+            key={l.code}
+            accessibilityRole="button"
+            accessibilityState={{ selected: on }}
+            onPress={() => set(l.code)}
+            style={{ paddingHorizontal: 14, paddingVertical: 9, borderRadius: 999, borderWidth: 2, borderColor: on ? t.primary : t.line, backgroundColor: on ? t.primary : t.surface }}
+          >
+            <Text style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 15 }}>{l.name}</Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+
   return (
     <View style={{ gap: 20 }}>
       <TopBar onBack={back} />
       <H1>Neuer Kurs</H1>
-      <Field label="Name" value={name} onChangeText={setName} placeholder="z. B. Latein Kapitel 1–5" autoFocus />
-      <View style={{ flexDirection: 'row', gap: 12 }}>
-        <View style={{ flex: 1 }}>
-          <Field label="Lernsprache" value={langA} onChangeText={setLangA} placeholder="z. B. Latein" />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Field label="Deine Sprache" value={langB} onChangeText={setLangB} />
-        </View>
+
+      <View style={{ flexDirection: 'row', backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, padding: 4, gap: 4 }}>
+        {([
+          ['own', 'Eigene Liste', 'create-outline'],
+          ['auto', 'Automatisch erstellen', 'sparkles'],
+        ] as const).map(([k, label, icon]) => {
+          const on = mode === k;
+          return (
+            <Pressable
+              key={k}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: on }}
+              onPress={() => setMode(k)}
+              style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 11, borderRadius: 12, backgroundColor: on ? t.primary : 'transparent' }}
+            >
+              <Ionicons name={icon} size={16} color={on ? t.onPrimary : t.ink} />
+              <Text style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 14 }}>{label}</Text>
+            </Pressable>
+          );
+        })}
       </View>
-      <P muted>Die Lernsprache steht in deiner Liste links, deine Sprache rechts. Falls es andersherum ist, kannst du das beim Einfügen tauschen.</P>
-      <Btn label="Kurs anlegen und Wörter hinzufügen" onPress={create} disabled={!name.trim()} />
+
+      {mode === 'own' ? (
+        <>
+          <Field label="Name" value={name} onChangeText={setName} placeholder="z. B. Latein Kapitel 1–5" />
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <View style={{ flex: 1 }}>
+              <Field label="Lernsprache" value={langA} onChangeText={setLangA} placeholder="z. B. Latein" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Field label="Deine Sprache" value={langB} onChangeText={setLangB} />
+            </View>
+          </View>
+          <P muted>Die Lernsprache steht in deiner Liste links, deine Sprache rechts. Falls es andersherum ist, kannst du das beim Einfügen tauschen.</P>
+          <Btn label="Kurs anlegen und Wörter hinzufügen" onPress={create} disabled={!name.trim()} />
+        </>
+      ) : (
+        <>
+          <P muted>Memoro erstellt dir einen Kurs mit dem Grundwortschatz, sortiert nach Häufigkeit: die wichtigsten Wörter zuerst, sauber gedrittelt in Leicht, Mittel und Schwer. Dazu gibt es Lückensätze mit Wörtern, die du schon kennst.</P>
+          <View style={{ gap: 8 }}>
+            <Text style={{ color: t.muted, fontSize: 14, fontWeight: '600' }}>Lernsprache</Text>
+            {chips(genA, (v) => { setGenA(v); if (v === genB) setGenB(v === 'de' ? 'en' : 'de'); }, '' as LangCode)}
+          </View>
+          <View style={{ gap: 8 }}>
+            <Text style={{ color: t.muted, fontSize: 14, fontWeight: '600' }}>Deine Sprache</Text>
+            {chips(genB, setGenB, genA)}
+          </View>
+          <Panel style={{ gap: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <H2>{amount} Wörter</H2>
+              {!data.premium && <Text style={{ color: t.muted, fontSize: 13, fontWeight: '700' }}>Gratis-Version</Text>}
+            </View>
+            {data.premium ? (
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                {[150, 300, 600, 1000, max].filter((v, i, arr) => v <= max && arr.indexOf(v) === i).map((v) => (
+                  <Pressable
+                    key={v}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: count === v }}
+                    onPress={() => setCount(v)}
+                    style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, borderWidth: 2, borderColor: count === v ? t.primary : t.line, backgroundColor: count === v ? t.primary : t.surface }}
+                  >
+                    <Text style={{ color: count === v ? t.onPrimary : t.ink, fontWeight: '800' }}>{v === max ? `Alle ${max}` : v}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            ) : (
+              <P muted>In der Gratis-Version bekommst du die {amount} wichtigsten Wörter. Mit Premium wählst du die Anzahl selbst.</P>
+            )}
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              {['Leicht', 'Mittel', 'Schwer'].map((n, i) => (
+                <View key={n} style={{ flex: 1, backgroundColor: t.lvl[i], borderRadius: 12, paddingVertical: 8, alignItems: 'center' }}>
+                  <Text style={{ color: t.onLvl, fontWeight: '900', fontSize: 16 }}>{thirds[i]}</Text>
+                  <Text style={{ color: t.onLvl, fontSize: 12 }}>{n}</Text>
+                </View>
+              ))}
+            </View>
+          </Panel>
+          <Btn label={`${langName(genA)}-Kurs erstellen`} onPress={generate} />
+        </>
+      )}
     </View>
   );
 }
@@ -309,7 +423,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.5 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.6 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }
