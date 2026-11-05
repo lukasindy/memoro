@@ -10,6 +10,7 @@ import { Home, NewCourse, Premium, Settings } from './src/screens/Home';
 import { Course } from './src/screens/Course';
 import { AddWords } from './src/screens/AddWords';
 import { Lesson, Result } from './src/screens/Lesson';
+import { Inventory } from './src/screens/Inventory';
 import { alreadyTried, applyUpdate, checkForUpdate, onAppVisible } from './src/update';
 
 export default function App() {
@@ -76,6 +77,7 @@ export default function App() {
       case 'home': screen = <Home {...p} />; break;
       case 'newCourse': screen = <NewCourse {...p} />; break;
       case 'settings': screen = <Settings {...p} />; break;
+      case 'inventory': screen = <Inventory {...p} />; break;
       case 'premium': screen = <Premium {...p} reason={route.reason} />; break;
       case 'course': screen = <Course {...p} id={route.id} tab={route.tab} sec={route.sec} />; break;
       case 'add': screen = <AddWords key={route.id} {...p} id={route.id} />; break;
