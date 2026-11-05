@@ -34,7 +34,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
           <TopBar onBack={back} title={`${c.name} · ${c.langA} – ${c.langB}`} />
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
           {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} />}
-          {tab === 'stats' && <StatsTab c={c} premium={data.premium} go={go} />}
+          {tab === 'stats' && <StatsTab c={c} />}
           {tab === 'settings' && (
             <SettingsTab
               c={c}
@@ -205,8 +205,59 @@ function Pulse({ color, w, h, radius }: { color: string; w: number; h: number; r
   );
 }
 
+// Mini-Prüfung: abgerundetes Rechteck mit Pokal
+function MiniStep({ node, color, best, offset, onPress }: { node: PathNode; color: string; best?: number; offset: number; onPress: () => void }) {
+  const t = useTheme();
+  const { status } = node;
+  const current = status === 'current';
+  const done = status === 'done';
+  const locked = status === 'locked';
+  const w = 120;
+  const h = 86;
+  const radius = 24;
+  const bg = locked ? t.line : done ? color : t.card;
+  const fg = locked ? t.muted : done ? t.onLvl : t.onCard;
+  const label = done ? `${node.title}, erledigt${best ? `, ${best} %` : ''}` : current ? `${node.title}, starten` : `${node.title}, gesperrt`;
+  return (
+    <View style={{ alignItems: 'center', transform: [{ translateX: offset }] }}>
+      {current && (
+        <View style={{ backgroundColor: t.card, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 6, marginBottom: 12 }}>
+          <Text style={{ color: t.onCard, fontSize: 14, fontWeight: '800' }}>Los geht’s</Text>
+        </View>
+      )}
+      <View style={{ width: w, height: h + 8, alignItems: 'center', justifyContent: 'flex-start' }}>
+        {current && <Pulse color={t.card} w={w} h={h} radius={radius} />}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={label}
+          onPress={onPress}
+          style={({ pressed }) => ({
+            width: w,
+            height: h,
+            borderRadius: radius,
+            backgroundColor: bg,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderBottomWidth: pressed ? 2 : 8,
+            borderColor: 'rgba(0,0,0,0.22)',
+            transform: [{ translateY: pressed ? 6 : 0 }],
+          })}
+        >
+          <Ionicons name="trophy" size={34} color={fg} />
+        </Pressable>
+      </View>
+      <Text style={{ color: locked ? t.muted : t.ink, fontSize: 16, fontWeight: '800', marginTop: 6 }}>
+        {node.title}
+        {done && best ? ` · ${best} %` : ''}
+      </Text>
+    </View>
+  );
+}
+
 // Lernpfad-Schritt als Karteikarte (Memoro-eigene Optik)
-function PathStep({ node, color, best, offset, onPress }: { node: PathNode; color: string; best?: number; offset: number; onPress: () => void }) {
+function PathStep(props: { node: PathNode; color: string; best?: number; offset: number; onPress: () => void }) {
+  if (props.node.kind === 'unitTest') return <MiniStep {...props} />;
+  const { node, color, best, offset, onPress } = props;
   const t = useTheme();
   const { status, kind } = node;
   const current = status === 'current';
@@ -230,7 +281,7 @@ function PathStep({ node, color, best, offset, onPress }: { node: PathNode; colo
         : mini
           ? 'flash'
           : 'play';
-  const bubble = exam ? 'Abschlussprüfung' : mini ? 'Miniprüfung' : 'Los geht’s';
+  const bubble = exam ? 'Abschlussprüfung' : mini ? 'Mini-Prüfung' : 'Los geht’s';
   const label = done ? `${node.title}, erledigt${best ? `, ${best} %` : ''}` : current ? `${node.title}, starten` : `${node.title}, gesperrt`;
 
   return (
@@ -427,20 +478,8 @@ function VocabTab({ c, go, setCourse }: { c: CourseT; go: ScreenProps['go']; set
 
 // ---------- Statistik ----------
 
-function StatsTab({ c, premium, go }: { c: CourseT; premium: boolean; go: ScreenProps['go'] }) {
+function StatsTab({ c }: { c: CourseT }) {
   const t = useTheme();
-  if (!premium) {
-    return (
-      <View style={{ gap: 16 }}>
-        <H1>Statistik</H1>
-        <Panel>
-          <H2>Teil von Premium</H2>
-          <P muted>Sieh, wie viele Wörter du schon kannst, deine Trefferquote und welche Wörter dir am schwersten fallen.</P>
-          <Btn label="Premium ansehen" onPress={() => go({ name: 'premium', reason: 'Die Statistik ist Teil von Premium.' })} />
-        </Panel>
-      </View>
-    );
-  }
   const right = c.words.reduce((s, w) => s + w.right, 0);
   const wrong = c.words.reduce((s, w) => s + w.wrong, 0);
   const learned = c.words.filter((w) => w.lp).length;
@@ -586,7 +625,7 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
       <Panel>
         <H2>Lernpfad</H2>
         <Stepper label="Wörter pro Lektion" value={c.wordsPerLesson} min={3} max={10} onChange={(v) => setCourse((x) => ({ ...x, wordsPerLesson: v }))} />
-        <Stepper label="Lektionen pro Abschnitt" hint="Danach folgt eine Miniprüfung" value={c.lessonsPerUnit} min={2} max={8} onChange={(v) => setCourse((x) => ({ ...x, lessonsPerUnit: v }))} />
+        <Stepper label="Lektionen pro Abschnitt" hint="Danach folgt eine Mini-Prüfung" value={c.lessonsPerUnit} min={2} max={8} onChange={(v) => setCourse((x) => ({ ...x, lessonsPerUnit: v }))} />
         <P muted>Die Wörter werden nach Schwierigkeit auf Leicht, Mittel und Schwer verteilt. Jede Stufe endet mit einer Abschlussprüfung (10, 20 bzw. 30 Fragen). Dein Fortschritt hängt an den Wörtern, Änderungen hier gehen also nicht verloren.</P>
       </Panel>
 

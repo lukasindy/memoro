@@ -77,7 +77,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
 
   const create = () => {
     if (limitReached) {
-      replace({ name: 'premium', reason: `In der Gratis-Version sind ${FREE_COURSE_LIMIT} Kurse möglich.` });
+      replace({ name: 'premium', reason: 'In der Gratis-Version ist ein Kurs möglich. Mit Premium legst du beliebig viele an.' });
       return;
     }
     const id = uid();
@@ -165,7 +165,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.5 – Testversion</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.7 – Testversion</P>
     </View>
   );
 }
@@ -177,9 +177,9 @@ export function Premium({ back, update, data, reason }: ScreenProps & { reason: 
       <H1>Memoro Premium</H1>
       <P>{reason}</P>
       <Panel>
-        <P>• Wörter per Foto erfassen</P>
-        <P>• Unbegrenzt viele Kurse</P>
-        <P>• Statistik mit deinen schwierigsten Wörtern</P>
+        <P>• Vokabellisten mit der Kamera abfotografieren</P>
+        <P>• Mehr als ein Kurs</P>
+        <P>• Mehr als 1000 Wörter</P>
       </Panel>
       <P muted>In der Testversion gibt es noch keinen Kauf. Du kannst Premium hier zum Testen aktivieren.</P>
       <Btn

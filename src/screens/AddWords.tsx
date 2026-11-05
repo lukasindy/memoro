@@ -4,6 +4,7 @@ import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, notify, useTheme } from '../ui';
 import { Pair, parseList } from '../parser';
 import { newWord } from '../engine';
+import { FREE_WORD_LIMIT } from '../store';
 import { ocrAvailable, ocrLanguages, pickImage, recognizeText } from '../platform';
 
 const EXAMPLE = 'amicus ; der Freund\naqua – das Wasser\nporta = die Tür';
@@ -27,7 +28,7 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
 
   const fromPhoto = async (camera: boolean) => {
     if (!data.premium) {
-      go({ name: 'premium', reason: 'Wörter per Foto zu erfassen ist Teil von Premium.' });
+      go({ name: 'premium', reason: 'Vokabellisten mit der Kamera zu erfassen ist Teil von Premium.' });
       return;
     }
     try {
@@ -52,6 +53,11 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
       .map((p) => ({ a: p.a.trim(), b: p.b.trim() }))
       .filter((p) => p.a && p.b && !existing.has((p.a + '|' + p.b).toLowerCase()))
       .map(newWord);
+    const total = data.courses.reduce((n, x) => n + x.words.length, 0) + fresh.length;
+    if (!data.premium && total > FREE_WORD_LIMIT) {
+      go({ name: 'premium', reason: `In der Gratis-Version sind bis zu ${FREE_WORD_LIMIT} Wörter möglich. Mit dieser Liste wären es ${total}.` });
+      return;
+    }
     update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? { ...x, words: [...x.words, ...fresh] } : x)) }));
     const dupes = pairs.length - fresh.length;
     notify(`${fresh.length} Wörter gespeichert und nach Schwierigkeit in die Abschnitte einsortiert.${dupes > 0 ? ` ${dupes} waren schon im Kurs.` : ''}`);
@@ -123,7 +129,7 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
       </Panel>
 
       <Panel>
-        <H2>Per Foto{data.premium ? '' : ' (Premium)'}</H2>
+        <H2>Per Kamera{data.premium ? '' : ' (Premium)'}</H2>
         <P muted>Fotografiere eine Vokabelliste aus Buch oder Heft. Der erkannte Text landet oben im Feld, dort kannst du ihn noch korrigieren.</P>
         {ocr.busy ? (
           <View style={{ gap: 8 }}>
