@@ -35,6 +35,12 @@ function lev(a: string, b: string) {
   return prev[n];
 }
 
+// Wie ähnlich sich Wort und Übersetzung sind (0 bis 1), z. B. familia/Familie
+export function similarity(a: string, b: string) {
+  const na = norm(a), nb = norm(b);
+  return 1 - lev(na, nb) / Math.max(na.length, nb.length, 1);
+}
+
 export function estimateDifficulty(a: string, b: string) {
   const na = norm(a), nb = norm(b);
   const len = na.length;
@@ -434,14 +440,23 @@ export function levelInfo(xp: number) {
 
 export type LevelUp = { from: number; to: number; freezes: number; boost: boolean };
 
+// Nächste Level-Belohnungen für die Vorschau im Inventar
+export function upcomingRewards(level: number, count = 5) {
+  return Array.from({ length: count }, (_, k) => {
+    const l = level + 1 + k;
+    return { level: l, booster: l % 5 === 0 };
+  });
+}
+
 // XP gutschreiben (mit Booster doppelt) und Level-Boni vergeben
-export function gainXp(d: { xp: number; freezes: number; boost: number }, base: number) {
+export function gainXp(d: { xp: number; freezes: number; boost: number; boosters?: number }, base: number) {
   const boosted = d.boost > 0 && base > 0;
   const gained = boosted ? base * 2 : base;
   const from = levelInfo(d.xp).level;
   const to = levelInfo(d.xp + gained).level;
   let freezes = d.freezes;
-  let boost = boosted ? d.boost - 1 : d.boost;
+  const boost = boosted ? d.boost - 1 : d.boost;
+  let boosters = d.boosters ?? 0;
   let freezeGain = 0;
   let boostGain = false;
   for (let l = from + 1; l <= to; l++) {
@@ -450,10 +465,10 @@ export function gainXp(d: { xp: number; freezes: number; boost: number }, base: 
       freezeGain++;
     }
     if (l % 5 === 0) {
-      boost += BOOST_LESSONS;
+      boosters++; // landet im Inventar
       boostGain = true;
     }
   }
   const up: LevelUp | null = to > from ? { from, to, freezes: freezeGain, boost: boostGain } : null;
-  return { xp: d.xp + gained, gained, boosted, freezes, boost, up };
+  return { xp: d.xp + gained, gained, boosted, freezes, boost, boosters, up };
 }

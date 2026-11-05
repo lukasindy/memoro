@@ -13,6 +13,7 @@ export type Route =
   | { name: 'lesson'; id: string; node?: LessonRef } // ohne node = Wiederholung
   | { name: 'result'; id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean; boosted?: boolean; up?: LevelUp | null }
   | { name: 'settings' }
+  | { name: 'inventory' }
   | { name: 'premium'; reason: string };
 
 export type ScreenProps = {

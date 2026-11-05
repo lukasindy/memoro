@@ -170,7 +170,7 @@ export function CardBox({ counts, compact }: { counts: number[]; compact?: boole
 }
 
 // Kompakte Anzeige von Streak, XP und Level (z. B. in der Kursleiste)
-export function StatPills({ streak, xp, freezes, boost }: { streak: number; xp: number; freezes: number; boost: number }) {
+export function StatPills({ streak, xp, freezes, boost, onPress }: { streak: number; xp: number; freezes: number; boost: number; onPress?: () => void }) {
   const t = useTheme();
   const lv = levelInfo(xp);
   const pill = (children: React.ReactNode, label: string) => (
@@ -179,7 +179,7 @@ export function StatPills({ streak, xp, freezes, boost }: { streak: number; xp: 
     </View>
   );
   return (
-    <View style={{ flexDirection: 'row', gap: 6 }}>
+    <Pressable onPress={onPress} disabled={!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityHint={onPress ? 'Öffnet das Inventar' : undefined} style={{ flexDirection: 'row', gap: 6 }}>
       {pill(
         <>
           <Ionicons name="flame" size={15} color={streak > 0 ? '#E8742C' : t.muted} />
@@ -196,7 +196,7 @@ export function StatPills({ streak, xp, freezes, boost }: { streak: number; xp: 
         </>,
         `${xp} XP, Level ${lv.level}${boost ? `, Booster für ${boost} Lektionen` : ''}`,
       )}
-    </View>
+    </Pressable>
   );
 }
 

@@ -48,7 +48,8 @@ export type AppData = {
   xp: number;
   streak: { day: string; count: number };
   freezes: number; // Streak-Schutz: rettet einen verpassten Tag
-  boost: number; // Lektionen mit doppelten XP
+  boost: number; // Lektionen mit doppelten XP (aktiver Booster)
+  boosters: number; // XP-Booster im Inventar, noch nicht aktiviert
   premium: boolean; // Testschalter, später In-App-Kauf
 };
 
@@ -61,6 +62,7 @@ export const emptyData = (): AppData => ({
   streak: { day: '', count: 0 },
   freezes: 0,
   boost: 0,
+  boosters: 0,
   premium: false,
 });
 
