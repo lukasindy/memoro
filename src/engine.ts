@@ -71,9 +71,16 @@ export function dueCount(c: Course, now = Date.now()) {
 // ---------- Übungen ----------
 
 export type Exercise =
-  | { kind: 'choice'; word: Word; dir: 'ab' | 'ba'; prompt: string; options: string[]; answer: string; isNew: boolean }
+  | { kind: 'choice'; word: Word; dir: 'ab' | 'ba'; prompt: string; options: string[]; answer: string; isNew: boolean; old?: boolean }
   | { kind: 'spelling'; word: Word; prompt: string; options: string[]; answer: string }
-  | { kind: 'pairs'; words: Word[] };
+  | { kind: 'pairs'; words: Word[] }
+  | { kind: 'listen'; word: Word; prompt: string; options: string[]; answer: string }
+  | { kind: 'build'; word: Word; prompt: string; prefix: string; answer: string; tiles: string[] }
+  | { kind: 'cloze'; word: Word; before: string; after: string; translation: string; options: string[]; answer: string };
+
+// Lückensatz-Daten, die von außen (mitgelieferte Sätze) kommen
+export type Cloze = { before: string; after: string; translation: string; answer: string; options: string[]; word?: Word };
+export type BuildOpts = { cloze?: (w: Word) => Cloze | null; old?: Word[]; canListen?: boolean };
 
 const shuffle = <T,>(arr: T[]) => {
   const a = [...arr];
@@ -149,6 +156,37 @@ function choice(c: Course, w: Word, dir: 'ab' | 'ba', isNew: boolean): Exercise 
   return { kind: 'choice', word: w, dir, prompt, options, answer, isNew };
 }
 
+function listen(c: Course, w: Word): Exercise {
+  const options = shuffle([w.b, ...distractors(c, w, 'b')]);
+  return { kind: 'listen', word: w, prompt: w.a, options, answer: w.b };
+}
+
+// Artikel abtrennen, damit nur das eigentliche Wort gepuzzelt wird
+const LEADING_ARTICLE = /^(der|die|das|the|a|an|to|el|la|los|las|le|les|il|lo|gli|i|un|une|una|uno)\s+|^(l'|l’)/i;
+
+function build(c: Course, w: Word): Exercise {
+  const m = w.a.match(LEADING_ARTICLE);
+  const prefix = m ? m[0] : '';
+  const core = w.a.slice(prefix.length).trim();
+  const letters = [...core.replace(/\s+/g, ' ')];
+  if (letters.length < 3 || letters.length > 14) return choice(c, w, 'ba', false);
+  let tiles = shuffle(letters);
+  for (let k = 0; k < 5 && tiles.join('') === core; k++) tiles = shuffle(letters);
+  return { kind: 'build', word: w, prompt: w.b, prefix, answer: core, tiles };
+}
+
+// Bereits gelernte Wörter für die Wiederholung in neuen Lektionen
+export function oldWordsFor(c: Course, exclude: Word[], count: number): Word[] {
+  const skip = new Set(exclude.map((w) => w.id));
+  const learned = c.words.filter((w) => w.lp && !skip.has(w.id));
+  // Unsichere und lange nicht gesehene Wörter bevorzugen, mit etwas Zufall
+  return learned
+    .map((w) => ({ w, s: w.box * 2 + w.due / 864e5 / 7 - effective(w) + Math.random() * 4 }))
+    .sort((x, y) => x.s - y.s)
+    .slice(0, count)
+    .map((x) => x.w);
+}
+
 function spelling(c: Course, w: Word): Exercise {
   const wrong = misspellings(w.a);
   if (w.a.length < 4 || wrong.length < 3) return choice(c, w, 'ba', false);
@@ -163,11 +201,11 @@ export const MIX_BASE_WORDS = 5;
 export function scaledMix(mix: Mix, wordCount: number): Mix {
   const f = Math.max(1, wordCount / MIX_BASE_WORDS);
   const s = (v: number) => (v === 0 ? 0 : Math.max(1, Math.round(v * f)));
-  return { ab: s(mix.ab), ba: s(mix.ba), pairs: s(mix.pairs), spelling: s(mix.spelling) };
+  return { ab: s(mix.ab), ba: s(mix.ba), pairs: s(mix.pairs), spelling: s(mix.spelling), listen: s(mix.listen), build: s(mix.build), cloze: s(mix.cloze) };
 }
 
 // Baut eine Lektion aus den Wörtern nach dem eingestellten Übungsmix
-export function buildMixed(c: Course, words: Word[], mix: Mix): Exercise[] {
+export function buildMixed(c: Course, words: Word[], mix: Mix, opts: BuildOpts = {}): Exercise[] {
   if (words.length === 0) return [];
   const order = shuffle(words);
   let i = 0;
@@ -184,6 +222,23 @@ export function buildMixed(c: Course, words: Word[], mix: Mix): Exercise[] {
   const rest: Exercise[] = [];
   for (let k = 0; k < mix.ba; k++) rest.push(choice(c, next(), 'ba', false));
   for (let k = 0; k < mix.spelling; k++) rest.push(spelling(c, next()));
+  for (let k = 0; k < (mix.listen ?? 0); k++) {
+    const w = next();
+    rest.push(opts.canListen ? listen(c, w) : choice(c, w, 'ab', false));
+  }
+  for (let k = 0; k < (mix.build ?? 0); k++) rest.push(build(c, next()));
+  // Lückensätze nur, wenn es passende Sätze mit bekannten Wörtern gibt
+  for (let k = 0, tries = 0; k < (mix.cloze ?? 0) && opts.cloze && tries < words.length; tries++) {
+    const w = next();
+    const cz = opts.cloze(w);
+    if (cz) {
+      const { word: target, ...rest2 } = cz;
+      rest.push({ kind: 'cloze', word: target ?? w, ...rest2 });
+      k++;
+    }
+  }
+  // Ein paar zufällige alte Wörter zur Wiederholung einstreuen
+  (opts.old ?? []).forEach((w) => rest.push({ ...(choice(c, w, Math.random() < 0.5 ? 'ab' : 'ba', false) as Extract<Exercise, { kind: 'choice' }>), old: true }));
   const pairsList: Exercise[] = [];
   if (words.length >= 2) {
     for (let k = 0; k < mix.pairs; k++) {
@@ -297,8 +352,8 @@ export function buildPath(c: Course): Section[] {
   const count = n >= 15 ? 3 : n >= 8 ? 2 : 1;
   const names = count === 3 ? ['Leicht', 'Mittel', 'Schwer'] : count === 2 ? ['Leicht', 'Schwer'] : ['Grundlagen'];
   const levelsOf: (0 | 1 | 2)[] = count === 3 ? [0, 1, 2] : count === 2 ? [0, 2] : [0];
-  const per = Math.ceil(n / count);
-  const flags = (ids: string[], f: 'lp' | 'ut' | 'se') => ids.every((id) => c.words.find((w) => w.id === id)?.[f]);
+  const byId = new Map(c.words.map((w) => [w.id, w]));
+  const flags = (ids: string[], f: 'lp' | 'ut' | 'se') => ids.every((id) => byId.get(id)?.[f]);
 
   let open = true; // erster nicht erledigter Knoten wird „aktuell“
   const status = (done: boolean): Status => {
@@ -311,7 +366,8 @@ export function buildPath(c: Course): Section[] {
   };
 
   return names.map((name, si) => {
-    const words = sorted.slice(si * per, (si + 1) * per);
+    // Exakt dritteln: 1000 Wörter ergeben 333 / 333 / 334
+    const words = sorted.slice(Math.round((n * si) / count), Math.round((n * (si + 1)) / count));
     // Bereits gelernte Wörter zuerst, damit erledigte Lektionen beim Umbauen erledigt bleiben
     const rank = (w: Word) => (w.se ? 3 : w.ut ? 2 : w.lp ? 1 : 0);
     const inOrder = [...words].sort((x, y) => rank(y) - rank(x));

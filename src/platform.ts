@@ -102,3 +102,32 @@ export function pickBackupFile(): Promise<string | null> {
     input.click();
   });
 }
+
+// ---------- Sprachausgabe (Hörübungen) ----------
+
+import * as Speech from 'expo-speech';
+
+const TTS: Record<string, string> = {
+  deutsch: 'de-DE', englisch: 'en-US', spanisch: 'es-ES', französisch: 'fr-FR', franzoesisch: 'fr-FR',
+  italienisch: 'it-IT', portugiesisch: 'pt-PT', niederländisch: 'nl-NL', schwedisch: 'sv-SE',
+  norwegisch: 'nb-NO', dänisch: 'da-DK', polnisch: 'pl-PL', türkisch: 'tr-TR', russisch: 'ru-RU',
+  griechisch: 'el-GR', kroatisch: 'hr-HR', tschechisch: 'cs-CZ',
+  latein: 'it-IT', // keine Latein-Stimme verfügbar: italienische Aussprache kommt am nächsten
+};
+
+export function ttsLang(name: string) {
+  return TTS[name.trim().toLowerCase()] ?? null;
+}
+
+// Gibt es eine Sprachausgabe für diese Sprache?
+export function canSpeak(name: string) {
+  if (!ttsLang(name)) return false;
+  if (Platform.OS === 'web') return typeof window !== 'undefined' && 'speechSynthesis' in window;
+  return true;
+}
+
+export function speak(text: string, langName: string) {
+  const language = ttsLang(langName) ?? undefined;
+  Speech.stop();
+  Speech.speak(text, { language, rate: 0.85 });
+}

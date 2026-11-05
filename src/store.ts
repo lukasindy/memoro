@@ -12,6 +12,7 @@ export type Word = {
   lp?: boolean; // im Lernpfad in einer Lektion gelernt
   ut?: boolean; // Mini-Prüfung bestanden
   se?: boolean; // Abschnittsprüfung bestanden
+  k?: string; // Begriff im mitgelieferten Wortschatz (automatisch erstellte Kurse)
 };
 
 // Wie oft jede Übung in einer Lektion vorkommt
@@ -20,9 +21,12 @@ export type Mix = {
   ba: number; // eigene Sprache → Lernsprache (Auswahl)
   pairs: number; // Paare finden
   spelling: number; // richtige Schreibweise wählen
+  listen: number; // Hörübung: Wort hören, Bedeutung wählen
+  build: number; // Buchstaben-Puzzle: Wort zusammensetzen
+  cloze: number; // Lückensatz (nur automatisch erstellte Kurse)
 };
 
-export const DEFAULT_MIX: Mix = { ab: 3, ba: 4, pairs: 2, spelling: 2 };
+export const DEFAULT_MIX: Mix = { ab: 3, ba: 3, pairs: 1, spelling: 1, listen: 2, build: 1, cloze: 1 };
 export const DEFAULT_WORDS_PER_LESSON = 5;
 
 export const DEFAULT_LESSONS_PER_UNIT = 4;
@@ -38,6 +42,7 @@ export type Course = {
   lessonsPerUnit: number;
   best: Record<string, number>; // beste Prozentzahl je Lernpfad-Knoten
   pending: { a: string; b: string }[]; // wegen Gratis-Limit geparkte Wörter
+  gen?: { a: string; b: string }; // Sprachcodes, wenn automatisch erstellt (für Lückensätze)
   lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
 };
