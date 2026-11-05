@@ -1,4 +1,4 @@
-import { Course, Mix, Word, uid } from './store';
+import { AppData, Course, FREE_WORD_LIMIT, Mix, Word, uid } from './store';
 import { Pair } from './parser';
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -358,6 +358,29 @@ export function markProgress(c: Course, kind: NodeKind | 'skip', wordIds: string
   });
   const best = key ? { ...c.best, [key]: Math.max(c.best[key] ?? 0, pct) } : c.best;
   return { ...c, words, best };
+}
+
+// ---------- Gratis-Limit ----------
+
+export function totalWords(d: AppData) {
+  return d.courses.reduce((n, c) => n + c.words.length, 0);
+}
+
+// Wie viele Wörter noch Platz haben (Premium: unbegrenzt)
+export function freeSlots(d: AppData) {
+  return d.premium ? Infinity : Math.max(0, FREE_WORD_LIMIT - totalWords(d));
+}
+
+// Geparkte Wörter übernehmen, soweit Platz ist
+export function releasePending(d: AppData, courseId?: string): AppData {
+  let slots = freeSlots(d);
+  const courses = d.courses.map((c) => {
+    if ((courseId && c.id !== courseId) || !c.pending?.length || slots <= 0) return c;
+    const take = c.pending.slice(0, slots === Infinity ? c.pending.length : slots);
+    slots -= take.length;
+    return { ...c, words: [...c.words, ...take.map(newWord)], pending: c.pending.slice(take.length) };
+  });
+  return { ...d, courses };
 }
 
 // ---------- Auswertung ----------

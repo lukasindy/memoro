@@ -37,6 +37,7 @@ export type Course = {
   wordsPerLesson: number;
   lessonsPerUnit: number;
   best: Record<string, number>; // beste Prozentzahl je Lernpfad-Knoten
+  pending: { a: string; b: string }[]; // wegen Gratis-Limit geparkte Wörter
   lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
 };
@@ -86,6 +87,7 @@ export function migrate(d: AppData): AppData {
         wordsPerLesson: c.wordsPerLesson ?? DEFAULT_WORDS_PER_LESSON,
         lessonsPerUnit: c.lessonsPerUnit ?? DEFAULT_LESSONS_PER_UNIT,
         best: c.best ?? {},
+        pending: c.pending ?? [],
         lessons: c.lessons ?? 0,
       };
     }),
