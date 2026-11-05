@@ -5,6 +5,7 @@ import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
 import { MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { canSpeak } from '../platform';
+import { codeOf } from '../data/generate';
 import { AppData, Course as CourseT, DEFAULT_MIX, FREE_WORD_LIMIT, Mix } from '../store';
 
 export type CourseTab = 'learn' | 'vocab' | 'stats' | 'settings';
@@ -350,6 +351,8 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
   const [editing, setEditing] = useState<string | null>(null);
   const [a, setA] = useState('');
   const [b, setB] = useState('');
+  const [ex, setEx] = useState('');
+  const [exT, setExT] = useState('');
   const [query, setQuery] = useState('');
   const [limit, setLimit] = useState(150);
   const toggle = (wid: string) =>
@@ -445,6 +448,8 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
                     <View key={w.id} style={{ borderTopWidth: k ? 1 : 0, borderColor: t.line, padding: 14, gap: 10 }}>
                       <Field label={c.langA} value={a} onChangeText={setA} />
                       <Field label={c.langB} value={b} onChangeText={setB} />
+                      <Field label={`Beispielsatz auf ${c.langA} (optional, für Lückensätze)`} value={ex} onChangeText={setEx} placeholder={`Ein Satz mit „${a}“`} />
+                      {ex.trim() ? <Field label={`Übersetzung auf ${c.langB} (optional)`} value={exT} onChangeText={setExT} /> : null}
                       <View style={{ flexDirection: 'row', gap: 10 }}>
                         <Btn
                           label="Speichern"
@@ -453,7 +458,7 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
                           onPress={() => {
                             setCourse((x) => ({
                               ...x,
-                              words: x.words.map((y) => (y.id === w.id ? { ...y, a: a.trim(), b: b.trim(), base: estimateDifficulty(a, b) } : y)),
+                              words: x.words.map((y) => (y.id === w.id ? { ...y, a: a.trim(), b: b.trim(), ex: ex.trim() || undefined, exT: ex.trim() && exT.trim() ? exT.trim() : undefined, base: estimateDifficulty(a, b) } : y)),
                             }));
                             setEditing(null);
                           }}
@@ -483,6 +488,8 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
                       setEditing(w.id);
                       setA(w.a);
                       setB(w.b);
+                      setEx(w.ex ?? '');
+                      setExT(w.exT ?? '');
                     }}
                     style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 13, borderTopWidth: k ? 1 : 0, borderColor: t.line, backgroundColor: pressed ? t.bg : 'transparent' })}
                   >
@@ -507,6 +514,8 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
                           setEditing(w.id);
                           setA(w.a);
                           setB(w.b);
+                          setEx(w.ex ?? '');
+                          setExT(w.exT ?? '');
                         }}
                       >
                         <Ionicons name="create-outline" size={18} color={t.muted} />
@@ -727,7 +736,7 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
         <Stepper label="Schreibweise" hint="Richtig geschriebenes Wort wählen" value={m.spelling} min={0} max={10} onChange={(v) => setMix('spelling', v)} />
         <Stepper label="Hörübung" hint={canSpeak(c.langA) ? 'Wort hören, Bedeutung wählen' : `Für ${c.langA} gibt es keine Sprachausgabe`} value={m.listen} min={0} max={10} onChange={(v) => setMix('listen', v)} />
         <Stepper label="Buchstaben-Puzzle" hint="Wort aus Buchstaben zusammensetzen" value={m.build} min={0} max={10} onChange={(v) => setMix('build', v)} />
-        <Stepper label="Lückensatz" hint={c.gen ? 'Satz mit bekannten Wörtern vervollständigen' : 'Nur in automatisch erstellten Kursen'} value={m.cloze} min={0} max={10} onChange={(v) => setMix('cloze', v)} />
+        <Stepper label="Lückensatz" hint={codeOf(c.langA) || c.gen ? 'Satz mit bekannten Wörtern vervollständigen' : 'Mit eigenen Beispielsätzen in der Vokabelliste'} value={m.cloze} min={0} max={10} onChange={(v) => setMix('cloze', v)} />
         <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.' : `Gilt für ${MIX_BASE_WORDS} Wörter. Bei ${c.wordsPerLesson} Wörtern pro Lektion rechnet Memoro automatisch auf ${scaledTotal(m, c.wordsPerLesson)} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
       </Panel>
 

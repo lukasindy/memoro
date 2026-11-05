@@ -50,7 +50,7 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
     if (!pairs) return;
     const existing = new Set(c.words.map((w) => (w.a + '|' + w.b).toLowerCase()));
     const fresh = pairs
-      .map((p) => ({ a: p.a.trim(), b: p.b.trim() }))
+      .map((p) => ({ ...p, a: p.a.trim(), b: p.b.trim() }))
       .filter((p) => p.a && p.b && !existing.has((p.a + '|' + p.b).toLowerCase()))
       .map(newWord);
     // Gratis-Limit: bis genau 1000 übernehmen, den Rest parken
@@ -129,7 +129,7 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
 
       <Panel>
         <H2>Liste einfügen</H2>
-        <P muted>Eine Zeile pro Wort, das Format ist egal: Semikolon, Bindestrich, Gleichheitszeichen, Tab oder einfach Wort und Übersetzung in abwechselnden Zeilen.</P>
+        <P muted>Eine Zeile pro Wort, das Format ist egal: Semikolon, Bindestrich, Gleichheitszeichen, Tab oder einfach Wort und Übersetzung in abwechselnden Zeilen. Mit Semikolon kannst du optional einen Beispielsatz und dessen Übersetzung anhängen, daraus werden Lückensätze: „amicus ; der Freund ; Amicus meus venit. ; Mein Freund kommt.“</P>
         <Field
           value={text}
           onChangeText={setText}

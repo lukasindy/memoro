@@ -19,7 +19,7 @@ function build(c: NonNullable<ScreenProps['data']['courses'][number]>, node?: Le
     const oldCount = Math.min(3, Math.max(1, Math.round(words.length / 4)));
     return buildMixed(c, words, scaledMix(c.mix, words.length), {
       canListen: canSpeak(c.langA),
-      cloze: c.gen ? (w) => clozeFor(c, w) : undefined,
+      cloze: (w) => clozeFor(c, w),
       old: oldWordsFor(c, words, oldCount),
     });
   }
