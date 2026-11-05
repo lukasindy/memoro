@@ -5,8 +5,9 @@ export type Route =
   | { name: 'newCourse' }
   | { name: 'course'; id: string }
   | { name: 'add'; id: string }
-  | { name: 'lesson'; id: string }
-  | { name: 'result'; id: string; total: number; errors: number; xp: number }
+  | { name: 'lesson'; id: string; lessonId?: string } // ohne lessonId = Wiederholung
+  | { name: 'result'; id: string; total: number; errors: number; xp: number; kind: 'lesson' | 'test' | 'review'; passed: boolean }
+  | { name: 'lessonSettings'; id: string }
   | { name: 'words'; id: string }
   | { name: 'stats'; id: string }
   | { name: 'settings' }

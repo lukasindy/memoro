@@ -1,4 +1,4 @@
-import { Course, Word, uid } from './store';
+import { Course, LessonDef, Mix, Unit, Word, uid } from './store';
 import { Pair } from './parser';
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -165,40 +165,129 @@ function spelling(c: Course, w: Word): Exercise {
 
 export const MIN_WORDS = 4;
 
-export function buildLesson(c: Course, now = Date.now()): Exercise[] {
-  if (c.words.length < MIN_WORDS) return [];
+// Baut eine Lektion aus den Wörtern nach dem eingestellten Übungsmix
+export function buildMixed(c: Course, words: Word[], mix: Mix): Exercise[] {
+  if (words.length === 0) return [];
+  const order = shuffle(words);
+  let i = 0;
+  const next = () => order[i++ % order.length];
+  const seen = new Set<string>();
 
-  const reviews = c.words
+  const intro: Exercise[] = [];
+  for (let k = 0; k < mix.ab; k++) {
+    const w = next();
+    intro.push(choice(c, w, 'ab', w.box === 0 && !seen.has(w.id)));
+    seen.add(w.id);
+  }
+
+  const rest: Exercise[] = [];
+  for (let k = 0; k < mix.ba; k++) rest.push(choice(c, next(), 'ba', false));
+  for (let k = 0; k < mix.spelling; k++) rest.push(spelling(c, next()));
+  const pairsList: Exercise[] = [];
+  if (words.length >= 2) {
+    for (let k = 0; k < mix.pairs; k++) {
+      const start = (k * 4) % words.length;
+      const rotated = [...order.slice(start), ...order.slice(0, start)];
+      pairsList.push({ kind: 'pairs', words: shuffle(rotated.slice(0, 4)) });
+    }
+  }
+
+  // Paare gleichmäßig zwischen die übrigen Aufgaben verteilen
+  const mixed = shuffle(rest);
+  const step = Math.max(1, Math.floor(mixed.length / (pairsList.length + 1)));
+  pairsList.forEach((p, k) => mixed.splice(Math.min(mixed.length, (k + 1) * step + k), 0, p));
+
+  const all = [...intro, ...mixed];
+  if (all.length === 0) return words.map((w) => choice(c, w, 'ab', w.box === 0));
+  return all;
+}
+
+// Abschlusstest: jedes Wort genau einmal, halb in jede Richtung
+export function buildTest(c: Course, words: Word[]): Exercise[] {
+  const picked = shuffle(words).slice(0, 20);
+  return picked.map((w, k) => choice(c, w, k % 2 === 0 ? 'ba' : 'ab', false));
+}
+
+// Wiederholung fälliger Wörter aus dem Karteikasten
+export function reviewWords(c: Course, now = Date.now()) {
+  const due = c.words
     .filter((w) => w.box > 0 && w.due <= now)
-    .sort((x, y) => x.box - y.box || effective(y) - effective(x))
-    .slice(0, 6);
+    .sort((x, y) => x.box - y.box || effective(y) - effective(x));
+  if (due.length) return due.slice(0, 8);
+  return [...c.words].filter((w) => w.box > 0).sort((x, y) => x.box - y.box || effective(y) - effective(x)).slice(0, 8);
+}
 
-  const fresh = c.words
-    .filter((w) => w.box === 0)
-    .sort((x, y) => x.base - y.base)
-    .slice(0, Math.min(6, Math.max(3, 8 - reviews.length)));
+export function buildReview(c: Course): Exercise[] {
+  const words = reviewWords(c);
+  return buildMixed(c, words, { ...c.mix, ab: Math.min(c.mix.ab, 2) });
+}
 
-  // Nichts fällig und nichts neu: die unsichersten Wörter vorziehen
-  let pool = [...fresh, ...reviews];
-  if (pool.length === 0) {
-    pool = [...c.words].sort((x, y) => x.box - y.box || effective(y) - effective(x)).slice(0, 6);
+export function buildFromDef(c: Course, def: LessonDef): Exercise[] {
+  const words = def.wordIds.map((id) => c.words.find((w) => w.id === id)).filter(Boolean) as Word[];
+  return def.kind === 'test' ? buildTest(c, words) : buildMixed(c, words, c.mix);
+}
+
+// ---------- Lernpfad ----------
+
+export function makeUnit(title: string, words: Word[], perLesson: number): Unit {
+  const sorted = [...words].sort((x, y) => x.base - y.base);
+  const chunks: Word[][] = [];
+  for (let k = 0; k < sorted.length; k += perLesson) chunks.push(sorted.slice(k, k + perLesson));
+  // Zu kleinen Rest an die vorige Lektion hängen
+  if (chunks.length > 1 && chunks[chunks.length - 1].length < Math.min(3, perLesson)) {
+    const last = chunks.pop()!;
+    chunks[chunks.length - 1].push(...last);
   }
+  const lessons: LessonDef[] = chunks.map((ch) => ({ id: uid(), kind: 'lesson', wordIds: ch.map((w) => w.id), done: false, best: 0 }));
+  if (sorted.length >= MIN_WORDS && chunks.length > 1) {
+    lessons.push({ id: uid(), kind: 'test', wordIds: sorted.map((w) => w.id), done: false, best: 0 });
+  }
+  return { id: uid(), title, lessons };
+}
 
-  const ex: Exercise[] = [];
-  // Neue Wörter: erst erkennen (Fremdsprache → Muttersprache), dann aktiv wählen
-  fresh.forEach((w) => ex.push(choice(c, w, 'ab', true)));
-  const active = shuffle(pool).map((w, i) =>
-    w.box >= 2 && i % 2 === 0 ? spelling(c, w) : choice(c, w, 'ba', w.box === 0),
+// Wörter ohne Einheit (z. B. aus Version 0.1) in eine Einheit packen
+export function ensureUnits(c: Course): Course {
+  const inUnit = new Set(c.units.flatMap((u) => u.lessons.flatMap((l) => l.wordIds)));
+  const loose = c.words.filter((w) => !inUnit.has(w.id));
+  if (loose.length === 0) return c;
+  return { ...c, units: [...c.units, makeUnit(`Einheit ${c.units.length + 1}`, loose, c.wordsPerLesson)] };
+}
+
+export function removeWordFromPath(c: Course, wordId: string): Course {
+  const units = c.units
+    .map((u) => ({
+      ...u,
+      lessons: u.lessons
+        .map((l) => ({ ...l, wordIds: l.wordIds.filter((id) => id !== wordId) }))
+        .filter((l) => l.wordIds.length > 0),
+    }))
+    .filter((u) => u.lessons.length > 0);
+  return { ...c, units };
+}
+
+export type PathNode = { unit: Unit; lesson: LessonDef; index: number; status: 'done' | 'current' | 'locked' };
+
+export function pathNodes(c: Course): PathNode[] {
+  const out: PathNode[] = [];
+  let open = true;
+  c.units.forEach((unit) =>
+    unit.lessons.forEach((lesson) => {
+      const status = lesson.done ? 'done' : open ? 'current' : 'locked';
+      if (!lesson.done) open = false;
+      out.push({ unit, lesson, index: out.length, status });
+    }),
   );
-  if (pool.length >= 4) {
-    const half = Math.ceil(active.length / 2);
-    ex.push(...active.slice(0, half));
-    ex.push({ kind: 'pairs', words: shuffle(pool).slice(0, 4) });
-    ex.push(...active.slice(half));
-  } else {
-    ex.push(...active);
-  }
-  return ex;
+  return out;
+}
+
+export function markLesson(c: Course, lessonId: string, pct: number): Course {
+  return {
+    ...c,
+    units: c.units.map((u) => ({
+      ...u,
+      lessons: u.lessons.map((l) => (l.id === lessonId ? { ...l, done: l.done || l.kind === 'lesson' || pct >= 50, best: Math.max(l.best, pct) } : l)),
+    })),
+  };
 }
 
 // ---------- Auswertung ----------

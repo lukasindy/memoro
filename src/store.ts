@@ -11,13 +11,41 @@ export type Word = {
   wrong: number;
 };
 
+// Wie oft jede Übung in einer Lektion vorkommt
+export type Mix = {
+  ab: number; // Lernsprache → eigene Sprache (Auswahl)
+  ba: number; // eigene Sprache → Lernsprache (Auswahl)
+  pairs: number; // Paare finden
+  spelling: number; // richtige Schreibweise wählen
+};
+
+export const DEFAULT_MIX: Mix = { ab: 3, ba: 4, pairs: 2, spelling: 2 };
+export const DEFAULT_WORDS_PER_LESSON = 5;
+
+export type LessonDef = {
+  id: string;
+  kind: 'lesson' | 'test';
+  wordIds: string[];
+  done: boolean;
+  best: number; // beste Prozentzahl, 0 = noch nicht gemacht
+};
+
+export type Unit = {
+  id: string;
+  title: string;
+  lessons: LessonDef[];
+};
+
 export type Course = {
   id: string;
   name: string;
   langA: string;
   langB: string;
   words: Word[];
-  lessons: number;
+  units: Unit[];
+  mix: Mix;
+  wordsPerLesson: number;
+  lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
 };
 
@@ -39,11 +67,26 @@ export const emptyData = (): AppData => ({
   premium: false,
 });
 
+// Ältere Daten (ohne Lernpfad) auf das aktuelle Format bringen
+export function migrate(d: AppData): AppData {
+  return {
+    ...emptyData(),
+    ...d,
+    courses: (d.courses ?? []).map((c: any) => ({
+      ...c,
+      mix: { ...DEFAULT_MIX, ...(c.mix ?? {}) },
+      wordsPerLesson: c.wordsPerLesson ?? DEFAULT_WORDS_PER_LESSON,
+      units: c.units ?? [],
+      lessons: c.lessons ?? 0,
+    })),
+  };
+}
+
 export async function load(): Promise<AppData> {
   try {
     const raw = await AsyncStorage.getItem(KEY);
     if (!raw) return emptyData();
-    return { ...emptyData(), ...JSON.parse(raw) };
+    return migrate(JSON.parse(raw));
   } catch {
     return emptyData();
   }
