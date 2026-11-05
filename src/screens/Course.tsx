@@ -3,7 +3,7 @@ import { Animated, Easing, Platform, Pressable, ScrollView, Text, TextInput, Vie
 import { Ionicons } from '@expo/vector-icons';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
-import { MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
+import { MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { AppData, Course as CourseT, DEFAULT_MIX, FREE_WORD_LIMIT, Mix } from '../store';
 
 export type CourseTab = 'learn' | 'vocab' | 'stats' | 'settings';
@@ -31,7 +31,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
     <View style={{ flex: 1 }}>
       <ScrollView key={tab} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} keyboardShouldPersistTaps="handled">
         <View style={{ width: '100%', maxWidth: 620, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 40, gap: 20 }}>
-          <TopBar onBack={back} right={<StatPills streak={data.streak.count} xp={data.xp} freezes={data.freezes} boost={data.boost} onInventory={() => go({ name: 'inventory' })} hasItems={data.boosters > 0 || data.screenMinutes > 0} />} />
+          <TopBar onBack={back} right={<StatPills streak={data.streak.count} xp={data.xp} saved={data.streakSaved === todayKey()} boost={data.boost} onInventory={() => go({ name: 'inventory' })} hasItems={data.boosters > 0 || data.screenMinutes > 0} />} />
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
           {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} data={data} update={update} />}
           {tab === 'stats' && <StatsTab c={c} />}
@@ -636,6 +636,11 @@ function StatsTab({ c }: { c: CourseT }) {
 
 // ---------- Einstellungen ----------
 
+const scaledTotal = (m: Mix, words: number) => {
+  const s = scaledMix(m, words);
+  return s.ab + s.ba + s.pairs + s.spelling;
+};
+
 const PRESETS: { name: string; note: string; mix: Mix }[] = [
   { name: 'Gemischt', note: 'Alle Übungen ausgewogen', mix: DEFAULT_MIX },
   { name: 'Aktiv', note: 'Mehr in die Lernsprache', mix: { ab: 2, ba: 6, pairs: 1, spelling: 3 } },
@@ -717,12 +722,12 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
         <Stepper label={`${c.langB} → ${c.langA}`} hint="Wort in der Lernsprache wählen" value={m.ba} min={0} max={10} onChange={(v) => setMix('ba', v)} />
         <Stepper label="Paare finden" hint="Je bis zu 4 Wortpaare zuordnen" value={m.pairs} min={0} max={5} onChange={(v) => setMix('pairs', v)} />
         <Stepper label="Schreibweise" hint="Richtig geschriebenes Wort wählen" value={m.spelling} min={0} max={10} onChange={(v) => setMix('spelling', v)} />
-        <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.' : `Eine Lektion hat ${total} Aufgaben. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
+        <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.' : `Gilt für ${MIX_BASE_WORDS} Wörter. Bei ${c.wordsPerLesson} Wörtern pro Lektion rechnet Memoro automatisch auf ${scaledTotal(m, c.wordsPerLesson)} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
       </Panel>
 
       <Panel>
         <H2>Lernpfad</H2>
-        <Stepper label="Wörter pro Lektion" value={c.wordsPerLesson} min={3} max={10} onChange={(v) => setCourse((x) => ({ ...x, wordsPerLesson: v }))} />
+        <Stepper label="Wörter pro Lektion" hint={`${scaledTotal(m, c.wordsPerLesson)} Aufgaben pro Lektion, etwa ${(scaledTotal(m, c.wordsPerLesson) / c.wordsPerLesson).toFixed(1).replace('.', ',')} pro Wort`} value={c.wordsPerLesson} min={3} max={20} onChange={(v) => setCourse((x) => ({ ...x, wordsPerLesson: v }))} />
         <Stepper label="Lektionen pro Abschnitt" hint="Danach folgt eine Mini-Prüfung" value={c.lessonsPerUnit} min={2} max={8} onChange={(v) => setCourse((x) => ({ ...x, lessonsPerUnit: v }))} />
         <P muted>Die Wörter werden nach Schwierigkeit auf Leicht, Mittel und Schwer verteilt. Jede Stufe endet mit einer Abschlussprüfung (10, 20 bzw. 30 Fragen). Dein Fortschritt hängt an den Wörtern, Änderungen hier gehen also nicht verloren.</P>
       </Panel>

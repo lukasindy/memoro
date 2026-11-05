@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Platform, Pressable, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
-import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, similarity, wordsByIds } from '../engine';
+import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, scaledMix, similarity, todayKey, wordsByIds } from '../engine';
 import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,7 +13,7 @@ type Item = Exercise & { retry?: boolean };
 function build(c: NonNullable<ScreenProps['data']['courses'][number]>, node?: LessonRef): Exercise[] {
   if (!node) return buildReview(c);
   const words = wordsByIds(c, node.wordIds);
-  if (node.kind === 'lesson') return buildMixed(c, words, c.mix);
+  if (node.kind === 'lesson') return buildMixed(c, words, scaledMix(c.mix, words.length));
   if (node.kind === 'unitTest') return buildTest(c, words);
   const size = buildPath(c)[node.section]?.examSize ?? 10;
   return buildExam(c, words, size);
@@ -80,6 +80,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
       boosters: gx.boosters,
       screenMinutes: gx.screenMinutes,
       streak: st.streak,
+      streakSaved: st.used > 0 ? todayKey() : d.streakSaved,
       courses: d.courses.map((x) => {
         if (x.id !== id) return x;
         const updated = applyResults(x, results.current);
