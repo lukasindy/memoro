@@ -165,7 +165,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.4 – Testversion</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.5 – Testversion</P>
     </View>
   );
 }
