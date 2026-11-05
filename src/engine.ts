@@ -402,9 +402,58 @@ export function todayKey(d = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
-export function nextStreak(s: { day: string; count: number }) {
+// Streak fortschreiben, verpasste Tage mit Streak-Schutz überbrücken
+export function nextStreak(s: { day: string; count: number }, freezes = 0) {
   const today = todayKey();
-  if (s.day === today) return s;
-  const y = todayKey(new Date(Date.now() - DAY));
-  return { day: today, count: s.day === y ? s.count + 1 : 1 };
+  if (s.day === today) return { streak: s, used: 0 };
+  if (!s.day) return { streak: { day: today, count: 1 }, used: 0 };
+  const missed = Math.round((Date.parse(today) - Date.parse(s.day)) / DAY) - 1;
+  if (missed <= 0) return { streak: { day: today, count: s.count + 1 }, used: 0 };
+  if (missed <= freezes) return { streak: { day: today, count: s.count + 1 }, used: missed };
+  return { streak: { day: today, count: 1 }, used: 0 };
+}
+
+// ---------- Level ----------
+
+export const MAX_FREEZES = 3;
+export const BOOST_LESSONS = 3;
+
+// XP, die man für den Schritt von Level n auf n+1 braucht
+const stepXp = (n: number) => 100 + 50 * (n - 1);
+
+export function levelInfo(xp: number) {
+  let level = 1;
+  let base = 0;
+  while (xp >= base + stepXp(level)) {
+    base += stepXp(level);
+    level++;
+  }
+  const need = stepXp(level);
+  return { level, into: xp - base, need, progress: (xp - base) / need };
+}
+
+export type LevelUp = { from: number; to: number; freezes: number; boost: boolean };
+
+// XP gutschreiben (mit Booster doppelt) und Level-Boni vergeben
+export function gainXp(d: { xp: number; freezes: number; boost: number }, base: number) {
+  const boosted = d.boost > 0 && base > 0;
+  const gained = boosted ? base * 2 : base;
+  const from = levelInfo(d.xp).level;
+  const to = levelInfo(d.xp + gained).level;
+  let freezes = d.freezes;
+  let boost = boosted ? d.boost - 1 : d.boost;
+  let freezeGain = 0;
+  let boostGain = false;
+  for (let l = from + 1; l <= to; l++) {
+    if (freezes < MAX_FREEZES) {
+      freezes++;
+      freezeGain++;
+    }
+    if (l % 5 === 0) {
+      boost += BOOST_LESSONS;
+      boostGain = true;
+    }
+  }
+  const up: LevelUp | null = to > from ? { from, to, freezes: freezeGain, boost: boostGain } : null;
+  return { xp: d.xp + gained, gained, boosted, freezes, boost, up };
 }
