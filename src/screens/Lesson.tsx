@@ -2,14 +2,17 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
-import { Exercise, applyResults, buildLesson, nextStreak } from '../engine';
+import { Exercise, applyResults, buildFromDef, buildReview, markLesson, nextStreak } from '../engine';
 
 type Item = Exercise & { retry?: boolean };
 
-export function Lesson({ data, update, back, replace, id }: ScreenProps & { id: string }) {
+export function Lesson({ data, update, back, replace, id, lessonId }: ScreenProps & { id: string; lessonId?: string }) {
   const t = useTheme();
   const c = data.courses.find((x) => x.id === id)!;
-  const initial = useMemo(() => buildLesson(c), []); // einmal pro Lektion
+  const def = lessonId ? c?.units.flatMap((u) => u.lessons).find((l) => l.id === lessonId) : undefined;
+  const kind: 'lesson' | 'test' | 'review' = def ? def.kind : 'review';
+  // einmal pro Lektion erzeugen
+  const initial = useMemo(() => (c ? (def ? buildFromDef(c, def) : buildReview(c)) : []), []);
   const [queue, setQueue] = useState<Item[]>(initial);
   const [pos, setPos] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
@@ -30,14 +33,19 @@ export function Lesson({ data, update, back, replace, id }: ScreenProps & { id: 
 
   const finish = () => {
     const errors = total - score.current.firstTry;
-    const xp = score.current.xp + (errors === 0 ? 10 : 0);
+    const xp = score.current.xp + (errors === 0 ? 10 : 0) + (kind === 'test' ? 20 : 0);
+    const pct = Math.round(((total - errors) / total) * 100);
     update((d) => ({
       ...d,
       xp: d.xp + xp,
       streak: nextStreak(d.streak),
-      courses: d.courses.map((x) => (x.id === id ? applyResults(x, results.current) : x)),
+      courses: d.courses.map((x) => {
+        if (x.id !== id) return x;
+        const updated = applyResults(x, results.current);
+        return lessonId ? markLesson(updated, lessonId, pct) : updated;
+      }),
     }));
-    replace({ name: 'result', id, total, errors, xp });
+    replace({ name: 'result', id, total, errors, xp, kind, passed: kind !== 'test' || pct >= 50 });
   };
 
   const next = () => {
@@ -92,6 +100,8 @@ export function Lesson({ data, update, back, replace, id }: ScreenProps & { id: 
             <P muted>
               {ex.retry
                 ? 'Noch einmal'
+                : kind === 'test' && pos === 0
+                  ? `Abschlusstest: ${total} Fragen, ab 50 % bestanden.`
                 : ex.kind === 'spelling'
                   ? `Wie schreibt man das auf ${c.langA}?`
                   : ex.dir === 'ab'
@@ -212,10 +222,23 @@ function PairsView({ ex, onMistake, onDone }: { ex: Extract<Exercise, { kind: 'p
   );
 }
 
-export function Result({ total, errors, xp, back }: ScreenProps & { id: string; total: number; errors: number; xp: number }) {
+export function Result({ total, errors, xp, back, kind, passed }: ScreenProps & { id: string; total: number; errors: number; xp: number; kind: 'lesson' | 'test' | 'review'; passed: boolean }) {
   const t = useTheme();
   const pct = Math.round(((total - errors) / total) * 100);
-  const title = pct === 100 ? 'Fehlerfrei' : pct >= 80 ? 'Stark' : pct >= 50 ? 'Gut dran' : 'Weiter üben';
+  const title =
+    kind === 'test'
+      ? passed ? 'Test bestanden' : 'Noch nicht bestanden'
+      : pct === 100 ? 'Fehlerfrei' : pct >= 80 ? 'Stark' : pct >= 50 ? 'Gut dran' : 'Weiter üben';
+  const note =
+    kind === 'test' && !passed
+      ? 'Für den Test brauchst du mindestens 50 %. Wiederhole die Lektionen der Einheit und versuch es dann noch einmal.'
+      : kind === 'test'
+        ? 'Die Einheit ist abgeschlossen, die nächste ist freigeschaltet.'
+        : kind === 'lesson'
+          ? 'Lektion geschafft, die nächste ist freigeschaltet. Falsch beantwortete Wörter kommen in der Wiederholung wieder dran.'
+          : errors > 0
+            ? 'Die falsch beantworteten Wörter liegen wieder in Fach 1 und kommen bei der nächsten Wiederholung zuerst dran.'
+            : 'Alle Wörter sind ein Fach im Karteikasten weitergerutscht.';
   return (
     <View style={{ gap: 24, paddingTop: 30 }}>
       <H1>{title}</H1>
@@ -231,12 +254,8 @@ export function Result({ total, errors, xp, back }: ScreenProps & { id: string; 
           </Panel>
         ))}
       </View>
-      <P muted>
-        {errors > 0
-          ? 'Die falsch beantworteten Wörter liegen wieder in Fach 1 und kommen in der nächsten Lektion zuerst dran.'
-          : 'Alle Wörter sind ein Fach weitergerutscht.'}
-      </P>
-      <Btn label="Zurück zum Kurs" onPress={back} />
+      <P muted>{note}</P>
+      <Btn label="Weiter" onPress={back} />
     </View>
   );
 }

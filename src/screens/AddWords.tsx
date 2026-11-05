@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-nativ
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, notify, useTheme } from '../ui';
 import { Pair, parseList } from '../parser';
-import { newWord } from '../engine';
+import { makeUnit, newWord } from '../engine';
 import { ocrAvailable, ocrLanguages, pickImage, recognizeText } from '../platform';
 
 const EXAMPLE = 'amicus ; der Freund\naqua – das Wasser\nporta = die Tür';
@@ -14,6 +14,7 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
   const [text, setText] = useState('');
   const [pairs, setPairs] = useState<Pair[] | null>(null);
   const [info, setInfo] = useState('');
+  const [unitTitle, setUnitTitle] = useState('');
   const [ocr, setOcr] = useState<{ busy: boolean; progress: number }>({ busy: false, progress: 0 });
   if (!c) return <TopBar onBack={back} />;
 
@@ -52,9 +53,18 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
       .map((p) => ({ a: p.a.trim(), b: p.b.trim() }))
       .filter((p) => p.a && p.b && !existing.has((p.a + '|' + p.b).toLowerCase()))
       .map(newWord);
-    update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? { ...x, words: [...x.words, ...fresh] } : x)) }));
+    const title = unitTitle.trim() || `Einheit ${c.units.length + 1}`;
+    update((d) => ({
+      ...d,
+      courses: d.courses.map((x) =>
+        x.id === id
+          ? { ...x, words: [...x.words, ...fresh], units: fresh.length ? [...x.units, makeUnit(title, fresh, x.wordsPerLesson)] : x.units }
+          : x,
+      ),
+    }));
     const dupes = pairs.length - fresh.length;
-    notify(`${fresh.length} Wörter gespeichert.${dupes > 0 ? ` ${dupes} waren schon im Kurs.` : ''}`);
+    const lessons = Math.max(1, Math.ceil(fresh.length / c.wordsPerLesson));
+    notify(`${fresh.length} Wörter gespeichert. Daraus entstehen ${lessons} ${lessons === 1 ? 'Lektion' : 'Lektionen'} in „${title}“.${dupes > 0 ? ` ${dupes} waren schon im Kurs.` : ''}`);
     back();
   };
 
@@ -97,6 +107,7 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
           ))}
         </View>
         <Btn kind="secondary" label="Spalten tauschen" onPress={() => setPairs((ps) => ps!.map((p) => ({ a: p.b, b: p.a })))} />
+        <Field label="Name der Einheit" value={unitTitle} onChangeText={setUnitTitle} placeholder={`Einheit ${c.units.length + 1}, z. B. „Kapitel 3“`} />
         <Btn label={`${pairs.length} Wörter speichern`} onPress={save} disabled={pairs.length === 0} />
       </View>
     );
