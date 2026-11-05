@@ -24,7 +24,8 @@
       "favicon": "./assets/favicon.png",
       "name": "Memoro",
       "themeColor": "#1F5E4E",
-      "backgroundColor": "#EEF1EC"
+      "backgroundColor": "#EEF1EC",
+      "lang": "de"
     },
     "experiments": {
       "baseUrl": "/memoro"
