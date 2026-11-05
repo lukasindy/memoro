@@ -7,6 +7,7 @@ import { buildPath, levelInfo } from '../engine';
 import { releasePending } from '../engine';
 import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
 import { exportBackup, pickBackupFile } from '../platform';
+import { BUILD_ID } from '../update';
 import { Platform } from 'react-native';
 
 // Begrüßungsfeld in beiden Farbmodi gleich: Tafelgrün mit weißer Schrift
@@ -296,7 +297,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.0 – Testversion</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.0 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }
