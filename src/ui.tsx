@@ -170,7 +170,7 @@ export function CardBox({ counts, compact }: { counts: number[]; compact?: boole
 }
 
 // Kompakte Anzeige von Streak, XP und Level (z. B. in der Kursleiste)
-export function StatPills({ streak, xp, freezes, boost, onPress }: { streak: number; xp: number; freezes: number; boost: number; onPress?: () => void }) {
+export function StatPills({ streak, xp, freezes, boost, onInventory, hasItems }: { streak: number; xp: number; freezes: number; boost: number; onInventory?: () => void; hasItems?: boolean }) {
   const t = useTheme();
   const lv = levelInfo(xp);
   const pill = (children: React.ReactNode, label: string) => (
@@ -179,7 +179,7 @@ export function StatPills({ streak, xp, freezes, boost, onPress }: { streak: num
     </View>
   );
   return (
-    <Pressable onPress={onPress} disabled={!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityHint={onPress ? 'Öffnet das Inventar' : undefined} style={{ flexDirection: 'row', gap: 6 }}>
+    <View style={{ flexDirection: 'row', gap: 6, alignItems: 'center' }}>
       {pill(
         <>
           <Ionicons name="flame" size={15} color={streak > 0 ? '#E8742C' : t.muted} />
@@ -187,6 +187,18 @@ export function StatPills({ streak, xp, freezes, boost, onPress }: { streak: num
           {freezes > 0 && <Ionicons name="snow" size={13} color="#4A9BD9" />}
         </>,
         `${streak} Tage in Folge${freezes ? `, ${freezes} Streak-Schutz` : ''}`,
+      )}
+      {onInventory && (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Inventar öffnen"
+          onPress={onInventory}
+          hitSlop={6}
+          style={({ pressed }) => ({ width: 32, height: 32, borderRadius: 16, backgroundColor: t.surface, borderWidth: 1, borderColor: t.line, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.7 : 1 })}
+        >
+          <Ionicons name="bag-handle" size={16} color={t.ink} />
+          {hasItems && <View style={{ position: 'absolute', top: -2, right: -2, width: 10, height: 10, borderRadius: 5, backgroundColor: '#E8742C', borderWidth: 2, borderColor: t.surface }} />}
+        </Pressable>
       )}
       {pill(
         <>
@@ -196,7 +208,7 @@ export function StatPills({ streak, xp, freezes, boost, onPress }: { streak: num
         </>,
         `${xp} XP, Level ${lv.level}${boost ? `, Booster für ${boost} Lektionen` : ''}`,
       )}
-    </Pressable>
+    </View>
   );
 }
 
