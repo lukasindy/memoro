@@ -113,7 +113,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
               {ex.retry
                 ? 'Noch einmal'
                 : isTest && pos === 0
-                  ? `${kind === 'unitTest' ? 'Einheitstest' : kind === 'skip' ? 'Einstufungsprüfung' : 'Abschnittsprüfung'}: ${total} Fragen, bestanden ab ${kind === 'skip' ? SKIP_PASS : PASS} %.`
+                  ? `${kind === 'unitTest' ? 'Miniprüfung' : kind === 'skip' ? 'Einstufungsprüfung' : 'Abschlussprüfung'}: ${total} Fragen, bestanden ab ${kind === 'skip' ? SKIP_PASS : PASS} %.`
                 : ex.kind === 'spelling'
                   ? `Wie schreibt man das auf ${c.langA}?`
                   : ex.dir === 'ab'
@@ -243,8 +243,8 @@ export function Result({ total, errors, xp, back, kind, passed }: ScreenProps & 
     : pct === 100 ? 'Fehlerfrei' : pct >= 80 ? 'Stark' : pct >= 50 ? 'Gut dran' : 'Weiter üben';
   const notes: Record<LessonKind, [string, string]> = {
     lesson: ['Lektion geschafft, die nächste ist freigeschaltet. Falsch beantwortete Wörter kommen in der Wiederholung wieder dran.', ''],
-    unitTest: ['Einheit abgeschlossen, weiter geht es mit der nächsten.', `Für den Einheitstest brauchst du mindestens ${PASS} %. Wiederhole die Lektionen der Einheit und versuch es noch einmal.`],
-    exam: ['Abschnitt abgeschlossen. Der nächste Abschnitt ist freigeschaltet.', `Für die Abschnittsprüfung brauchst du mindestens ${PASS} %. Übe noch etwas und versuch es dann erneut.`],
+    unitTest: ['Miniprüfung geschafft, weiter geht es mit dem nächsten Abschnitt.', `Für die Miniprüfung brauchst du mindestens ${PASS} %. Wiederhole die Lektionen des Abschnitts und versuch es noch einmal.`],
+    exam: ['Abschnitt abgeschlossen. Der nächste Abschnitt ist freigeschaltet.', `Für die Abschlussprüfung brauchst du mindestens ${PASS} %. Übe noch etwas und versuch es dann erneut.`],
     skip: ['Du bist direkt in den Abschnitt gesprungen. Alle Abschnitte bis hierher gelten als abgeschlossen.', `Zum Überspringen brauchst du mindestens ${SKIP_PASS} %. Du kannst den Abschnitt auch ganz normal durcharbeiten.`],
     review: [errors > 0 ? 'Falsch beantwortete Wörter liegen wieder in Fach 1 und kommen bei der nächsten Wiederholung zuerst dran.' : 'Alle Wörter sind ein Fach im Karteikasten weitergerutscht.', ''],
   };

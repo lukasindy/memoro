@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Easing, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
@@ -10,10 +10,10 @@ export type CourseTab = 'learn' | 'vocab' | 'stats' | 'settings';
 type SetCourse = (fn: (c: CourseT) => CourseT) => void;
 
 const TABS: { key: CourseTab; label: string; icon: keyof typeof Ionicons.glyphMap; active: keyof typeof Ionicons.glyphMap }[] = [
-  { key: 'learn', label: 'Lernen', icon: 'school-outline', active: 'school' },
-  { key: 'vocab', label: 'Vokabeln', icon: 'book-outline', active: 'book' },
-  { key: 'stats', label: 'Statistik', icon: 'stats-chart-outline', active: 'stats-chart' },
-  { key: 'settings', label: 'Einstellungen', icon: 'settings-outline', active: 'settings' },
+  { key: 'learn', label: 'Lernen', icon: 'map-outline', active: 'map' },
+  { key: 'vocab', label: 'Vokabeln', icon: 'albums-outline', active: 'albums' },
+  { key: 'stats', label: 'Statistik', icon: 'analytics-outline', active: 'analytics' },
+  { key: 'settings', label: 'Einstellungen', icon: 'options-outline', active: 'options' },
 ];
 
 const lessonRoute = (id: string, n: PathNode): Route => ({ name: 'lesson', id, node: { key: n.key, kind: n.kind, wordIds: n.wordIds, section: n.section } });
@@ -74,7 +74,8 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
 
 // ---------- Lernen ----------
 
-const OFFSETS = [0, 52, 78, 52, 0, -52, -78, -52];
+// Sanfte Welle statt Zickzack
+const OFFSETS = [0, 34, 48, 34, 0, -34, -48, -34];
 
 function LearnTab({ c, go, sec, setSec, openVocab }: { c: CourseT; go: ScreenProps['go']; sec?: number; setSec: (n: number) => void; openVocab: () => void }) {
   const t = useTheme();
@@ -179,46 +180,106 @@ function LearnTab({ c, go, sec, setSec, openVocab }: { c: CourseT; go: ScreenPro
   );
 }
 
+// Pulsierender Ring um den aktuellen Schritt
+function Pulse({ color, w, h, radius }: { color: string; w: number; h: number; radius: number }) {
+  const v = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    const loop = Animated.loop(Animated.timing(v, { toValue: 1, duration: 1600, easing: Easing.out(Easing.quad), useNativeDriver: Platform.OS !== 'web' }));
+    loop.start();
+    return () => loop.stop();
+  }, [v]);
+  return (
+    <Animated.View
+      pointerEvents="none"
+      style={{
+        position: 'absolute',
+        width: w,
+        height: h,
+        borderRadius: radius,
+        borderWidth: 3,
+        borderColor: color,
+        opacity: v.interpolate({ inputRange: [0, 1], outputRange: [0.7, 0] }),
+        transform: [{ scale: v.interpolate({ inputRange: [0, 1], outputRange: [1, 1.35] }) }],
+      }}
+    />
+  );
+}
+
+// Lernpfad-Schritt als Karteikarte (Memoro-eigene Optik)
 function PathStep({ node, color, best, offset, onPress }: { node: PathNode; color: string; best?: number; offset: number; onPress: () => void }) {
   const t = useTheme();
   const { status, kind } = node;
-  const size = kind === 'exam' ? 104 : 88;
   const current = status === 'current';
   const done = status === 'done';
-  const icon: keyof typeof Ionicons.glyphMap =
-    status === 'locked' ? 'lock-closed' : done ? 'checkmark-sharp' : kind === 'exam' ? 'trophy' : kind === 'unitTest' ? 'ribbon' : 'star';
-  const bubble = kind === 'exam' ? 'Prüfung' : kind === 'unitTest' ? 'Test' : 'Start';
+  const locked = status === 'locked';
+  const mini = kind === 'unitTest';
+  const exam = kind === 'exam';
+  const w = exam ? 118 : mini ? 100 : 92;
+  const h = exam ? 84 : mini ? 76 : 68;
+  const radius = 12;
+  const tilt = offset > 0 ? '3deg' : offset < 0 ? '-3deg' : '0deg';
+
+  const bg = locked ? t.line : mini && !done ? t.card : color;
+  const fg = locked ? t.muted : mini && !done ? t.onCard : t.onLvl;
+  const icon: keyof typeof Ionicons.glyphMap = locked
+    ? 'lock-closed-outline'
+    : done
+      ? 'checkmark-done'
+      : exam
+        ? 'medal'
+        : mini
+          ? 'flash'
+          : 'play';
+  const bubble = exam ? 'Abschlussprüfung' : mini ? 'Miniprüfung' : 'Los geht’s';
   const label = done ? `${node.title}, erledigt${best ? `, ${best} %` : ''}` : current ? `${node.title}, starten` : `${node.title}, gesperrt`;
+
   return (
     <View style={{ alignItems: 'center', transform: [{ translateX: offset }] }}>
       {current && (
-        <View style={{ alignItems: 'center', marginBottom: 10 }}>
-          <View style={{ borderWidth: 2, borderColor: t.line, backgroundColor: t.surface, borderRadius: 14, paddingHorizontal: 16, paddingVertical: 8 }}>
-            <Text style={{ color, fontSize: 18, fontWeight: '800' }}>{bubble}</Text>
-          </View>
-          <View style={{ width: 14, height: 14, backgroundColor: t.surface, borderRightWidth: 2, borderBottomWidth: 2, borderColor: t.line, transform: [{ rotate: '45deg' }], marginTop: -8 }} />
+        <View style={{ backgroundColor: mini ? t.card : color, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          {mini && <Ionicons name="flash" size={14} color={t.onCard} />}
+          <Text style={{ color: mini ? t.onCard : t.onLvl, fontSize: 14, fontWeight: '800' }}>{bubble}</Text>
         </View>
       )}
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={label}
-        onPress={onPress}
-        style={({ pressed }) => ({
-          width: size,
-          height: size * 0.92,
-          borderRadius: size / 2,
-          backgroundColor: status === 'locked' ? t.line : color,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderBottomWidth: pressed ? 2 : 8,
-          borderColor: 'rgba(0,0,0,0.22)',
-          transform: [{ translateY: pressed ? 6 : 0 }],
-        })}
-      >
-        <Ionicons name={icon} size={kind === 'exam' ? 40 : 34} color={status === 'locked' ? t.muted : t.onLvl} />
-      </Pressable>
+      <View style={{ width: w, height: h, alignItems: 'center', justifyContent: 'center' }}>
+        {/* Karten dahinter: bei Prüfungen ein kleiner Stapel */}
+        {(mini || exam) && (
+          <View style={{ position: 'absolute', width: w, height: h, borderRadius: radius, backgroundColor: locked ? t.line : bg, opacity: 0.45, transform: [{ rotate: '-8deg' }, { translateY: -4 }] }} />
+        )}
+        {exam && (
+          <View style={{ position: 'absolute', width: w, height: h, borderRadius: radius, backgroundColor: locked ? t.line : bg, opacity: 0.3, transform: [{ rotate: '7deg' }, { translateY: -6 }] }} />
+        )}
+        {current && <Pulse color={mini ? t.card : color} w={w} h={h} radius={radius} />}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={label}
+          onPress={onPress}
+          style={({ pressed }) => ({
+            width: w,
+            height: h,
+            borderRadius: radius,
+            backgroundColor: bg,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: current ? 3 : 0,
+            borderColor: t.surface,
+            transform: [{ rotate: tilt }, { scale: pressed ? 0.94 : 1 }],
+            shadowColor: '#000',
+            shadowOpacity: locked ? 0 : 0.18,
+            shadowRadius: 8,
+            shadowOffset: { width: 0, height: 4 },
+            elevation: locked ? 0 : 4,
+          })}
+        >
+          {/* Linien wie auf einer Karteikarte */}
+          {!locked && !mini && !exam && (
+            <View style={{ position: 'absolute', left: 12, right: 12, top: 14, height: 2, backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 1 }} />
+          )}
+          <Ionicons name={icon} size={exam ? 38 : mini ? 34 : 30} color={fg} />
+        </Pressable>
+      </View>
       {kind !== 'lesson' && (
-        <Text style={{ color: status === 'locked' ? t.muted : t.ink, fontSize: 13, fontWeight: '700', marginTop: 6 }}>
+        <Text style={{ color: locked ? t.muted : t.ink, fontSize: 13, fontWeight: '700', marginTop: 8 }}>
           {node.title}
           {done && best ? ` · ${best} %` : ''}
         </Text>
@@ -525,7 +586,7 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
       <Panel>
         <H2>Lernpfad</H2>
         <Stepper label="Wörter pro Lektion" value={c.wordsPerLesson} min={3} max={10} onChange={(v) => setCourse((x) => ({ ...x, wordsPerLesson: v }))} />
-        <Stepper label="Lektionen pro Abschnitt" hint="Danach folgt ein Test" value={c.lessonsPerUnit} min={2} max={8} onChange={(v) => setCourse((x) => ({ ...x, lessonsPerUnit: v }))} />
+        <Stepper label="Lektionen pro Abschnitt" hint="Danach folgt eine Miniprüfung" value={c.lessonsPerUnit} min={2} max={8} onChange={(v) => setCourse((x) => ({ ...x, lessonsPerUnit: v }))} />
         <P muted>Die Wörter werden nach Schwierigkeit auf Leicht, Mittel und Schwer verteilt. Jede Stufe endet mit einer Abschlussprüfung (10, 20 bzw. 30 Fragen). Dein Fortschritt hängt an den Wörtern, Änderungen hier gehen also nicht verloren.</P>
       </Panel>
 
