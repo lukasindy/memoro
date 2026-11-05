@@ -3,8 +3,7 @@ import { Pressable, Switch, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, CardBox, Field, H1, H2, P, Panel, TopBar, confirm, notify, useTheme } from '../ui';
 import { boxCounts, dueCount } from '../engine';
-import { DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
-import { ensureUnits } from '../engine';
+import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
 import { exportBackup, pickBackupFile } from '../platform';
 import { Platform } from 'react-native';
 
@@ -83,7 +82,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
     const id = uid();
     update((d) => ({
       ...d,
-      courses: [...d.courses, { id, name: name.trim(), langA: langA.trim() || 'Fremdsprache', langB: langB.trim() || 'Deutsch', words: [], units: [], mix: { ...DEFAULT_MIX }, wordsPerLesson: DEFAULT_WORDS_PER_LESSON, lessons: 0, createdAt: Date.now() }],
+      courses: [...d.courses, { id, name: name.trim(), langA: langA.trim() || 'Fremdsprache', langB: langB.trim() || 'Deutsch', words: [], mix: { ...DEFAULT_MIX }, wordsPerLesson: DEFAULT_WORDS_PER_LESSON, lessonsPerUnit: DEFAULT_LESSONS_PER_UNIT, best: {}, lessons: 0, createdAt: Date.now() }],
     }));
     replace({ name: 'course', id });
     go({ name: 'add', id });
@@ -118,7 +117,7 @@ export function Settings({ data, update, back }: ScreenProps) {
       const parsed = JSON.parse(raw);
       if (!isValidBackup(parsed)) throw new Error();
       confirm('Backup laden? Deine aktuellen Kurse werden dabei ersetzt.', () => {
-        update(() => { const m = migrate(parsed); return { ...m, courses: m.courses.map(ensureUnits) }; });
+        update(() => migrate(parsed));
         notify('Backup geladen.');
       });
     } catch {
@@ -165,7 +164,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.2 – Testversion</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.3 – Testversion</P>
     </View>
   );
 }

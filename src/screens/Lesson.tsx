@@ -2,17 +2,27 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
-import { Exercise, applyResults, buildFromDef, buildReview, markLesson, nextStreak } from '../engine';
+import { Exercise, PASS, SKIP_PASS, applyResults, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, wordsByIds } from '../engine';
+import { LessonKind, LessonRef } from '../nav';
 
 type Item = Exercise & { retry?: boolean };
 
-export function Lesson({ data, update, back, replace, id, lessonId }: ScreenProps & { id: string; lessonId?: string }) {
+function build(c: NonNullable<ScreenProps['data']['courses'][number]>, node?: LessonRef): Exercise[] {
+  if (!node) return buildReview(c);
+  const words = wordsByIds(c, node.wordIds);
+  if (node.kind === 'lesson') return buildMixed(c, words, c.mix);
+  if (node.kind === 'unitTest') return buildTest(c, words);
+  const size = buildPath(c)[node.section]?.examSize ?? 10;
+  return buildExam(c, words, size);
+}
+
+export function Lesson({ data, update, back, replace, id, node }: ScreenProps & { id: string; node?: LessonRef }) {
   const t = useTheme();
   const c = data.courses.find((x) => x.id === id)!;
-  const def = lessonId ? c?.units.flatMap((u) => u.lessons).find((l) => l.id === lessonId) : undefined;
-  const kind: 'lesson' | 'test' | 'review' = def ? def.kind : 'review';
+  const kind: LessonKind = node ? node.kind : 'review';
+  const isTest = kind === 'unitTest' || kind === 'exam' || kind === 'skip';
   // einmal pro Lektion erzeugen
-  const initial = useMemo(() => (c ? (def ? buildFromDef(c, def) : buildReview(c)) : []), []);
+  const initial = useMemo(() => (c ? build(c, node) : []), []);
   const [queue, setQueue] = useState<Item[]>(initial);
   const [pos, setPos] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
@@ -33,8 +43,10 @@ export function Lesson({ data, update, back, replace, id, lessonId }: ScreenProp
 
   const finish = () => {
     const errors = total - score.current.firstTry;
-    const xp = score.current.xp + (errors === 0 ? 10 : 0) + (kind === 'test' ? 20 : 0);
     const pct = Math.round(((total - errors) / total) * 100);
+    const need = kind === 'skip' ? SKIP_PASS : PASS;
+    const passed = !isTest || pct >= need;
+    const xp = score.current.xp + (errors === 0 ? 10 : 0) + (isTest && passed ? (kind === 'unitTest' ? 20 : 50) : 0);
     update((d) => ({
       ...d,
       xp: d.xp + xp,
@@ -42,10 +54,10 @@ export function Lesson({ data, update, back, replace, id, lessonId }: ScreenProp
       courses: d.courses.map((x) => {
         if (x.id !== id) return x;
         const updated = applyResults(x, results.current);
-        return lessonId ? markLesson(updated, lessonId, pct) : updated;
+        return node ? markProgress(updated, node.kind, node.wordIds, pct, node.kind === 'skip' ? undefined : node.key) : updated;
       }),
     }));
-    replace({ name: 'result', id, total, errors, xp, kind, passed: kind !== 'test' || pct >= 50 });
+    replace({ name: 'result', id, total, errors, xp, kind, passed });
   };
 
   const next = () => {
@@ -100,8 +112,8 @@ export function Lesson({ data, update, back, replace, id, lessonId }: ScreenProp
             <P muted>
               {ex.retry
                 ? 'Noch einmal'
-                : kind === 'test' && pos === 0
-                  ? `Abschlusstest: ${total} Fragen, ab 50 % bestanden.`
+                : isTest && pos === 0
+                  ? `${kind === 'unitTest' ? 'Einheitstest' : kind === 'skip' ? 'Einstufungsprüfung' : 'Abschnittsprüfung'}: ${total} Fragen, bestanden ab ${kind === 'skip' ? SKIP_PASS : PASS} %.`
                 : ex.kind === 'spelling'
                   ? `Wie schreibt man das auf ${c.langA}?`
                   : ex.dir === 'ab'
@@ -222,23 +234,21 @@ function PairsView({ ex, onMistake, onDone }: { ex: Extract<Exercise, { kind: 'p
   );
 }
 
-export function Result({ total, errors, xp, back, kind, passed }: ScreenProps & { id: string; total: number; errors: number; xp: number; kind: 'lesson' | 'test' | 'review'; passed: boolean }) {
+export function Result({ total, errors, xp, back, kind, passed }: ScreenProps & { id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean }) {
   const t = useTheme();
   const pct = Math.round(((total - errors) / total) * 100);
-  const title =
-    kind === 'test'
-      ? passed ? 'Test bestanden' : 'Noch nicht bestanden'
-      : pct === 100 ? 'Fehlerfrei' : pct >= 80 ? 'Stark' : pct >= 50 ? 'Gut dran' : 'Weiter üben';
-  const note =
-    kind === 'test' && !passed
-      ? 'Für den Test brauchst du mindestens 50 %. Wiederhole die Lektionen der Einheit und versuch es dann noch einmal.'
-      : kind === 'test'
-        ? 'Die Einheit ist abgeschlossen, die nächste ist freigeschaltet.'
-        : kind === 'lesson'
-          ? 'Lektion geschafft, die nächste ist freigeschaltet. Falsch beantwortete Wörter kommen in der Wiederholung wieder dran.'
-          : errors > 0
-            ? 'Die falsch beantworteten Wörter liegen wieder in Fach 1 und kommen bei der nächsten Wiederholung zuerst dran.'
-            : 'Alle Wörter sind ein Fach im Karteikasten weitergerutscht.';
+  const isTest = kind === 'unitTest' || kind === 'exam' || kind === 'skip';
+  const title = isTest
+    ? passed ? (kind === 'skip' ? 'Abschnitt übersprungen' : 'Bestanden') : 'Noch nicht bestanden'
+    : pct === 100 ? 'Fehlerfrei' : pct >= 80 ? 'Stark' : pct >= 50 ? 'Gut dran' : 'Weiter üben';
+  const notes: Record<LessonKind, [string, string]> = {
+    lesson: ['Lektion geschafft, die nächste ist freigeschaltet. Falsch beantwortete Wörter kommen in der Wiederholung wieder dran.', ''],
+    unitTest: ['Einheit abgeschlossen, weiter geht es mit der nächsten.', `Für den Einheitstest brauchst du mindestens ${PASS} %. Wiederhole die Lektionen der Einheit und versuch es noch einmal.`],
+    exam: ['Abschnitt abgeschlossen. Der nächste Abschnitt ist freigeschaltet.', `Für die Abschnittsprüfung brauchst du mindestens ${PASS} %. Übe noch etwas und versuch es dann erneut.`],
+    skip: ['Du bist direkt in den Abschnitt gesprungen. Alle Abschnitte bis hierher gelten als abgeschlossen.', `Zum Überspringen brauchst du mindestens ${SKIP_PASS} %. Du kannst den Abschnitt auch ganz normal durcharbeiten.`],
+    review: [errors > 0 ? 'Falsch beantwortete Wörter liegen wieder in Fach 1 und kommen bei der nächsten Wiederholung zuerst dran.' : 'Alle Wörter sind ein Fach im Karteikasten weitergerutscht.', ''],
+  };
+  const note = passed ? notes[kind][0] : notes[kind][1];
   return (
     <View style={{ gap: 24, paddingTop: 30 }}>
       <H1>{title}</H1>

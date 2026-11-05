@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { ScreenProps } from '../nav';
-import { Btn, CardBox, Field, H1, H2, P, Panel, TopBar, confirm, notify, useTheme } from '../ui';
-import { MIN_WORDS, PathNode, boxCounts, dueCount, effective, estimateDifficulty, makeUnit, pathNodes, removeWordFromPath } from '../engine';
+import { Route, ScreenProps } from '../nav';
+import { Btn, CardBox, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
+import { MIN_WORDS, PathNode, SKIP_PASS, Section, boxCounts, buildPath, dueCount, effective, estimateDifficulty } from '../engine';
 import { Course as CourseT, DEFAULT_MIX, Mix } from '../store';
 
 function useCourse(data: ScreenProps['data'], id: string) {
@@ -11,31 +11,51 @@ function useCourse(data: ScreenProps['data'], id: string) {
 
 const OFFSETS = [0, 46, 70, 46, 0, -46, -70, -46];
 
+const lessonRoute = (id: string, n: PathNode): Route => ({ name: 'lesson', id, node: { key: n.key, kind: n.kind, wordIds: n.wordIds, section: n.section } });
+const skipRoute = (id: string, s: Section): Route => ({ name: 'lesson', id, node: { key: `skip${s.index}`, kind: 'skip', wordIds: s.wordIds, section: s.index } });
+
 export function Course({ data, go, back, id }: ScreenProps & { id: string }) {
   const t = useTheme();
   const c = useCourse(data, id);
   if (!c) return <TopBar onBack={back} />;
   const due = dueCount(c);
-  const nodes = pathNodes(c);
+  const sections = buildPath(c);
   const canLearn = c.words.length >= MIN_WORDS;
   const reviewable = c.words.some((w) => w.box > 0);
-
-  const open = (n: PathNode) => {
-    if (n.status === 'locked') {
-      notify('Schließe zuerst die vorherige Lektion ab.');
-      return;
-    }
-    if (!canLearn) {
-      notify(`Der Kurs braucht mindestens ${MIN_WORDS} Wörter.`);
-      return;
-    }
-    go({ name: 'lesson', id, lessonId: n.lesson.id });
-  };
+  const current = sections.flatMap((s) => [...s.units.flatMap((u) => u.nodes), ...(s.exam ? [s.exam] : [])]).find((n) => n.status === 'current');
+  const currentSection = current ? sections[current.section] : undefined;
 
   return (
     <View style={{ gap: 22 }}>
       <TopBar onBack={back} title={`${c.langA} – ${c.langB}`} />
       <H1>{c.name}</H1>
+
+      {!canLearn ? (
+        <Panel>
+          <H2>{c.words.length === 0 ? 'Noch keine Wörter' : 'Fast startklar'}</H2>
+          <P muted>Füge mindestens {MIN_WORDS} Wörter hinzu. Memoro sortiert sie nach Schwierigkeit in die Abschnitte Leicht, Mittel und Schwer und baut daraus Einheiten mit Lektionen und Tests.</P>
+          <Btn label="Wörter hinzufügen" onPress={() => go({ name: 'add', id })} />
+        </Panel>
+      ) : current && currentSection ? (
+        <View style={{ backgroundColor: t.lvl[currentSection.level], borderRadius: 20, padding: 20, gap: 12 }}>
+          <Text style={{ color: t.onLvl, opacity: 0.85, fontSize: 14, fontWeight: '700', letterSpacing: 0.5 }}>
+            ABSCHNITT {currentSection.index + 1} · {currentSection.name.toUpperCase()}
+          </Text>
+          <Text style={{ color: t.onLvl, fontSize: 24, fontWeight: '800' }}>{current.title}</Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => go(lessonRoute(id, current))}
+            style={({ pressed }) => ({ backgroundColor: t.onLvl, borderRadius: 14, minHeight: 52, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.85 : 1 })}
+          >
+            <Text style={{ color: t.lvl[currentSection.level], fontSize: 17, fontWeight: '800' }}>Weiterlernen</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <Panel>
+          <H2>Kurs abgeschlossen</H2>
+          <P muted>Alle Abschnitte geschafft. Halte die Wörter im Karteikasten frisch oder füge neue hinzu.</P>
+        </Panel>
+      )}
 
       <Panel>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -51,35 +71,13 @@ export function Course({ data, go, back, id }: ScreenProps & { id: string }) {
         />
       </Panel>
 
-      {nodes.length === 0 ? (
-        <Panel>
-          <H2>Noch keine Lektionen</H2>
-          <P muted>Füge eine Wortliste hinzu. Memoro sortiert sie von leicht nach schwer und baut daraus einen Lernpfad mit Lektionen und Abschlusstest.</P>
-          <Btn label="Wörter hinzufügen" onPress={() => go({ name: 'add', id })} />
-        </Panel>
-      ) : (
-        c.units.map((u) => {
-          const unitNodes = nodes.filter((n) => n.unit.id === u.id);
-          const done = u.lessons.filter((l) => l.done).length;
-          return (
-            <View key={u.id} style={{ gap: 18 }}>
-              <View style={{ backgroundColor: t.primary, borderRadius: 18, padding: 18, gap: 8 }}>
-                <Text style={{ color: t.onPrimary, fontSize: 20, fontWeight: '800' }}>{u.title}</Text>
-                <Text style={{ color: t.onPrimary, opacity: 0.85, fontSize: 15 }}>
-                  {done} von {u.lessons.length} abgeschlossen · {new Set(u.lessons.flatMap((l) => l.wordIds)).size} Wörter
-                </Text>
-                <View style={{ height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
-                  <View style={{ height: '100%', width: `${Math.round((done / u.lessons.length) * 100)}%`, backgroundColor: t.card }} />
-                </View>
-              </View>
-              <View style={{ alignItems: 'center', gap: 14 }}>
-                {unitNodes.map((n, k) => (
-                  <PathStep key={n.lesson.id} node={n} offset={OFFSETS[k % OFFSETS.length]} number={u.lessons.filter((l, j) => l.kind === 'lesson' && j <= k).length} onPress={() => open(n)} />
-                ))}
-              </View>
-            </View>
-          );
-        })
+      {canLearn && (
+        <View style={{ gap: 12 }}>
+          <H2>Abschnitte</H2>
+          {sections.map((s) => (
+            <SectionCard key={s.index} s={s} onOpen={() => go({ name: 'section', id, index: s.index })} onSkip={() => go(skipRoute(id, s))} />
+          ))}
+        </View>
       )}
 
       <View style={{ gap: 10 }}>
@@ -97,24 +95,122 @@ export function Course({ data, go, back, id }: ScreenProps & { id: string }) {
   );
 }
 
-function PathStep({ node, offset, number, onPress }: { node: PathNode; offset: number; number: number; onPress: () => void }) {
+function SectionCard({ s, onOpen, onSkip }: { s: Section; onOpen: () => void; onSkip: () => void }) {
   const t = useTheme();
-  const { status, lesson } = node;
-  const isTest = lesson.kind === 'test';
-  const bg = status === 'done' ? t.primary : status === 'current' ? t.card : t.line;
-  const fg = status === 'done' ? t.onPrimary : status === 'current' ? t.onCard : t.muted;
-  const label = isTest ? 'Abschlusstest' : `Lektion ${number}`;
-  const sub = status === 'done' ? (lesson.best ? `${lesson.best} %` : 'erledigt') : status === 'current' ? 'Start' : 'gesperrt';
+  const color = t.lvl[s.level];
+  const locked = s.status === 'locked';
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={`Abschnitt ${s.index + 1}, ${s.name}`} onPress={onOpen} style={({ pressed }) => ({ opacity: pressed ? 0.88 : 1 })}>
+      <View style={{ borderRadius: 18, borderWidth: 2, borderColor: locked ? t.line : color, backgroundColor: t.surface, overflow: 'hidden' }}>
+        <View style={{ backgroundColor: locked ? t.line : color, paddingHorizontal: 16, paddingVertical: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text style={{ color: locked ? t.muted : t.onLvl, fontWeight: '800', fontSize: 13, letterSpacing: 0.5 }}>ABSCHNITT {s.index + 1}</Text>
+          <Text style={{ color: locked ? t.muted : t.onLvl, fontWeight: '700', fontSize: 13 }}>
+            {s.status === 'done' ? 'Abgeschlossen ✓' : s.status === 'current' ? 'Aktuell' : 'Gesperrt'}
+          </Text>
+        </View>
+        <View style={{ padding: 16, gap: 10 }}>
+          <Text style={{ color: t.ink, fontSize: 22, fontWeight: '800' }}>{s.name}</Text>
+          <P muted>
+            {s.wordIds.length} Wörter · {s.units.length} {s.units.length === 1 ? 'Einheit' : 'Einheiten'} · Prüfung mit {Math.min(s.examSize, s.wordIds.length * 2)} Fragen
+          </P>
+          <Progress value={s.total ? s.done / s.total : 0} color={color} />
+          {locked && s.wordIds.length >= MIN_WORDS && (
+            <Btn kind="secondary" label="Hierher springen" onPress={onSkip} style={{ minHeight: 44 }} />
+          )}
+        </View>
+      </View>
+    </Pressable>
+  );
+}
+
+export function SectionView({ data, go, back, id, index }: ScreenProps & { id: string; index: number }) {
+  const t = useTheme();
+  const c = useCourse(data, id);
+  const s = c ? buildPath(c)[index] : undefined;
+  if (!c || !s) return <TopBar onBack={back} />;
+  const color = t.lvl[s.level];
+
+  const open = (n: PathNode) => {
+    if (n.status === 'locked') {
+      notify('Schließe zuerst die vorherigen Lektionen ab.');
+      return;
+    }
+    go(lessonRoute(id, n));
+  };
+
+  return (
+    <View style={{ gap: 22 }}>
+      <TopBar onBack={back} title={c.name} />
+      <View style={{ backgroundColor: color, borderRadius: 20, padding: 20, gap: 8 }}>
+        <Text style={{ color: t.onLvl, opacity: 0.85, fontSize: 14, fontWeight: '700', letterSpacing: 0.5 }}>ABSCHNITT {s.index + 1}</Text>
+        <Text style={{ color: t.onLvl, fontSize: 28, fontWeight: '800' }}>{s.name}</Text>
+        <Text style={{ color: t.onLvl, opacity: 0.9, fontSize: 15 }}>{s.done} von {s.total} Schritten · {s.wordIds.length} Wörter</Text>
+        <View style={{ height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.3)', overflow: 'hidden' }}>
+          <View style={{ height: '100%', width: `${Math.round((s.done / Math.max(1, s.total)) * 100)}%`, backgroundColor: t.onLvl }} />
+        </View>
+      </View>
+
+      {s.status === 'locked' && (
+        <Panel>
+          <H2>Schon fit in diesem Abschnitt?</H2>
+          <P muted>Mit einer Einstufungsprüfung kannst du direkt hierher springen. Ab {SKIP_PASS} % gelten alle Abschnitte bis hierher als abgeschlossen.</P>
+          <Btn label="Hierher springen" onPress={() => go(skipRoute(id, s))} />
+        </Panel>
+      )}
+
+      {s.units.map((u) => {
+        const done = u.nodes.filter((n) => n.status === 'done').length;
+        return (
+          <View key={u.index} style={{ gap: 16 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <View style={{ flex: 1, height: 2, backgroundColor: t.line }} />
+              <Text style={{ color: t.muted, fontWeight: '800', fontSize: 14 }}>
+                Einheit {u.index + 1} · {done}/{u.nodes.length}
+              </Text>
+              <View style={{ flex: 1, height: 2, backgroundColor: t.line }} />
+            </View>
+            <View style={{ alignItems: 'center', gap: 14 }}>
+              {u.nodes.map((n, k) => (
+                <PathStep key={n.key} node={n} color={color} best={c.best[n.key]} offset={OFFSETS[k % OFFSETS.length]} onPress={() => open(n)} />
+              ))}
+            </View>
+          </View>
+        );
+      })}
+
+      {s.exam && (
+        <View style={{ alignItems: 'center', gap: 10, paddingTop: 6 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, alignSelf: 'stretch' }}>
+            <View style={{ flex: 1, height: 2, backgroundColor: t.line }} />
+            <Text style={{ color: t.muted, fontWeight: '800', fontSize: 14 }}>Abschluss</Text>
+            <View style={{ flex: 1, height: 2, backgroundColor: t.line }} />
+          </View>
+          <PathStep node={s.exam} color={color} best={c.best[s.exam.key]} offset={0} onPress={() => open(s.exam!)} />
+          <P muted style={{ textAlign: 'center' }}>{Math.min(s.examSize, s.wordIds.length * 2)} Fragen aus dem ganzen Abschnitt, je zur Hälfte in beide Richtungen.</P>
+        </View>
+      )}
+    </View>
+  );
+}
+
+function PathStep({ node, color, best, offset, onPress }: { node: PathNode; color: string; best?: number; offset: number; onPress: () => void }) {
+  const t = useTheme();
+  const { status, kind } = node;
+  const big = kind !== 'lesson';
+  const bg = status === 'done' ? color : status === 'current' ? t.card : t.line;
+  const fg = status === 'done' ? t.onLvl : status === 'current' ? t.onCard : t.muted;
+  const symbol = status === 'done' ? '✓' : kind === 'exam' ? 'PRÜFUNG' : kind === 'unitTest' ? 'TEST' : node.title.replace('Lektion ', '');
+  const sub = status === 'done' ? (best ? `${best} %` : 'erledigt') : status === 'current' ? 'Start' : 'gesperrt';
   return (
     <View style={{ alignItems: 'center', transform: [{ translateX: offset }], gap: 6 }}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={`${label}, ${sub}`}
+        accessibilityLabel={`${node.title}, ${sub}`}
         onPress={onPress}
         style={({ pressed }) => ({
-          width: isTest ? 84 : 72,
-          height: 72,
-          borderRadius: isTest ? 20 : 36,
+          width: kind === 'exam' ? 120 : big ? 88 : 72,
+          height: kind === 'exam' ? 80 : 72,
+          borderRadius: big ? 22 : 36,
           backgroundColor: bg,
           alignItems: 'center',
           justifyContent: 'center',
@@ -124,11 +220,9 @@ function PathStep({ node, offset, number, onPress }: { node: PathNode; offset: n
           transform: [{ translateY: pressed ? 3 : 0 }],
         })}
       >
-        <Text style={{ color: fg, fontSize: isTest ? 15 : 24, fontWeight: '800' }}>
-          {status === 'done' ? '✓' : isTest ? 'TEST' : String(number)}
-        </Text>
+        <Text style={{ color: fg, fontSize: big && status !== 'done' ? 14 : 24, fontWeight: '800', letterSpacing: big ? 0.5 : 0 }}>{symbol}</Text>
       </Pressable>
-      <Text style={{ color: status === 'locked' ? t.muted : t.ink, fontSize: 13, fontWeight: '700' }}>{label}</Text>
+      <Text style={{ color: status === 'locked' ? t.muted : t.ink, fontSize: 13, fontWeight: '700' }}>{node.title}</Text>
       <Text style={{ color: t.muted, fontSize: 12, marginTop: -4 }}>{sub}</Text>
     </View>
   );
@@ -177,18 +271,6 @@ export function LessonSettings({ data, update, back, id }: ScreenProps & { id: s
   const total = m.ab + m.ba + m.pairs + m.spelling;
   const active = PRESETS.find((p) => (Object.keys(p.mix) as (keyof Mix)[]).every((k) => p.mix[k] === m[k]));
 
-  const rebuild = () =>
-    confirm('Alle Einheiten mit der neuen Lektionsgröße neu aufteilen? Der Fortschritt im Lernpfad startet dann von vorn, der Karteikasten bleibt erhalten.', () =>
-      setCourse((x) => ({
-        ...x,
-        units: x.units.map((u) => {
-          const ids = new Set(u.lessons.flatMap((l) => l.wordIds));
-          const fresh = makeUnit(u.title, x.words.filter((w) => ids.has(w.id)), x.wordsPerLesson);
-          return { ...fresh, id: u.id };
-        }),
-      })),
-    );
-
   return (
     <View style={{ gap: 20 }}>
       <TopBar onBack={back} title={c.name} />
@@ -223,9 +305,9 @@ export function LessonSettings({ data, update, back, id }: ScreenProps & { id: s
 
       <Panel>
         <H2>Lernpfad</H2>
-        <Stepper label="Wörter pro Lektion" hint="Gilt für neu hinzugefügte Listen" value={c.wordsPerLesson} min={3} max={10} onChange={(v) => setCourse((x) => ({ ...x, wordsPerLesson: v }))} />
-        <Btn kind="secondary" label="Bestehende Einheiten neu aufteilen" onPress={rebuild} disabled={!c.units.length} />
-        <P muted>Jede Einheit endet mit einem Abschlusstest. Er fragt jedes Wort einmal ab, je zur Hälfte in beide Richtungen, und gilt ab 50 % als bestanden.</P>
+        <Stepper label="Wörter pro Lektion" value={c.wordsPerLesson} min={3} max={10} onChange={(v) => setCourse((x) => ({ ...x, wordsPerLesson: v }))} />
+        <Stepper label="Lektionen pro Einheit" hint="Danach folgt ein Einheitstest" value={c.lessonsPerUnit} min={2} max={8} onChange={(v) => setCourse((x) => ({ ...x, lessonsPerUnit: v }))} />
+        <P muted>Die Wörter werden nach Schwierigkeit in die Abschnitte Leicht, Mittel und Schwer verteilt. Jeder Abschnitt endet mit einer Prüfung (10, 20 bzw. 30 Fragen), bestanden ab 50 %. Dein Fortschritt hängt an den Wörtern, Änderungen hier gehen also nicht verloren.</P>
       </Panel>
     </View>
   );
@@ -243,6 +325,8 @@ export function Words({ data, update, back, id }: ScreenProps & { id: string }) 
   const setCourse = (fn: (c: CourseT) => CourseT) =>
     update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? fn(x) : x)) }));
 
+  const sectionOf = new Map<string, string>();
+  buildPath(c).forEach((sec) => sec.wordIds.forEach((wid) => sectionOf.set(wid, sec.name)));
   const q = query.trim().toLowerCase();
   const list = [...c.words]
     .filter((w) => !q || w.a.toLowerCase().includes(q) || w.b.toLowerCase().includes(q))
@@ -279,7 +363,7 @@ export function Words({ data, update, back, id }: ScreenProps & { id: string }) 
                 label="Wort löschen"
                 onPress={() =>
                   confirm(`„${w.a}“ löschen?`, () => {
-                    setCourse((x) => removeWordFromPath({ ...x, words: x.words.filter((y) => y.id !== w.id) }, w.id));
+                    setCourse((x) => ({ ...x, words: x.words.filter((y) => y.id !== w.id) }));
                     setEditing(null);
                   })
                 }
@@ -301,7 +385,7 @@ export function Words({ data, update, back, id }: ScreenProps & { id: string }) 
                 <Text style={{ color: t.ink, fontSize: 16, fontWeight: '600' }}>{w.a}</Text>
                 <Text style={{ color: t.muted, fontSize: 15 }}>{w.b}</Text>
               </View>
-              <Text style={{ color: t.muted, fontSize: 13 }}>{w.box === 0 ? 'Neu' : `Fach ${w.box}`}</Text>
+              <Text style={{ color: t.muted, fontSize: 13, textAlign: 'right' }}>{sectionOf.get(w.id)}{'\n'}{w.box === 0 ? 'neu' : `Fach ${w.box}`}</Text>
             </Pressable>
           ),
         )}
