@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="%LANG_ISO_CODE%">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>%WEB_TITLE%</title>
+    <meta name="description" content="Memoro – Vokabeln lernen mit deinen eigenen Wortlisten." />
+
+    <!-- Als App vom Homebildschirm starten (ohne Safari-Leisten) -->
+    <link rel="manifest" href="/memoro/manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Memoro" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/memoro/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/memoro/icon-192.png" />
+
+    <style id="expo-reset">
+      html,
+      body {
+        height: 100%;
+        background-color: #eef1ec;
+      }
+      @media (prefers-color-scheme: dark) {
+        html,
+        body {
+          background-color: #111917;
+        }
+      }
+      body {
+        overflow: hidden;
+        -webkit-tap-highlight-color: transparent;
+        overscroll-behavior: none;
+      }
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <noscript>Memoro braucht JavaScript.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
