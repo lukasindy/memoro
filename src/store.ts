@@ -10,7 +10,7 @@ export type Word = {
   right: number;
   wrong: number;
   lp?: boolean; // im Lernpfad in einer Lektion gelernt
-  ut?: boolean; // Einheitstest bestanden
+  ut?: boolean; // Miniprüfung bestanden
   se?: boolean; // Abschnittsprüfung bestanden
 };
 

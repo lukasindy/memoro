@@ -308,7 +308,7 @@ export function buildPath(c: Course): Section[] {
         return { key: `s${si}u${ui}l${lessonNo}`, kind: 'lesson', title: `Lektion ${lessonNo}`, wordIds: ids, section: si, status: status(flags(ids, 'lp')) };
       });
       if (unitIds.length >= MIN_WORDS) {
-        nodes.push({ key: `s${si}u${ui}t`, kind: 'unitTest', title: 'Einheitstest', wordIds: unitIds, section: si, status: status(flags(unitIds, 'ut')) });
+        nodes.push({ key: `s${si}u${ui}t`, kind: 'unitTest', title: 'Miniprüfung', wordIds: unitIds, section: si, status: status(flags(unitIds, 'ut')) });
       }
       return { index: ui, nodes, wordIds: unitIds };
     });
@@ -316,7 +316,7 @@ export function buildPath(c: Course): Section[] {
     const examSize = EXAM_SIZE[levelsOf[si]];
     const exam: PathNode | null =
       ids.length >= MIN_WORDS
-        ? { key: `s${si}e`, kind: 'exam', title: 'Abschnittsprüfung', wordIds: ids, section: si, status: status(flags(ids, 'se')) }
+        ? { key: `s${si}e`, kind: 'exam', title: 'Abschlussprüfung', wordIds: ids, section: si, status: status(flags(ids, 'se')) }
         : null;
     const all = [...units.flatMap((u) => u.nodes), ...(exam ? [exam] : [])];
     const done = all.filter((x) => x.status === 'done').length;
@@ -333,7 +333,7 @@ export function findNode(c: Course, key: string): PathNode | undefined {
   return undefined;
 }
 
-export const PASS = 50; // Prozent für Einheitstest und Abschnittsprüfung
+export const PASS = 50; // Prozent für Miniprüfung und Abschlussprüfung
 export const SKIP_PASS = 80; // Prozent zum Überspringen eines Abschnitts
 
 // Fortschritt nach einer Lektion, einem Test oder einer Prüfung auf die Wörter schreiben
