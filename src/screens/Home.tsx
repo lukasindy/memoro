@@ -3,7 +3,7 @@ import { Pressable, Switch, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
-import { buildPath } from '../engine';
+import { buildPath, levelInfo } from '../engine';
 import { releasePending } from '../engine';
 import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
 import { exportBackup, pickBackupFile } from '../platform';
@@ -49,6 +49,7 @@ function HeroCards() {
 export function Home({ data, go }: ScreenProps) {
   const t = useTheme();
   const has = data.courses.length > 0;
+  const lv = levelInfo(data.xp);
   return (
     <View style={{ gap: 22 }}>
       {/* Kopfzeile: Premium + Einstellungen */}
@@ -96,20 +97,34 @@ export function Home({ data, go }: ScreenProps) {
           <HeroCards />
         </View>
         <View style={{ flexDirection: 'row', gap: 10 }}>
-          {[
-            { icon: 'flame' as const, value: data.streak.count, label: data.streak.count === 1 ? 'Tag in Folge' : 'Tage in Folge' },
-            { icon: 'flash' as const, value: data.xp, label: 'XP gesammelt' },
-          ].map((x) => (
-            <View key={x.label} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: 'rgba(255,255,255,0.14)', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 10 }}>
-              <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: t.card, alignItems: 'center', justifyContent: 'center' }}>
-                <Ionicons name={x.icon} size={18} color={t.onCard} />
-              </View>
-              <View>
-                <Text style={{ color: HERO_INK, fontSize: 20, fontWeight: '900' }}>{x.value}</Text>
-                <Text style={{ color: HERO_INK, opacity: 0.85, fontSize: 12 }}>{x.label}</Text>
-              </View>
+          {/* Streak */}
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: 'rgba(255,255,255,0.14)', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 10 }}>
+            <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: t.card, alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="flame" size={18} color={t.onCard} />
             </View>
-          ))}
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: HERO_INK, fontSize: 20, fontWeight: '900' }}>{data.streak.count}</Text>
+              <Text style={{ color: HERO_INK, opacity: 0.85, fontSize: 12 }}>
+                {data.streak.count === 1 ? 'Tag in Folge' : 'Tage in Folge'}
+                {data.freezes > 0 ? ` · ${data.freezes}× Schutz` : ''}
+              </Text>
+            </View>
+          </View>
+          {/* Level */}
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: 'rgba(255,255,255,0.14)', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 10 }}>
+            <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: t.card, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ color: t.onCard, fontSize: 15, fontWeight: '900' }}>{lv.level}</Text>
+            </View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <Text style={{ color: HERO_INK, fontSize: 14, fontWeight: '900' }}>Level {lv.level}</Text>
+              <View style={{ height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
+                <View style={{ height: '100%', width: `${Math.round(lv.progress * 100)}%`, backgroundColor: t.card }} />
+              </View>
+              <Text style={{ color: HERO_INK, opacity: 0.85, fontSize: 11 }}>
+                {data.xp} XP{data.boost > 0 ? ` · Booster ×2` : ''}
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
 
@@ -181,29 +196,6 @@ export function Home({ data, go }: ScreenProps) {
         </View>
       )}
 
-      {!data.premium && (
-        <Pressable accessibilityRole="button" onPress={() => go({ name: 'premium', reason: 'Hol dir mehr aus Memoro heraus.' })} style={({ pressed }) => ({ opacity: pressed ? 0.9 : 1 })}>
-          <View style={{ backgroundColor: t.card, borderRadius: 22, padding: 18, gap: 10 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <Ionicons name="diamond" size={22} color={t.onCard} />
-              <Text style={{ color: t.onCard, fontSize: 19, fontWeight: '900' }}>Memoro Premium</Text>
-            </View>
-            {[
-              { icon: 'camera' as const, text: 'Vokabellisten abfotografieren' },
-              { icon: 'albums' as const, text: 'Beliebig viele Kurse' },
-              { icon: 'infinite' as const, text: 'Mehr als 1000 Wörter' },
-            ].map((x) => (
-              <View key={x.text} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                <Ionicons name={x.icon} size={18} color={t.onCard} />
-                <Text style={{ color: t.onCard, fontSize: 15 }}>{x.text}</Text>
-              </View>
-            ))}
-            <View style={{ backgroundColor: t.onCard, borderRadius: 14, minHeight: 46, alignItems: 'center', justifyContent: 'center', marginTop: 4 }}>
-              <Text style={{ color: t.card, fontSize: 16, fontWeight: '800' }}>Premium ansehen</Text>
-            </View>
-          </View>
-        </Pressable>
-      )}
     </View>
   );
 }
@@ -304,7 +296,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.9 – Testversion</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.0 – Testversion</P>
     </View>
   );
 }

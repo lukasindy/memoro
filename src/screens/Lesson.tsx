@@ -2,8 +2,10 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
-import { Exercise, PASS, SKIP_PASS, applyResults, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, wordsByIds } from '../engine';
+import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, wordsByIds } from '../engine';
 import { LessonKind, LessonRef } from '../nav';
+import { Ionicons } from '@expo/vector-icons';
+import type { LevelUp } from '../engine';
 
 type Item = Exercise & { retry?: boolean };
 
@@ -46,18 +48,25 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
     const pct = Math.round(((total - errors) / total) * 100);
     const need = kind === 'skip' ? SKIP_PASS : PASS;
     const passed = !isTest || pct >= need;
-    const xp = score.current.xp + (errors === 0 ? 10 : 0) + (isTest && passed ? (kind === 'unitTest' ? 20 : 50) : 0);
-    update((d) => ({
+    const base = score.current.xp + (errors === 0 ? 10 : 0) + (isTest && passed ? (kind === 'unitTest' ? 20 : 50) : 0);
+    const g = gainXp(data, base);
+    update((d) => {
+      const gx = gainXp(d, base);
+      const st = nextStreak(d.streak, gx.freezes);
+      return {
       ...d,
-      xp: d.xp + xp,
-      streak: nextStreak(d.streak),
+      xp: gx.xp,
+      freezes: gx.freezes - st.used,
+      boost: gx.boost,
+      streak: st.streak,
       courses: d.courses.map((x) => {
         if (x.id !== id) return x;
         const updated = applyResults(x, results.current);
         return node ? markProgress(updated, node.kind, node.wordIds, pct, node.kind === 'skip' ? undefined : node.key) : updated;
       }),
-    }));
-    replace({ name: 'result', id, total, errors, xp, kind, passed });
+      };
+    });
+    replace({ name: 'result', id, total, errors, xp: g.gained, kind, passed, boosted: g.boosted, up: g.up });
   };
 
   const next = () => {
@@ -234,8 +243,9 @@ function PairsView({ ex, onMistake, onDone }: { ex: Extract<Exercise, { kind: 'p
   );
 }
 
-export function Result({ total, errors, xp, back, kind, passed }: ScreenProps & { id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean }) {
+export function Result({ total, errors, xp, back, kind, passed, boosted, up, data }: ScreenProps & { id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean; boosted?: boolean; up?: LevelUp | null }) {
   const t = useTheme();
+  const lv = levelInfo(data.xp);
   const pct = Math.round(((total - errors) / total) * 100);
   const isTest = kind === 'unitTest' || kind === 'exam' || kind === 'skip';
   const title = isTest
@@ -263,6 +273,43 @@ export function Result({ total, errors, xp, back, kind, passed }: ScreenProps & 
             <P muted>{l}</P>
           </Panel>
         ))}
+      </View>
+      {boosted && (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Ionicons name="rocket" size={18} color={t.primary} />
+          <P>XP-Booster aktiv: doppelte XP für diese Lektion.</P>
+        </View>
+      )}
+      {up && (
+        <View style={{ backgroundColor: t.card, borderRadius: 22, padding: 18, gap: 10, alignItems: 'center' }}>
+          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: t.onCard, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ color: t.card, fontSize: 26, fontWeight: '900' }}>{up.to}</Text>
+          </View>
+          <Text style={{ color: t.onCard, fontSize: 22, fontWeight: '900' }}>Level {up.to} erreicht!</Text>
+          <Text style={{ color: t.onCard, fontSize: 15, fontWeight: '700' }}>Dein Bonus:</Text>
+          {up.freezes > 0 && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="snow" size={18} color={t.onCard} />
+              <Text style={{ color: t.onCard, fontSize: 15 }}>
+                +{up.freezes} Streak-Schutz (rettet einen verpassten Tag)
+              </Text>
+            </View>
+          )}
+          {up.boost && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="rocket" size={18} color={t.onCard} />
+              <Text style={{ color: t.onCard, fontSize: 15 }}>XP-Booster: doppelte XP für 3 Lektionen</Text>
+            </View>
+          )}
+          {up.freezes === 0 && !up.boost && <Text style={{ color: t.onCard, fontSize: 15 }}>Streak-Schutz ist schon voll (max. 3).</Text>}
+        </View>
+      )}
+      <View style={{ gap: 6 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ color: t.ink, fontWeight: '800', fontSize: 15 }}>Level {lv.level}</Text>
+          <P muted>{lv.into} / {lv.need} XP</P>
+        </View>
+        <Progress value={lv.progress} color={t.card} />
       </View>
       <P muted>{note}</P>
       <Btn label="Weiter" onPress={back} />

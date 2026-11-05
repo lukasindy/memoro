@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Animated, Easing, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Route, ScreenProps } from '../nav';
-import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
+import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
 import { MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { AppData, Course as CourseT, DEFAULT_MIX, FREE_WORD_LIMIT, Mix } from '../store';
 
@@ -31,7 +31,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
     <View style={{ flex: 1 }}>
       <ScrollView key={tab} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} keyboardShouldPersistTaps="handled">
         <View style={{ width: '100%', maxWidth: 620, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 40, gap: 20 }}>
-          <TopBar onBack={back} title={`${c.name} · ${c.langA} – ${c.langB}`} />
+          <TopBar onBack={back} right={<StatPills streak={data.streak.count} xp={data.xp} freezes={data.freezes} boost={data.boost} />} />
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
           {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} data={data} update={update} />}
           {tab === 'stats' && <StatsTab c={c} />}
@@ -345,6 +345,7 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
   const t = useTheme();
   const [open, setOpen] = useState<Set<string>>(new Set());
   const [showAll, setShowAll] = useState(false);
+  const [filter, setFilter] = useState<number | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [a, setA] = useState('');
   const [b, setB] = useState('');
@@ -356,52 +357,90 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
       return n;
     });
 
+  const sections = buildPath(c);
+  const levelOf = new Map<string, number>();
+  sections.forEach((sec) => sec.wordIds.forEach((wid) => levelOf.set(wid, sec.level)));
   const q = query.trim().toLowerCase();
-  const match = (wid: string) => {
-    const w = c.words.find((x) => x.id === wid)!;
-    return !q || w.a.toLowerCase().includes(q) || w.b.toLowerCase().includes(q);
-  };
-  const sections = buildPath(c).map((sec) => ({ sec, ids: sec.wordIds.filter(match) })).filter((x) => x.ids.length);
+  const ids = sections
+    .filter((sec) => filter === null || sec.index === filter)
+    .flatMap((sec) => sec.wordIds)
+    .filter((wid) => {
+      const w = c.words.find((x) => x.id === wid)!;
+      return !q || w.a.toLowerCase().includes(q) || w.b.toLowerCase().includes(q);
+    });
+
+  const chip = (label: string, on: boolean, onPress: () => void, color?: string) => (
+    <Pressable
+      key={label}
+      accessibilityRole="button"
+      accessibilityState={{ selected: on }}
+      onPress={onPress}
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 7, borderRadius: 999, backgroundColor: on ? (color ?? t.primary) : t.surface, borderWidth: 1, borderColor: on ? (color ?? t.primary) : t.line }}
+    >
+      {color && !on && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />}
+      <Text style={{ color: on ? t.onLvl : t.ink, fontWeight: '700', fontSize: 14 }}>{label}</Text>
+    </Pressable>
+  );
 
   return (
-    <View style={{ gap: 18 }}>
-      <View style={{ gap: 4 }}>
-        <H1>Vokabeln</H1>
-        <P muted>{c.words.length} Wörter · {c.langA} – {c.langB}</P>
-      </View>
-      <Btn label="Wörter hinzufügen" onPress={() => go({ name: 'add', id: c.id })} />
-      {c.pending?.length > 0 && <PendingPanel c={c} data={data} update={update} go={go} setCourse={setCourse} />}
-      <Field value={query} onChangeText={setQuery} placeholder={`Suchen auf ${c.langA} oder ${c.langB}`} />
-      <Pressable
-        accessibilityRole="switch"
-        accessibilityState={{ checked: showAll }}
-        onPress={() => setShowAll((v) => !v)}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, alignSelf: 'flex-start', paddingVertical: 4 }}
-      >
-        <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: t.primary, backgroundColor: showAll ? t.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-          {showAll && <Text style={{ color: t.onPrimary, fontWeight: '800', fontSize: 13 }}>✓</Text>}
+    <View style={{ gap: 14 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ flex: 1 }}>
+          <H1>Vokabeln</H1>
+          <P muted>{c.words.length} Wörter · {c.langA} – {c.langB}</P>
         </View>
-        <Text style={{ color: t.ink, fontSize: 16 }}>Alle Übersetzungen zeigen</Text>
-      </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Wörter hinzufügen"
+          onPress={() => go({ name: 'add', id: c.id })}
+          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: t.primary, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 10, opacity: pressed ? 0.85 : 1 })}
+        >
+          <Ionicons name="add" size={18} color={t.onPrimary} />
+          <Text style={{ color: t.onPrimary, fontWeight: '800', fontSize: 15 }}>Hinzufügen</Text>
+        </Pressable>
+      </View>
 
-      {c.words.length === 0 && <P muted>Noch keine Wörter. Füge eine Liste ein oder fotografiere eine Vokabelliste ab.</P>}
-      {c.words.length > 0 && sections.length === 0 && <P muted>Kein Wort gefunden.</P>}
+      {c.pending?.length > 0 && <PendingPanel c={c} data={data} update={update} go={go} setCourse={setCourse} />}
 
-      {sections.map(({ sec, ids }) => (
-        <View key={sec.index} style={{ gap: 8 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: t.lvl[sec.level] }} />
-            <Text style={{ color: t.ink, fontSize: 18, fontWeight: '800' }}>{sec.name}</Text>
-            <Text style={{ color: t.muted, fontSize: 14 }}>{ids.length} Wörter</Text>
+      {c.words.length === 0 ? (
+        <P muted>Noch keine Wörter. Füge eine Liste ein oder fotografiere eine Vokabelliste ab.</P>
+      ) : (
+        <>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: t.surface, borderWidth: 1, borderColor: t.line, borderRadius: 14, paddingHorizontal: 12 }}>
+            <Ionicons name="search" size={18} color={t.muted} />
+            <TextInput
+              value={query}
+              onChangeText={setQuery}
+              placeholder={`Suchen auf ${c.langA} oder ${c.langB}`}
+              placeholderTextColor={t.muted}
+              style={{ flex: 1, color: t.ink, fontSize: 16, paddingVertical: 12 }}
+            />
+            <Pressable
+              accessibilityRole="switch"
+              accessibilityState={{ checked: showAll }}
+              accessibilityLabel="Alle Übersetzungen zeigen"
+              onPress={() => setShowAll((v) => !v)}
+              hitSlop={8}
+            >
+              <Ionicons name={showAll ? 'eye' : 'eye-off'} size={22} color={showAll ? t.primary : t.muted} />
+            </Pressable>
           </View>
-          <View style={{ backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, overflow: 'hidden' }}>
-            {ids.map((wid, k) => {
-              const w = c.words.find((x) => x.id === wid)!;
-              const visible = showAll || open.has(w.id);
-              return (
-                <View key={w.id} style={{ borderTopWidth: k ? 1 : 0, borderColor: t.line, paddingHorizontal: 14, paddingVertical: 12, gap: 8 }}>
-                  {editing === w.id ? (
-                    <View style={{ gap: 10 }}>
+
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            {chip(`Alle ${c.words.length}`, filter === null, () => setFilter(null))}
+            {sections.map((sec) => chip(`${sec.name} ${sec.wordIds.length}`, filter === sec.index, () => setFilter(sec.index), t.lvl[sec.level]))}
+          </View>
+
+          {ids.length === 0 ? (
+            <P muted>Kein Wort gefunden.</P>
+          ) : (
+            <View style={{ backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, overflow: 'hidden' }}>
+              {ids.map((wid, k) => {
+                const w = c.words.find((x) => x.id === wid)!;
+                const visible = showAll || open.has(w.id);
+                if (editing === w.id) {
+                  return (
+                    <View key={w.id} style={{ borderTopWidth: k ? 1 : 0, borderColor: t.line, padding: 14, gap: 10 }}>
                       <Field label={c.langA} value={a} onChangeText={setA} />
                       <Field label={c.langB} value={b} onChangeText={setB} />
                       <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -430,49 +469,55 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
                         }
                       />
                     </View>
-                  ) : (
-                    <>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                        <Text style={{ flex: 1, color: t.ink, fontSize: 17, fontWeight: '700' }}>{w.a}</Text>
-                        {w.lp && <Text style={{ color: t.right, fontSize: 13, fontWeight: '700' }}>gelernt</Text>}
-                        <Pressable
-                          accessibilityRole="button"
-                          accessibilityLabel={visible ? `Übersetzung von ${w.a} ausblenden` : `Was heißt ${w.a} auf ${c.langB}?`}
-                          onPress={() => toggle(w.id)}
-                          hitSlop={8}
-                          style={{ width: 34, height: 34, borderRadius: 17, borderWidth: 2, borderColor: t.primary, backgroundColor: visible ? t.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}
-                        >
-                          <Text style={{ color: visible ? t.onPrimary : t.primary, fontSize: 17, fontWeight: '800', fontStyle: 'italic' }}>i</Text>
-                        </Pressable>
-                      </View>
-                      {visible && (
-                        <View style={{ backgroundColor: t.bg, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                          <View style={{ flex: 1 }}>
-                            <Text style={{ color: t.muted, fontSize: 12, fontWeight: '700' }}>{c.langB.toUpperCase()}</Text>
-                            <Text style={{ color: t.ink, fontSize: 16 }}>{w.b}</Text>
-                          </View>
-                          <Pressable
-                            accessibilityRole="button"
-                            onPress={() => {
-                              setEditing(w.id);
-                              setA(w.a);
-                              setB(w.b);
-                            }}
-                            hitSlop={8}
-                          >
-                            <Text style={{ color: t.primary, fontWeight: '700', fontSize: 14 }}>Bearbeiten</Text>
-                          </Pressable>
-                        </View>
-                      )}
-                    </>
-                  )}
-                </View>
-              );
-            })}
-          </View>
-        </View>
-      ))}
-
+                  );
+                }
+                return (
+                  <Pressable
+                    key={w.id}
+                    accessibilityRole="button"
+                    accessibilityLabel={visible ? `${w.a}: ${w.b}` : `${w.a}, Übersetzung anzeigen`}
+                    onPress={() => toggle(w.id)}
+                    onLongPress={() => {
+                      setEditing(w.id);
+                      setA(w.a);
+                      setB(w.b);
+                    }}
+                    style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 13, borderTopWidth: k ? 1 : 0, borderColor: t.line, backgroundColor: pressed ? t.bg : 'transparent' })}
+                  >
+                    <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: t.lvl[levelOf.get(w.id) ?? 0] }} />
+                    <Text style={{ flex: 1, color: t.ink, fontSize: 16, fontWeight: '700' }} numberOfLines={2}>
+                      {w.a}
+                    </Text>
+                    {visible ? (
+                      <Text style={{ flex: 1, color: t.muted, fontSize: 15, textAlign: 'right' }} numberOfLines={2}>
+                        {w.b}
+                      </Text>
+                    ) : (
+                      <Ionicons name="information-circle-outline" size={22} color={t.primary} />
+                    )}
+                    {w.lp && <Ionicons name="checkmark-circle" size={16} color={t.right} />}
+                    {visible && (
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={`${w.a} bearbeiten`}
+                        hitSlop={8}
+                        onPress={() => {
+                          setEditing(w.id);
+                          setA(w.a);
+                          setB(w.b);
+                        }}
+                      >
+                        <Ionicons name="create-outline" size={18} color={t.muted} />
+                      </Pressable>
+                    )}
+                  </Pressable>
+                );
+              })}
+            </View>
+          )}
+          <P muted style={{ fontSize: 13, textAlign: 'center' }}>Tippen zeigt die Übersetzung, gedrückt halten zum Bearbeiten.</P>
+        </>
+      )}
     </View>
   );
 }
