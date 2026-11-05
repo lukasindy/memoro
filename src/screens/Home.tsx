@@ -3,6 +3,7 @@ import { Pressable, Switch, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
 import { buildPath } from '../engine';
+import { releasePending } from '../engine';
 import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
 import { exportBackup, pickBackupFile } from '../platform';
 import { Platform } from 'react-native';
@@ -83,7 +84,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
     const id = uid();
     update((d) => ({
       ...d,
-      courses: [...d.courses, { id, name: name.trim(), langA: langA.trim() || 'Fremdsprache', langB: langB.trim() || 'Deutsch', words: [], mix: { ...DEFAULT_MIX }, wordsPerLesson: DEFAULT_WORDS_PER_LESSON, lessonsPerUnit: DEFAULT_LESSONS_PER_UNIT, best: {}, lessons: 0, createdAt: Date.now() }],
+      courses: [...d.courses, { id, name: name.trim(), langA: langA.trim() || 'Fremdsprache', langB: langB.trim() || 'Deutsch', words: [], pending: [], mix: { ...DEFAULT_MIX }, wordsPerLesson: DEFAULT_WORDS_PER_LESSON, lessonsPerUnit: DEFAULT_LESSONS_PER_UNIT, best: {}, lessons: 0, createdAt: Date.now() }],
     }));
     replace({ name: 'course', id });
     go({ name: 'add', id });
@@ -139,7 +140,7 @@ export function Settings({ data, update, back }: ScreenProps) {
           </View>
           <Switch
             value={data.premium}
-            onValueChange={(v) => update((d) => ({ ...d, premium: v }))}
+            onValueChange={(v) => update((d) => (v ? releasePending({ ...d, premium: true }) : { ...d, premium: false }))}
             trackColor={{ true: t.primary, false: t.line }}
             accessibilityLabel="Premium testen"
           />
@@ -165,7 +166,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.7 – Testversion</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 0.8 – Testversion</P>
     </View>
   );
 }
@@ -186,7 +187,7 @@ export function Premium({ back, update, data, reason }: ScreenProps & { reason: 
         label={data.premium ? 'Premium ist aktiv' : 'Premium testen'}
         disabled={data.premium}
         onPress={() => {
-          update((d) => ({ ...d, premium: true }));
+          update((d) => releasePending({ ...d, premium: true }));
           back();
         }}
       />

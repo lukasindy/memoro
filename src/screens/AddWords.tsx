@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-nativ
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, notify, useTheme } from '../ui';
 import { Pair, parseList } from '../parser';
-import { newWord } from '../engine';
+import { freeSlots, newWord } from '../engine';
 import { FREE_WORD_LIMIT } from '../store';
 import { ocrAvailable, ocrLanguages, pickImage, recognizeText } from '../platform';
 
@@ -53,14 +53,28 @@ export function AddWords({ data, update, back, go, id }: ScreenProps & { id: str
       .map((p) => ({ a: p.a.trim(), b: p.b.trim() }))
       .filter((p) => p.a && p.b && !existing.has((p.a + '|' + p.b).toLowerCase()))
       .map(newWord);
-    const total = data.courses.reduce((n, x) => n + x.words.length, 0) + fresh.length;
-    if (!data.premium && total > FREE_WORD_LIMIT) {
-      go({ name: 'premium', reason: `In der Gratis-Version sind bis zu ${FREE_WORD_LIMIT} Wörter möglich. Mit dieser Liste wären es ${total}.` });
-      return;
-    }
-    update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? { ...x, words: [...x.words, ...fresh] } : x)) }));
+    // Gratis-Limit: bis genau 1000 übernehmen, den Rest parken
+    const slots = freeSlots(data);
+    const keep = slots === Infinity ? fresh : fresh.slice(0, slots);
+    const parked = fresh.slice(keep.length).map((w) => ({ a: w.a, b: w.b }));
+    update((d) => ({
+      ...d,
+      courses: d.courses.map((x) => {
+        if (x.id !== id) return x;
+        const known = new Set((x.pending ?? []).map((p) => (p.a + '|' + p.b).toLowerCase()));
+        const morePending = parked.filter((p) => !known.has((p.a + '|' + p.b).toLowerCase()));
+        return { ...x, words: [...x.words, ...keep], pending: [...(x.pending ?? []), ...morePending] };
+      }),
+    }));
     const dupes = pairs.length - fresh.length;
-    notify(`${fresh.length} Wörter gespeichert und nach Schwierigkeit in die Abschnitte einsortiert.${dupes > 0 ? ` ${dupes} waren schon im Kurs.` : ''}`);
+    const parts = [`${keep.length} ${keep.length === 1 ? 'Wort' : 'Wörter'} gespeichert und nach Schwierigkeit einsortiert.`];
+    if (dupes > 0) parts.push(`${dupes} ${dupes === 1 ? 'war' : 'waren'} schon im Kurs.`);
+    if (parked.length > 0) {
+      parts.push(
+        `${parked.length} ${parked.length === 1 ? 'Wort wurde' : 'Wörter wurden'} nicht hinzugefügt, weil die Gratis-Version auf ${FREE_WORD_LIMIT} Wörter begrenzt ist. ${parked.length === 1 ? 'Es wartet' : 'Sie warten'} unter „Vokabeln“, mit Premium ${parked.length === 1 ? 'kommt es' : 'kommen sie'} automatisch dazu.`,
+      );
+    }
+    notify(parts.join(' '));
     back();
   };
 

@@ -3,8 +3,8 @@ import { Animated, Easing, Platform, Pressable, ScrollView, Text, View } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
-import { MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty } from '../engine';
-import { Course as CourseT, DEFAULT_MIX, Mix } from '../store';
+import { MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
+import { AppData, Course as CourseT, DEFAULT_MIX, FREE_WORD_LIMIT, Mix } from '../store';
 
 export type CourseTab = 'learn' | 'vocab' | 'stats' | 'settings';
 type SetCourse = (fn: (c: CourseT) => CourseT) => void;
@@ -33,7 +33,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         <View style={{ width: '100%', maxWidth: 620, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 40, gap: 20 }}>
           <TopBar onBack={back} title={`${c.name} · ${c.langA} – ${c.langB}`} />
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
-          {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} />}
+          {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} data={data} update={update} />}
           {tab === 'stats' && <StatsTab c={c} />}
           {tab === 'settings' && (
             <SettingsTab
@@ -341,7 +341,7 @@ function PathStep(props: { node: PathNode; color: string; best?: number; offset:
 
 // ---------- Vokabeln ----------
 
-function VocabTab({ c, go, setCourse }: { c: CourseT; go: ScreenProps['go']; setCourse: SetCourse }) {
+function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenProps['go']; setCourse: SetCourse; data: AppData; update: ScreenProps['update'] }) {
   const t = useTheme();
   const [open, setOpen] = useState<Set<string>>(new Set());
   const [showAll, setShowAll] = useState(false);
@@ -370,6 +370,7 @@ function VocabTab({ c, go, setCourse }: { c: CourseT; go: ScreenProps['go']; set
         <P muted>{c.words.length} Wörter · {c.langA} – {c.langB}</P>
       </View>
       <Btn label="Wörter hinzufügen" onPress={() => go({ name: 'add', id: c.id })} />
+      {c.pending?.length > 0 && <PendingPanel c={c} data={data} update={update} go={go} setCourse={setCourse} />}
       <Field value={query} onChangeText={setQuery} placeholder={`Suchen auf ${c.langA} oder ${c.langB}`} />
       <Pressable
         accessibilityRole="switch"
@@ -472,6 +473,58 @@ function VocabTab({ c, go, setCourse }: { c: CourseT; go: ScreenProps['go']; set
         </View>
       ))}
 
+    </View>
+  );
+}
+
+// Wörter, die wegen des Gratis-Limits warten
+function PendingPanel({ c, data, update, go, setCourse }: { c: CourseT; data: AppData; update: ScreenProps['update']; go: ScreenProps['go']; setCourse: SetCourse }) {
+  const t = useTheme();
+  const [showAll, setShowAll] = useState(false);
+  const n = c.pending.length;
+  const slots = freeSlots(data);
+  const canAdd = Math.min(n, slots);
+  const list = showAll ? c.pending : c.pending.slice(0, 5);
+  return (
+    <View style={{ borderRadius: 18, borderWidth: 2, borderColor: t.card, backgroundColor: t.surface, overflow: 'hidden' }}>
+      <View style={{ backgroundColor: t.card, paddingHorizontal: 16, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Ionicons name="lock-closed" size={16} color={t.onCard} />
+        <Text style={{ color: t.onCard, fontWeight: '800', fontSize: 15 }}>
+          {n} {n === 1 ? 'Wort wartet' : 'Wörter warten'} auf Premium
+        </Text>
+      </View>
+      <View style={{ padding: 16, gap: 10 }}>
+        <P muted>
+          {n === 1 ? 'Dieses Wort wurde' : 'Diese Wörter wurden'} nicht hinzugefügt, weil die Gratis-Version auf {FREE_WORD_LIMIT} Wörter begrenzt ist. Kaufe Premium, um {n === 1 ? 'es' : 'sie'} hinzuzufügen.
+        </P>
+        <View style={{ gap: 4 }}>
+          {list.map((p, k) => (
+            <Text key={k} style={{ color: t.ink, fontSize: 15 }}>
+              {p.a} <Text style={{ color: t.muted }}>– {p.b}</Text>
+            </Text>
+          ))}
+          {n > 5 && (
+            <Pressable onPress={() => setShowAll((v) => !v)} accessibilityRole="button" hitSlop={8}>
+              <Text style={{ color: t.primary, fontWeight: '700', fontSize: 14, marginTop: 4 }}>{showAll ? 'Weniger anzeigen' : `+ ${n - 5} weitere anzeigen`}</Text>
+            </Pressable>
+          )}
+        </View>
+        {canAdd > 0 ? (
+          <Btn
+            label={canAdd === n ? `${n === 1 ? 'Wort' : 'Alle'} jetzt hinzufügen` : `${canAdd} davon jetzt hinzufügen`}
+            onPress={() => update((d) => releasePending(d, c.id))}
+          />
+        ) : (
+          <Btn label={`Premium holen, um ${n === 1 ? 'es' : 'sie'} hinzuzufügen`} onPress={() => go({ name: 'premium', reason: `${n} ${n === 1 ? 'Wort wartet' : 'Wörter warten'} darauf, hinzugefügt zu werden. Mit Premium gibt es kein Limit.` })} />
+        )}
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => confirm(`${n === 1 ? 'Das wartende Wort' : `Die ${n} wartenden Wörter`} verwerfen?`, () => setCourse((x) => ({ ...x, pending: [] })))}
+          style={{ alignSelf: 'center', paddingVertical: 4 }}
+        >
+          <Text style={{ color: t.muted, fontSize: 14 }}>Verwerfen</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
