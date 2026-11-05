@@ -55,7 +55,7 @@ export function effective(w: Word) {
 }
 
 export function newWord(p: Pair): Word {
-  return { id: uid(), a: p.a, b: p.b, base: estimateDifficulty(p.a, p.b), box: 0, due: 0, right: 0, wrong: 0 };
+  return { id: uid(), a: p.a, b: p.b, ...(p.ex ? { ex: p.ex } : {}), ...(p.exT ? { exT: p.exT } : {}), base: estimateDifficulty(p.a, p.b), box: 0, due: 0, right: 0, wrong: 0 };
 }
 
 export function boxCounts(c: Course) {

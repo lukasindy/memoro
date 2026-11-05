@@ -13,6 +13,8 @@ export type Word = {
   ut?: boolean; // Mini-Prüfung bestanden
   se?: boolean; // Abschnittsprüfung bestanden
   k?: string; // Begriff im mitgelieferten Wortschatz (automatisch erstellte Kurse)
+  ex?: string; // eigener Beispielsatz in der Lernsprache (für Lückensätze)
+  exT?: string; // Übersetzung des Beispielsatzes
 };
 
 // Wie oft jede Übung in einer Lektion vorkommt

@@ -1,6 +1,6 @@
 // Erkennt Wortpaare aus beliebig formatiertem Text (eingefügt oder per Foto erkannt).
 
-export type Pair = { a: string; b: string };
+export type Pair = { a: string; b: string; ex?: string; exT?: string };
 
 type Sep = { name: string; re: RegExp };
 
@@ -89,6 +89,11 @@ export function parseList(text: string): ParseResult {
     for (const sep of SEPARATORS) {
       if (p) break;
       p = splitFirst(l, sep.re);
+    }
+    // Bei ; | oder Tab: weitere Spalten als Beispielsatz und dessen Übersetzung
+    if (p && ['Tab', ';', '|'].includes(best.name)) {
+      const [b, ex, exT] = p.b.split(best.re).map((x) => x.trim());
+      p = { a: p.a, b, ...(ex ? { ex } : {}), ...(exT ? { exT } : {}) };
     }
     if (p) pairs.push(p);
     else skipped.push(l);
