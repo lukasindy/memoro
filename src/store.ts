@@ -10,7 +10,7 @@ export type Word = {
   right: number;
   wrong: number;
   lp?: boolean; // im Lernpfad in einer Lektion gelernt
-  ut?: boolean; // Miniprüfung bestanden
+  ut?: boolean; // Mini-Prüfung bestanden
   se?: boolean; // Abschnittsprüfung bestanden
 };
 
@@ -116,4 +116,6 @@ export function isValidBackup(x: any): x is AppData {
 
 export const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
-export const FREE_COURSE_LIMIT = 3;
+// Gratis-Version: ein Kurs, bis zu 1000 Wörter
+export const FREE_COURSE_LIMIT = 1;
+export const FREE_WORD_LIMIT = 1000;
