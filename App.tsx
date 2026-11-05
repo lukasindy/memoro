@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, BackHandler, Platform, ScrollView, View, useColorScheme } from 'react-native';
+import { ActivityIndicator, BackHandler, Platform, Pressable, ScrollView, Text, View, useColorScheme } from 'react-native';
 import type { ScrollViewInstance } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import { Home, NewCourse, Premium, Settings } from './src/screens/Home';
 import { Course } from './src/screens/Course';
 import { AddWords } from './src/screens/AddWords';
 import { Lesson, Result } from './src/screens/Lesson';
+import { alreadyTried, applyUpdate, checkForUpdate, onAppVisible } from './src/update';
 
 export default function App() {
   const scheme = useColorScheme();
@@ -35,6 +36,22 @@ export default function App() {
   const back = useCallback(() => setStack((s) => (s.length > 1 ? s.slice(0, -1) : s)), []);
 
   const route = stack[stack.length - 1];
+
+  // Auto-Update für die Web-App (z. B. vom iPhone-Homebildschirm)
+  const [newVersion, setNewVersion] = useState<string | null>(null);
+  const routeRef = useRef(route.name);
+  routeRef.current = route.name;
+  useEffect(() => {
+    const check = async () => {
+      const v = await checkForUpdate();
+      if (!v) return;
+      // Auf der Startseite sofort neu laden, sonst Hinweis zeigen (z. B. mitten in einer Lektion)
+      if (routeRef.current === 'home' && !alreadyTried(v)) applyUpdate(v);
+      else setNewVersion(v);
+    };
+    check();
+    return onAppVisible(check);
+  }, []);
 
   useEffect(() => {
     scroll.current?.scrollTo({ y: 0, animated: false });
@@ -72,6 +89,16 @@ export default function App() {
       <ThemeCtx.Provider value={theme}>
         <SafeAreaView style={{ flex: 1, backgroundColor: theme.bg }}>
           <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+          {newVersion && (
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => applyUpdate(newVersion)}
+              style={{ backgroundColor: theme.card, paddingHorizontal: 16, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+            >
+              <Text style={{ color: theme.onCard, fontWeight: '700', fontSize: 14 }}>Neue Version verfügbar</Text>
+              <Text style={{ color: theme.onCard, fontWeight: '900', fontSize: 14, textDecorationLine: 'underline' }}>Aktualisieren</Text>
+            </Pressable>
+          )}
           {route.name === 'course' && data ? (
             // Kursseite hat eigene Scrollfläche und untere Navigationsleiste
             screen
