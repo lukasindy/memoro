@@ -24,7 +24,12 @@ jobs:
           node-version: 22
       - run: npm install
       - run: npx tsc --noEmit
-      - run: npx expo export -p web
+      - name: Web-Version bauen (mit Versionsnummer für Auto-Update)
+        run: npx expo export -p web
+        env:
+          EXPO_PUBLIC_BUILD_ID: ${{ github.sha }}
+      - name: Versionsdatei schreiben
+        run: echo '{"v":"${{ github.sha }}"}' > dist/version.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
