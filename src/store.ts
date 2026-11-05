@@ -48,6 +48,7 @@ export type AppData = {
   xp: number;
   streak: { day: string; count: number };
   freezes: number; // Streak-Schutz: rettet einen verpassten Tag
+  streakSaved: string; // Tag, an dem zuletzt ein Streak-Schutz eingesetzt wurde
   boost: number; // Lektionen mit doppelten XP (aktiver Booster)
   boosters: number; // XP-Booster im Inventar, noch nicht aktiviert
   screenMinutes: number; // Social-Media-Zeit-Guthaben in Minuten
@@ -63,6 +64,7 @@ export const emptyData = (): AppData => ({
   xp: 0,
   streak: { day: '', count: 0 },
   freezes: 0,
+  streakSaved: '',
   boost: 0,
   boosters: 0,
   screenMinutes: 0,

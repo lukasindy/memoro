@@ -157,6 +157,15 @@ function spelling(c: Course, w: Word): Exercise {
 
 export const MIN_WORDS = 4;
 
+// Der Übungsmix gilt für 5 Wörter. Bei mehr Wörtern wird er hochgerechnet,
+// damit jedes Wort etwa gleich oft drankommt (rund 2 Aufgaben pro Wort).
+export const MIX_BASE_WORDS = 5;
+export function scaledMix(mix: Mix, wordCount: number): Mix {
+  const f = Math.max(1, wordCount / MIX_BASE_WORDS);
+  const s = (v: number) => (v === 0 ? 0 : Math.max(1, Math.round(v * f)));
+  return { ab: s(mix.ab), ba: s(mix.ba), pairs: s(mix.pairs), spelling: s(mix.spelling) };
+}
+
 // Baut eine Lektion aus den Wörtern nach dem eingestellten Übungsmix
 export function buildMixed(c: Course, words: Word[], mix: Mix): Exercise[] {
   if (words.length === 0) return [];

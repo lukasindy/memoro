@@ -170,7 +170,7 @@ export function CardBox({ counts, compact }: { counts: number[]; compact?: boole
 }
 
 // Kompakte Anzeige von Streak, XP und Level (z. B. in der Kursleiste)
-export function StatPills({ streak, xp, freezes, boost, onInventory, hasItems }: { streak: number; xp: number; freezes: number; boost: number; onInventory?: () => void; hasItems?: boolean }) {
+export function StatPills({ streak, xp, saved, boost, onInventory, hasItems }: { streak: number; xp: number; saved?: boolean; boost: number; onInventory?: () => void; hasItems?: boolean }) {
   const t = useTheme();
   const lv = levelInfo(xp);
   const pill = (children: React.ReactNode, label: string) => (
@@ -182,11 +182,14 @@ export function StatPills({ streak, xp, freezes, boost, onInventory, hasItems }:
     <View style={{ flexDirection: 'row', gap: 6, alignItems: 'center' }}>
       {pill(
         <>
-          <Ionicons name="flame" size={15} color={streak > 0 ? '#E8742C' : t.muted} />
+          {saved ? (
+            <Ionicons name="snow" size={15} color="#4A9BD9" />
+          ) : (
+            <Ionicons name="flame" size={15} color={streak > 0 ? '#E8742C' : t.muted} />
+          )}
           <Text style={{ color: t.ink, fontWeight: '800', fontSize: 14 }}>{streak}</Text>
-          {freezes > 0 && <Ionicons name="snow" size={13} color="#4A9BD9" />}
         </>,
-        `${streak} Tage in Folge${freezes ? `, ${freezes} Streak-Schutz` : ''}`,
+        `${streak} Tage in Folge${saved ? ', heute vom Streak-Schutz gerettet' : ''}`,
       )}
       {onInventory && (
         <Pressable
