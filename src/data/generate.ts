@@ -74,24 +74,94 @@ const split = (s: string) => {
 };
 const plain = (s: string) => s.replace(/\[(.+?)\]/g, '$1');
 
-// Lückensatz für ein Wort, aber nur, wenn alle anderen Wörter im Satz schon gelernt sind
+// ---------- Eigene Kurse mit dem Wortschatz abgleichen ----------
+
+const ART = /^(der|die|das|the|a|an|to|el|la|los|las|le|les|il|lo|gli|i|un|une|una|uno)\s+|^(l'|l’)/i;
+const normW = (s: string) => s.toLowerCase().replace(ART, '').replace(/\(.*?\)/g, '').trim();
+const core = (s: string) => s.replace(ART, '').trim();
+
+export function codeOf(name: string): LangCode | undefined {
+  return GEN_LANGS.find((l) => l.name.toLowerCase() === name.trim().toLowerCase())?.code;
+}
+
+const indexes: Partial<Record<LangCode, Map<string, string>>> = {};
+function index(code: LangCode) {
+  if (!indexes[code]) {
+    const m = new Map<string, string>();
+    vocab().forEach((r) => {
+      const k = normW(r[code]);
+      if (!m.has(k)) m.set(k, r.en);
+    });
+    indexes[code] = m;
+  }
+  return indexes[code]!;
+}
+
+// Begriff im Wortschatz für ein (auch selbst eingepflegtes) Wort
+function keyOf(w: Word, a?: LangCode, b?: LangCode) {
+  if (w.k) return w.k;
+  return (a && index(a).get(normW(w.a))) || (b && index(b).get(normW(w.b))) || undefined;
+}
+
+// Lückensatz aus einem eigenen Beispielsatz
+function ownCloze(c: Course, w: Word) {
+  if (!w.ex) return null;
+  const target = core(w.a);
+  const at = w.ex.toLowerCase().indexOf(target.toLowerCase());
+  if (!target || at < 0) return null;
+  const others = [...new Set(c.words.filter((x) => x.id !== w.id).map((x) => core(x.a)).filter((x) => x && x.toLowerCase() !== target.toLowerCase()))]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
+  if (others.length < 2) return null;
+  const answer = w.ex.slice(at, at + target.length);
+  return {
+    before: w.ex.slice(0, at),
+    after: w.ex.slice(at + target.length),
+    answer,
+    translation: w.exT ?? `(${w.b})`,
+    options: [answer, ...others].sort(() => Math.random() - 0.5),
+    word: w,
+  };
+}
+
+// Lückensatz für ein Wort: eigener Beispielsatz, sonst eingebaute Sätze, bei denen
+// alle übrigen Wörter schon gelernt sind
 export function clozeFor(c: Course, w: Word) {
-  if (!c.gen || !w.k) return null;
-  const a = c.gen.a as LangCode;
-  const b = c.gen.b as LangCode;
-  const learned = new Set(c.words.filter((x) => x.lp && x.k).map((x) => x.k!));
-  const inCourse = new Set(c.words.filter((x) => x.k).map((x) => x.k!));
-  // Zuerst Sätze mit dem neuen Wort als Lücke, sonst Sätze aus lauter bekannten Wörtern
-  let fits = sentences().filter((s) => s.blank === w.k && s.keys.slice(1).every((k) => learned.has(k) && inCourse.has(k)));
-  if (fits.length === 0) fits = sentences().filter((s) => s.keys.every((k) => learned.has(k) && inCourse.has(k)));
-  if (fits.length === 0) return null;
-  const s = fits[Math.floor(Math.random() * fits.length)];
-  const target = c.words.find((x) => x.k === s.blank) ?? w;
-  const parts = split(s.text[a]);
-  if (!parts) return null;
-  // Falsche Antworten: Lückenwörter aus anderen Sätzen derselben Sprache
-  const others = [...new Set(sentences().map((x) => split(x.text[a])?.answer).filter((x): x is string => !!x && x.toLowerCase() !== parts.answer.toLowerCase()))];
-  const pick = others.sort(() => Math.random() - 0.5).slice(0, 3);
-  const options = [parts.answer, ...pick].sort(() => Math.random() - 0.5);
-  return { before: parts.before, after: parts.after, answer: parts.answer, translation: plain(s.text[b]), options, word: target };
+  const own = ownCloze(c, w);
+  if (own) return own;
+
+  const a = (c.gen?.a as LangCode | undefined) ?? codeOf(c.langA);
+  const b = (c.gen?.b as LangCode | undefined) ?? codeOf(c.langB);
+  if (a) {
+    const keyed = c.words.map((x) => ({ x, k: keyOf(x, a, b) }));
+    const learned = new Set(keyed.filter((e) => e.k && e.x.lp).map((e) => e.k!));
+    const inCourse = new Map(keyed.filter((e) => e.k).map((e) => [e.k!, e.x]));
+    const wk = keyOf(w, a, b);
+    let fits = wk ? sentences().filter((s) => s.blank === wk && s.keys.slice(1).every((k) => learned.has(k))) : [];
+    if (fits.length === 0) fits = sentences().filter((s) => s.keys.every((k) => learned.has(k)));
+    if (fits.length > 0) {
+      const s = fits[Math.floor(Math.random() * fits.length)];
+      const parts = split(s.text[a]);
+      if (parts) {
+        const others = [...new Set(sentences().map((x) => split(x.text[a])?.answer).filter((x): x is string => !!x && x.toLowerCase() !== parts.answer.toLowerCase()))];
+        const options = [parts.answer, ...others.sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
+        return {
+          before: parts.before,
+          after: parts.after,
+          answer: parts.answer,
+          translation: b ? plain(s.text[b]) : '',
+          options,
+          word: inCourse.get(s.blank) ?? w,
+        };
+      }
+    }
+  }
+
+  // Sonst: ein eigener Beispielsatz eines schon gelernten Wortes
+  const withEx = c.words.filter((x) => x.ex && x.lp && x.id !== w.id).sort(() => Math.random() - 0.5);
+  for (const x of withEx) {
+    const cz = ownCloze(c, x);
+    if (cz) return cz;
+  }
+  return null;
 }
