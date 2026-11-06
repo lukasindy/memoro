@@ -18,10 +18,18 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/memoro/icon-192.png" />
 
     <style id="expo-reset">
-      html,
-      body {
+      html {
         height: 100%;
         background-color: #eef1ec;
+      }
+      body {
+        margin: 0;
+        /* etwas höher als der Bildschirm: die Seite ist (wie bei der Latein-App) scrollbar,
+           iOS gibt dann die volle Fensterhöhe */
+        min-height: calc(100% + 2px);
+        background-color: #eef1ec;
+        -webkit-tap-highlight-color: transparent;
+        overscroll-behavior: none;
       }
       @media (prefers-color-scheme: dark) {
         html,
@@ -29,32 +37,19 @@
           background-color: #111917;
         }
       }
-      /* Wichtig: KEIN overflow:hidden auf html/body, sonst schneidet iOS bei der (zu kleinen) Fensterhöhe ab.
-         --app-h = echte Bildschirmhöhe, wird unten per Skript gesetzt. */
-      body {
+      #root {
+        display: flex;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        width: 100%;
-        height: var(--app-h, 100%);
-        -webkit-tap-highlight-color: transparent;
-        overscroll-behavior: none;
-      }
-      #root {
-        display: flex;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 100%;
+        bottom: 0;
         overflow: hidden;
-        flex: 1;
       }
     </style>
     <script>
-      // iOS meldet in der Home-Bildschirm-App eine um die Statusleiste zu kleine Fensterhöhe (innerHeight).
-      // Darum die echte Bildschirmhöhe verwenden, solange sie nur wenig größer ist.
+      // iOS meldet in der Home-Bildschirm-App teils eine um die Statusleiste zu kleine Fensterhöhe.
+      // --gap = fehlende Höhe (px), damit die Tab-Leiste den Rest ausgleichen kann.
       (function () {
         var root = document.documentElement;
         function set() {
@@ -63,8 +58,7 @@
             var portrait = window.innerHeight >= window.innerWidth;
             var full = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
             var diff = full - window.innerHeight;
-            if (standalone && diff > 0 && diff <= 100) root.style.setProperty('--app-h', full + 'px');
-            else root.style.removeProperty('--app-h');
+            root.style.setProperty('--gap', standalone && diff > 0 && diff <= 100 ? diff + 'px' : '0px');
           } catch (e) {}
         }
         set();
