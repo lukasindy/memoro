@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
+import { Text, TextInput } from '../i18n';
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, notify, useTheme } from '../ui';
 import { Pair, parseList } from '../parser';

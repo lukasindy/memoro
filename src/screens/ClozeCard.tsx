@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '../i18n';
 
 // Lückensatz-Karte: Wörter, die noch nicht gelernt sind, sind unterstrichen.
 // Antippen zeigt die Bedeutung.

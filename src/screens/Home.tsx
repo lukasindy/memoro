@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Pressable, Switch, Text, TextInput, View } from 'react-native';
+import { Pressable, Switch, View } from 'react-native';
+import { RawText, Text, TextInput } from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
@@ -409,7 +410,7 @@ export function Settings({ data, update, back }: ScreenProps) {
       const parsed = JSON.parse(raw);
       if (!isValidBackup(parsed)) throw new Error();
       confirm('Backup laden? Deine aktuellen Kurse werden dabei ersetzt.', () => {
-        update(() => migrate(parsed));
+        update((d0) => ({ ...migrate(parsed), ui: d0.ui }));
         notify('Backup geladen.');
       });
     } catch {
@@ -421,6 +422,25 @@ export function Settings({ data, update, back }: ScreenProps) {
     <View style={{ gap: 20 }}>
       <TopBar onBack={back} />
       <H1>Einstellungen</H1>
+
+      <Panel>
+        <H2>Sprache / Language</H2>
+        <View style={{ flexDirection: 'row', gap: 10 }}>
+          {(['de', 'en'] as const).map((l) => {
+            const on = (data.ui ?? 'de') === l;
+            return (
+              <Pressable
+                key={l}
+                accessibilityRole="button"
+                onPress={() => update((d) => ({ ...d, ui: l }))}
+                style={{ flex: 1, minHeight: 48, borderRadius: 14, borderWidth: 1.5, borderColor: t.primary, backgroundColor: on ? t.primary : 'transparent', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <RawText style={{ color: on ? t.onPrimary : t.primary, fontSize: 16, fontWeight: '800' }}>{l === 'de' ? 'Deutsch' : 'English'}</RawText>
+              </Pressable>
+            );
+          })}
+        </View>
+      </Panel>
 
       <Panel>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
@@ -454,9 +474,9 @@ export function Settings({ data, update, back }: ScreenProps) {
       <Btn
         kind="danger"
         label="Alle Daten löschen"
-        onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
+        onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update((d0) => ({ ...emptyData(), ui: d0.ui })))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 3.2 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 3.3 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }

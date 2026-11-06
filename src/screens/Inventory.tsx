@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { Text } from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenProps } from '../nav';
 import { Btn, H1, H2, P, Panel, Progress, TopBar, useTheme } from '../ui';

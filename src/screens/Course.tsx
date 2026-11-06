@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Animated, Easing, Platform, Pressable, ScrollView, View } from 'react-native';
+import { Text, TextInput } from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Route, ScreenProps } from '../nav';

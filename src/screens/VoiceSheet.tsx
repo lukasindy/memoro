@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Modal, Platform, Pressable, ScrollView, View } from 'react-native';
+import { Text } from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { Btn, useTheme } from '../ui';
 import { VoiceOption, chooseVoice, listVoices, savedVoice, speak, ttsLang } from '../platform';

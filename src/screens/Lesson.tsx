@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, Platform, Pressable, Text, View } from 'react-native';
+import { Animated, Easing, Platform, Pressable, View } from 'react-native';
+import { Text } from '../i18n';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
 import { COMBO_BONUS, COMBO_STEP, GOAL_BONUS, Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, levelTitle, settleXp, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, oldWordsFor, scaledMix, similarity, todayKey, wordsByIds } from '../engine';
@@ -7,7 +8,6 @@ import { canSpeak, speak } from '../platform';
 import { clozeFor } from '../data/generate';
 import { ClozeCard } from './ClozeCard';
 import { QuitSheet } from './QuitSheet';
-import { VoiceSheet } from './VoiceSheet';
 import { StarsBurst, starsFor } from './Stars';
 import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
@@ -401,14 +401,12 @@ function ComboBadge({ n, shield }: { n: number; shield: boolean }) {
 // Hörübung: Lautsprecher-Karte, spielt das Wort beim Öffnen und auf Tippen ab
 function ListenCard({ text, lang, reveal }: { text: string; lang: string; reveal: boolean }) {
   const t = useTheme();
-  const [voiceOpen, setVoiceOpen] = useState(false);
   useEffect(() => {
     const id = setTimeout(() => speak(text, lang), 250);
     return () => clearTimeout(id);
   }, [text]);
   return (
     <View style={{ gap: 8 }}>
-    <VoiceSheet visible={voiceOpen} langName={lang} onClose={() => { setVoiceOpen(false); speak(text, lang); }} />
     <Pressable
       accessibilityRole="button"
       accessibilityLabel="Nochmal anhören"
@@ -420,10 +418,6 @@ function ListenCard({ text, lang, reveal }: { text: string; lang: string; reveal
       </View>
       <Text style={{ color: t.onCard, fontSize: reveal ? 24 : 14, fontWeight: reveal ? '800' : '700' }}>{reveal ? text : 'Tippen zum Anhören'}</Text>
     </Pressable>
-    {!reveal && <Pressable accessibilityRole="button" onPress={() => setVoiceOpen(true)} hitSlop={8} style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 4 }}>
-      <Ionicons name="options" size={16} color={t.muted} />
-      <Text style={{ color: t.muted, fontSize: 14, fontWeight: '700' }}>Stimme ändern</Text>
-    </Pressable>}
     </View>
   );
 }
