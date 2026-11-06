@@ -68,7 +68,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'max(0px, calc(env(safe-area-inset-bottom, 0px) - var(--gap, 0px)))' : insets.bottom) as any }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'max(0px, calc(env(safe-area-inset-bottom, 0px) + 36px - var(--gap, 0px)))' : insets.bottom) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
@@ -584,13 +584,13 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
           {ids.length === 0 ? (
             <P muted>Kein Wort gefunden.</P>
           ) : (
-            <View style={{ backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, overflow: 'hidden' }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {ids.slice(0, limit).map((wid, k) => {
                 const w = c.words.find((x) => x.id === wid)!;
                 const visible = showAll || open.has(w.id);
                 if (editing === w.id) {
                   return (
-                    <View key={w.id} style={{ borderTopWidth: k ? 1 : 0, borderColor: t.line, padding: 14, gap: 10 }}>
+                    <View key={w.id} style={{ width: '100%', backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, padding: 14, gap: 10 }}>
                       <Field label={c.langA} value={a} onChangeText={setA} />
                       <Field label={c.langB} value={b} onChangeText={setB} />
                       <Field label={`Beispielsatz auf ${c.langA} (optional, für Lückensätze)`} value={ex} onChangeText={setEx} placeholder={`Ein Satz mit „${a}“`} />
@@ -636,35 +636,36 @@ function VocabTab({ c, go, setCourse, data, update }: { c: CourseT; go: ScreenPr
                       setEx(w.ex ?? '');
                       setExT(w.exT ?? '');
                     }}
-                    style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 13, borderTopWidth: k ? 1 : 0, borderColor: t.line, backgroundColor: pressed ? t.bg : 'transparent' })}
+                    style={({ pressed }) => ({ width: '48.8%', flexGrow: 1, minHeight: 64, justifyContent: 'center', gap: 3, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 14, borderWidth: 1, borderColor: t.line, borderLeftWidth: 5, borderLeftColor: t.lvl[levelOf.get(w.id) ?? 0], backgroundColor: pressed ? t.bg : t.surface })}
                   >
-                    <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: t.lvl[levelOf.get(w.id) ?? 0] }} />
-                    <Text style={{ flex: 1, color: t.ink, fontSize: 16, fontWeight: '700' }} numberOfLines={2}>
-                      {w.a}
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <Text style={{ flex: 1, color: t.ink, fontSize: 16, fontWeight: '800' }} numberOfLines={1}>
+                        {w.a}
+                      </Text>
+                      {w.lp && <Ionicons name="checkmark-circle" size={15} color={t.right} />}
+                      {visible && (
+                        <Pressable
+                          accessibilityRole="button"
+                          accessibilityLabel={`${w.a} bearbeiten`}
+                          hitSlop={10}
+                          onPress={() => {
+                            setEditing(w.id);
+                            setA(w.a);
+                            setB(w.b);
+                            setEx(w.ex ?? '');
+                            setExT(w.exT ?? '');
+                          }}
+                        >
+                          <Ionicons name="create-outline" size={17} color={t.muted} />
+                        </Pressable>
+                      )}
+                    </View>
                     {visible ? (
-                      <Text style={{ flex: 1, color: t.muted, fontSize: 15, textAlign: 'right' }} numberOfLines={2}>
+                      <Text style={{ color: t.muted, fontSize: 14 }} numberOfLines={2}>
                         {w.b}
                       </Text>
                     ) : (
-                      <Ionicons name="information-circle-outline" size={22} color={t.primary} />
-                    )}
-                    {w.lp && <Ionicons name="checkmark-circle" size={16} color={t.right} />}
-                    {visible && (
-                      <Pressable
-                        accessibilityRole="button"
-                        accessibilityLabel={`${w.a} bearbeiten`}
-                        hitSlop={8}
-                        onPress={() => {
-                          setEditing(w.id);
-                          setA(w.a);
-                          setB(w.b);
-                          setEx(w.ex ?? '');
-                          setExT(w.exT ?? '');
-                        }}
-                      >
-                        <Ionicons name="create-outline" size={18} color={t.muted} />
-                      </Pressable>
+                      <Text style={{ color: t.line, fontSize: 14, fontWeight: '700' }}>• • •</Text>
                     )}
                   </Pressable>
                 );

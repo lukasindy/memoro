@@ -413,17 +413,17 @@ function ListenCard({ text, lang, reveal }: { text: string; lang: string; reveal
       accessibilityRole="button"
       accessibilityLabel="Nochmal anhören"
       onPress={() => speak(text, lang)}
-      style={({ pressed }) => ({ backgroundColor: t.card, borderRadius: 6, paddingVertical: 26, alignItems: 'center', gap: 8, transform: [{ rotate: '-1deg' }, { scale: pressed ? 0.97 : 1 }] })}
+      style={({ pressed }) => ({ backgroundColor: t.card, borderRadius: 6, paddingVertical: reveal ? 12 : 26, alignItems: 'center', gap: reveal ? 4 : 8, transform: [{ rotate: '-1deg' }, { scale: pressed ? 0.97 : 1 }] })}
     >
-      <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: t.onCard, alignItems: 'center', justifyContent: 'center' }}>
-        <Ionicons name="volume-high" size={36} color={t.card} />
+      <View style={{ width: reveal ? 44 : 72, height: reveal ? 44 : 72, borderRadius: reveal ? 22 : 36, backgroundColor: t.onCard, alignItems: 'center', justifyContent: 'center' }}>
+        <Ionicons name="volume-high" size={reveal ? 24 : 36} color={t.card} />
       </View>
       <Text style={{ color: t.onCard, fontSize: reveal ? 24 : 14, fontWeight: reveal ? '800' : '700' }}>{reveal ? text : 'Tippen zum Anhören'}</Text>
     </Pressable>
-    <Pressable accessibilityRole="button" onPress={() => setVoiceOpen(true)} hitSlop={8} style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 4 }}>
+    {!reveal && <Pressable accessibilityRole="button" onPress={() => setVoiceOpen(true)} hitSlop={8} style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 4 }}>
       <Ionicons name="options" size={16} color={t.muted} />
       <Text style={{ color: t.muted, fontSize: 14, fontWeight: '700' }}>Stimme ändern</Text>
-    </Pressable>
+    </Pressable>}
     </View>
   );
 }
@@ -706,7 +706,11 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, ext
           <Ionicons name={passed ? (pct === 100 ? 'trophy' : 'ribbon') : 'refresh'} size={38} color={passed ? t.card : t.muted} />
         </View>
         <Text style={{ color: passed ? t.onCard : t.ink, fontSize: 32, fontWeight: '900', letterSpacing: -0.8, textAlign: 'center' }}>{title}</Text>
-        {passed && <StarsBurst n={starsFor(pct)} />}
+        {passed && (
+          <View style={{ backgroundColor: '#FBF7EA', borderRadius: 26, paddingHorizontal: 26, paddingTop: 12, paddingBottom: 14, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 8, shadowOffset: { width: 0, height: 4 }, elevation: 4 }}>
+            <StarsBurst n={starsFor(pct)} />
+          </View>
+        )}
         <Text style={{ color: passed ? t.onCard : t.muted, fontSize: 15, lineHeight: 22, textAlign: 'center', opacity: passed ? 0.9 : 1 }}>{note}</Text>
       </View>
       <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -756,13 +760,6 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, ext
           <P>XP-Booster aktiv: doppelte XP für diese Lektion.</P>
         </View>
       )}
-      <View style={{ gap: 6 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ color: t.ink, fontWeight: '800', fontSize: 15 }}>Level {lv.level} · {levelTitle(lv.level)}</Text>
-          <P muted>{lv.into} / {lv.need} XP</P>
-        </View>
-        <Progress value={lv.progress} color={t.card} />
-      </View>
       <Btn label="Weiter" onPress={back} />
     </View>
   );

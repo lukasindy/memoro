@@ -17,8 +17,10 @@ const fmt = (ms: number) => {
 export function Inventory({ data, update, back }: ScreenProps) {
   const t = useTheme();
   const lv = levelInfo(data.xp);
-  const rewards = upcomingRewards(lv.level, 5);
+  const rewards = upcomingRewards(lv.level, 8);
   const canActivate = data.boosters > 0 && data.boost === 0;
+  const [view, setView] = useState<'items' | 'rewards'>('items');
+  const [filter, setFilter] = useState<'all' | 'level' | 'streak'>('all');
 
   // Countdown für eingelöste Social-Media-Zeit
   const [now, setNow] = useState(Date.now());
@@ -79,10 +81,45 @@ export function Inventory({ data, update, back }: ScreenProps) {
         <View style={{ height: 10, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.12)', overflow: 'hidden' }}>
           <View style={{ height: '100%', width: `${Math.round(lv.progress * 100)}%`, backgroundColor: t.onCard }} />
         </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Belohnungen ansehen"
+          onPress={() => setView('rewards')}
+          style={({ pressed }) => ({ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: t.onCard, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 9, opacity: pressed ? 0.85 : 1 })}
+        >
+          <Text style={{ fontSize: 16 }}>🎁</Text>
+          <Text style={{ color: t.card, fontSize: 15, fontWeight: '900' }}>Belohnungen ansehen</Text>
+        </Pressable>
       </View>
 
-      <H2>Deine Gegenstände</H2>
+      {/* Auswahl per Emoji */}
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        {(
+          [
+            ['items', '🎒', 'Gegenstände'],
+            ['rewards', '🎁', 'Belohnungen'],
+          ] as const
+        ).map(([k, e, l]) => {
+          const on = view === k;
+          return (
+            <Pressable
+              key={k}
+              accessibilityRole="button"
+              accessibilityState={{ selected: on }}
+              onPress={() => setView(k)}
+              style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 12, borderRadius: 16, borderWidth: 2, borderColor: on ? t.primary : t.line, backgroundColor: on ? t.primary : t.surface }}
+            >
+              <Text style={{ fontSize: 20 }}>{e}</Text>
+              <Text style={{ color: on ? t.onPrimary : t.ink, fontSize: 15, fontWeight: '800' }}>{l}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
 
+      {view === 'items' && <H2>Deine Gegenstände</H2>}
+
+      {view === 'items' && (
+        <>
       {item({
         icon: 'snow',
         color: FREEZE_BLUE,
@@ -179,61 +216,98 @@ export function Inventory({ data, update, back }: ScreenProps) {
         ),
       })}
 
-      <Panel style={{ gap: 12 }}>
-        <H2>Serien-Belohnungen</H2>
-        <P muted style={{ fontSize: 13 }}>Lerne an aufeinanderfolgenden Tagen. Aktuell: {data.streak.count} {data.streak.count === 1 ? 'Tag' : 'Tage'}.</P>
-        {STREAK_REWARDS.map((r) => {
-          const got = data.streak.count >= r.days;
-          return (
-            <View key={r.days} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, opacity: got ? 0.55 : 1 }}>
-              <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: got ? '#2E8B5E' : 'transparent', borderWidth: got ? 0 : 2, borderColor: t.line, alignItems: 'center', justifyContent: 'center' }}>
-                {got ? <Ionicons name="checkmark" size={18} color="#FFFFFF" /> : <Ionicons name="flame" size={18} color="#E8742C" />}
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: t.ink, fontSize: 15, fontWeight: '800' }}>{r.days} Tage</Text>
-                <Text style={{ color: t.muted, fontSize: 13 }}>
-                  {[r.minutes ? `+${r.minutes} Min.` : '', r.boosters ? `${r.boosters} Booster` : '', r.freezes ? `${r.freezes} Streak-Schutz` : '', r.shields ? `${r.shields} Combo-Schutz` : ''].filter(Boolean).join(' · ')}
-                </Text>
-              </View>
-            </View>
-          );
-        })}
-      </Panel>
+        </>
+      )}
 
-      <Panel style={{ gap: 12 }}>
-        <H2>Nächste Belohnungen</H2>
-        {rewards.map((r) => (
-          <View key={r.level} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <View style={{ width: 36, height: 36, borderRadius: 18, borderWidth: 2, borderColor: t.line, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ color: t.ink, fontWeight: '900', fontSize: 14 }}>{r.level}</Text>
-            </View>
-            <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Ionicons name="snow" size={16} color={FREEZE_BLUE} />
-                <Text style={{ color: t.ink, fontSize: 14 }}>Streak-Schutz</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Ionicons name="phone-portrait" size={16} color={SOCIAL_PINK} />
-                <Text style={{ color: t.ink, fontSize: 14, fontWeight: r.minutes > 5 ? '800' : '400' }}>+{r.minutes} Min.</Text>
-              </View>
-              {r.shield && (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                  <Ionicons name="shield-checkmark" size={16} color="#2F7FC0" />
-                  <Text style={{ color: t.ink, fontSize: 14 }}>Combo-Schutz</Text>
-                </View>
-              )}
-              {r.title && <Text style={{ color: t.ink, fontSize: 14, fontWeight: '900' }}>Titel: {r.title}</Text>}
-              {r.booster && (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                  <Ionicons name="rocket" size={16} color={BOOST_ORANGE} />
-                  <Text style={{ color: t.ink, fontSize: 14, fontWeight: '700' }}>XP-Booster</Text>
-                </View>
-              )}
-            </View>
+      {view === 'rewards' && (
+        <>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            {(
+              [
+                ['all', '🎁', 'Alle'],
+                ['level', '⭐', 'Level'],
+                ['streak', '🔥', 'Serie'],
+              ] as const
+            ).map(([k, e, l]) => {
+              const on = filter === k;
+              return (
+                <Pressable
+                  key={k}
+                  accessibilityRole="button"
+                  accessibilityLabel={l}
+                  accessibilityState={{ selected: on }}
+                  onPress={() => setFilter(k)}
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, paddingVertical: 9, borderRadius: 999, borderWidth: 2, borderColor: on ? t.primary : t.line, backgroundColor: on ? t.primary : 'transparent' }}
+                >
+                  <Text style={{ fontSize: 18 }}>{e}</Text>
+                  {on && <Text style={{ color: t.onPrimary, fontSize: 14, fontWeight: '800' }}>{l}</Text>}
+                </Pressable>
+              );
+            })}
           </View>
-        ))}
-        <P muted style={{ fontSize: 13 }}>Ist der Streak-Schutz voll ({MAX_FREEZES}), verfällt der zusätzliche.</P>
-      </Panel>
+
+          {(filter === 'all' || filter === 'streak') && (
+            <Panel style={{ gap: 12 }}>
+              <H2>🔥 Serien-Belohnungen</H2>
+              <P muted style={{ fontSize: 13 }}>Lerne an aufeinanderfolgenden Tagen. Aktuell: {data.streak.count} {data.streak.count === 1 ? 'Tag' : 'Tage'}.</P>
+              {STREAK_REWARDS.map((r) => {
+                const got = data.streak.count >= r.days;
+                return (
+                  <View key={r.days} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, opacity: got ? 0.55 : 1 }}>
+                    <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: got ? '#2E8B5E' : 'transparent', borderWidth: got ? 0 : 2, borderColor: t.line, alignItems: 'center', justifyContent: 'center' }}>
+                      {got ? <Ionicons name="checkmark" size={18} color="#FFFFFF" /> : <Ionicons name="flame" size={18} color="#E8742C" />}
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ color: t.ink, fontSize: 15, fontWeight: '800' }}>{r.days} Tage</Text>
+                      <Text style={{ color: t.muted, fontSize: 13 }}>
+                        {[r.minutes ? `+${r.minutes} Min.` : '', r.boosters ? `${r.boosters} Booster` : '', r.freezes ? `${r.freezes} Streak-Schutz` : '', r.shields ? `${r.shields} Combo-Schutz` : ''].filter(Boolean).join(' · ')}
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </Panel>
+          )}
+
+          {(filter === 'all' || filter === 'level') && (
+            <Panel style={{ gap: 12 }}>
+              <H2>⭐ Level-Belohnungen</H2>
+              <P muted style={{ fontSize: 13 }}>Die nächsten Level-Aufstiege. Aktuell: Level {lv.level}.</P>
+              {rewards.map((r) => (
+                <View key={r.level} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                  <View style={{ width: 36, height: 36, borderRadius: 18, borderWidth: 2, borderColor: t.line, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: t.ink, fontWeight: '900', fontSize: 14 }}>{r.level}</Text>
+                  </View>
+                  <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                      <Ionicons name="snow" size={16} color={FREEZE_BLUE} />
+                      <Text style={{ color: t.ink, fontSize: 14 }}>Streak-Schutz</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                      <Ionicons name="phone-portrait" size={16} color={SOCIAL_PINK} />
+                      <Text style={{ color: t.ink, fontSize: 14, fontWeight: r.minutes > 5 ? '800' : '400' }}>+{r.minutes} Min.</Text>
+                    </View>
+                    {r.shield && (
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <Ionicons name="shield-checkmark" size={16} color="#2F7FC0" />
+                        <Text style={{ color: t.ink, fontSize: 14 }}>Combo-Schutz</Text>
+                      </View>
+                    )}
+                    {r.title && <Text style={{ color: t.ink, fontSize: 14, fontWeight: '900' }}>Titel: {r.title}</Text>}
+                    {r.booster && (
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <Ionicons name="rocket" size={16} color={BOOST_ORANGE} />
+                        <Text style={{ color: t.ink, fontSize: 14, fontWeight: '700' }}>XP-Booster</Text>
+                      </View>
+                    )}
+                  </View>
+                </View>
+              ))}
+              <P muted style={{ fontSize: 13 }}>Ist der Streak-Schutz voll ({MAX_FREEZES}), verfällt der zusätzliche.</P>
+            </Panel>
+          )}
+        </>
+      )}
     </View>
   );
 }

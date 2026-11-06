@@ -15,23 +15,6 @@ import { Platform } from 'react-native';
 // Wortschatz weiter wächst (aktuell rund 3000 Wörter). Größere oder genaue Mengen gibt man von Hand ein.
 const QUICK_PICKS = [150, 300, 600, 1000];
 
-// Nur Web: Fenstergröße und Ränder anzeigen (Fehlersuche für die iPhone-Ansicht)
-function viewportInfo() {
-  try {
-    const w: any = window;
-    const el = document.createElement('div');
-    el.style.cssText = 'position:fixed;visibility:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0';
-    document.body.appendChild(el);
-    const cs = getComputedStyle(el);
-    const top = cs.paddingTop;
-    const bottom = cs.paddingBottom;
-    document.body.removeChild(el);
-    return `Fenster ${w.innerWidth}×${w.innerHeight} · Bildschirm ${w.screen.width}×${w.screen.height} · Rand oben ${top} unten ${bottom} · ${w.navigator.standalone ? 'App' : 'Browser'} · Lücke ${document.documentElement.style.getPropertyValue('--gap') || '–'} · Dok ${document.documentElement.scrollHeight}`;
-  } catch {
-    return '';
-  }
-}
-
 // Begrüßungsfeld in beiden Farbmodi gleich: Tafelgrün mit weißer Schrift
 const HERO_BG = '#1F5E4E';
 const HERO_INK = '#FFFFFF';
@@ -308,7 +291,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
       <View style={{ flexDirection: 'row', backgroundColor: t.surface, borderRadius: 16, borderWidth: 1, borderColor: t.line, padding: 4, gap: 4 }}>
         {([
           ['own', 'Eigene Liste', 'create-outline'],
-          ['auto', 'Automatisch erstellen', 'sparkles'],
+          ['auto', 'Automatisch', 'sparkles'],
         ] as const).map(([k, label, icon]) => {
           const on = mode === k;
           return (
@@ -320,7 +303,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
               style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 11, borderRadius: 12, backgroundColor: on ? t.primary : 'transparent' }}
             >
               <Ionicons name={icon} size={16} color={on ? t.onPrimary : t.ink} />
-              <Text style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 14 }}>{label}</Text>
+              <Text numberOfLines={1} style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 15, textAlign: 'center' }}>{label}</Text>
             </Pressable>
           );
         })}
@@ -473,8 +456,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 3.1 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
-      {Platform.OS === 'web' && <P muted style={{ textAlign: 'center', fontSize: 11 }}>{viewportInfo()}</P>}
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 3.2 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }
