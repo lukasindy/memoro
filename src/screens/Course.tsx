@@ -69,7 +69,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'max(0px, calc(env(safe-area-inset-bottom, 0px) - 14px))' : insets.bottom) as any }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'max(0px, calc(env(safe-area-inset-bottom, 0px) - 8px))' : insets.bottom) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
