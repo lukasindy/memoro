@@ -194,7 +194,7 @@ export const EXACT: Record<string, string> = {
  "Backup-Inhalt hier einfügen": "Paste backup content here",
  "Alle Daten löschen": "Delete all data",
  "Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.": "Delete all courses, words and progress? This cannot be undone.",
- "Memoro 3.7 – Testversion": "Memoro 3.7 – Test version",
+ "Memoro 3.8 – Testversion": "Memoro 3.8 – Test version",
  "Kamera": "Camera",
  "Vokabellisten aus Buch oder Heft einfach abfotografieren": "Just photograph vocabulary lists from a book or notebook",
  "Beliebig viele Kurse": "Any number of courses",
@@ -711,3 +711,5 @@ EXACT['Wörter'] = 'words';
 RULES.push(['Das sind etwa ${} ${} (je ${} Wörter).', 'That is about $1 $T2 (each $3 words).']);
 EXACT['Schwierigste Wörter üben'] = 'Practice hardest words';
 EXACT['Richtig beantwortete Wörter verlieren einen Fehlerpunkt und verschwinden irgendwann aus dieser Liste.'] = 'Correctly answered words lose one mistake point and eventually disappear from this list.';
+EXACT['im Plan'] = 'on track';
+EXACT['nicht im Plan'] = 'off track';
