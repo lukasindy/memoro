@@ -6,6 +6,8 @@ import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, 
 import { canSpeak, speak } from '../platform';
 import { clozeFor } from '../data/generate';
 import { ClozeCard } from './ClozeCard';
+import { QuitSheet } from './QuitSheet';
+import { StarsBurst, starsFor } from './Stars';
 import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
 import { Ionicons } from '@expo/vector-icons';
@@ -35,17 +37,21 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   const kind: LessonKind = node ? node.kind : 'review';
   const isTest = kind === 'unitTest' || kind === 'exam' || kind === 'skip';
   // einmal pro Lektion erzeugen
-  const initial = useMemo(() => (c ? build(c, node) : []), []);
+  const nodeKey = node?.key ?? 'review';
+  const resume = c?.paused && c.paused.key === nodeKey ? c.paused : null;
+  const initial = useMemo<Item[]>(() => (c ? (resume ? resume.queue : build(c, node)) : []), []);
   const [queue, setQueue] = useState<Item[]>(initial);
-  const [pos, setPos] = useState(0);
+  const [pos, setPos] = useState(resume ? Math.min(resume.pos, Math.max(0, initial.length - 1)) : 0);
+  const [quitOpen, setQuitOpen] = useState(false);
   const [picked, setPicked] = useState<string | null>(null);
   const [pairsDone, setPairsDone] = useState(false);
-  const results = useRef(new Map<string, boolean>());
-  const score = useRef({ firstTry: 0, xp: 0 });
+  const results = useRef(new Map<string, boolean>(resume ? resume.results : []));
+  // xp: erst ab dem Fortsetzen gezählt (frühere XP wurden beim Speichern schon gutgeschrieben)
+  const score = useRef({ firstTry: resume ? resume.firstTry : 0, xp: 0 });
 
   // Neue Wörter vor der Lektion spielerisch kennenlernen
   const introWords = useMemo(
-    () => (c && node?.kind === 'lesson' ? wordsByIds(c, node.wordIds).filter((w) => !w.lp && w.right + w.wrong === 0) : []),
+    () => (c && !resume && node?.kind === 'lesson' ? wordsByIds(c, node.wordIds).filter((w) => !w.lp && w.right + w.wrong === 0) : []),
     [],
   );
   const [intro, setIntro] = useState(introWords.length > 0);
@@ -53,18 +59,21 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   if (!c || initial.length === 0) return <TopBar onBack={back} />;
   if (intro) {
     return (
-      <IntroView
-        words={introWords}
-        langA={c.langA}
-        langB={c.langB}
-        onDone={() => setIntro(false)}
-        onQuit={() => confirm('Lektion abbrechen?', back)}
-      />
+      <>
+        <IntroView
+          words={introWords}
+          langA={c.langA}
+          langB={c.langB}
+          onDone={() => setIntro(false)}
+          onQuit={() => setQuitOpen(true)}
+        />
+        <QuitSheet visible={quitOpen} canSave={false} onContinue={() => setQuitOpen(false)} onDiscard={() => { setQuitOpen(false); back(); }} />
+      </>
     );
   }
 
   const ex = queue[pos];
-  const total = initial.length;
+  const total = resume ? resume.total : initial.length;
   const progress = Math.min(1, pos / queue.length);
 
   const mark = (wordId: string, ok: boolean) => {
@@ -93,7 +102,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
       streakSaved: st.used > 0 ? todayKey() : d.streakSaved,
       courses: d.courses.map((x) => {
         if (x.id !== id) return x;
-        const updated = applyResults(x, results.current);
+        const updated = applyResults({ ...x, paused: undefined }, results.current);
         return node ? markProgress(updated, node.kind, node.wordIds, pct, node.kind === 'skip' ? undefined : node.key) : updated;
       }),
       };
@@ -120,12 +129,57 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
     if (!ok && !ex.retry) setQueue((q) => [...q, { ...ex, retry: true }]);
   };
 
-  const quit = () => confirm('Lektion abbrechen? Der Fortschritt dieser Lektion geht verloren.', back);
+  const quit = () => setQuitOpen(true);
+
+  // Stand speichern: bisher verdiente XP gutschreiben, Serie fortschreiben, Lektion später fortsetzen
+  const saveAndLeave = () => {
+    const done = picked !== null || pairsDone ? pos + 1 : pos;
+    if (done >= queue.length) {
+      setQuitOpen(false);
+      finish();
+      return;
+    }
+    const xpNow = score.current.xp;
+    const snapshot = {
+      key: nodeKey,
+      queue: JSON.parse(JSON.stringify(queue)),
+      pos: done,
+      total,
+      results: Array.from(results.current.entries()),
+      firstTry: score.current.firstTry,
+      savedAt: Date.now(),
+    };
+    update((d) => {
+      const gx = gainXp(d, xpNow);
+      const st = nextStreak(d.streak, gx.freezes);
+      return {
+        ...d,
+        xp: gx.xp,
+        freezes: gx.freezes - st.used,
+        boost: gx.boost,
+        boosters: gx.boosters,
+        screenMinutes: gx.screenMinutes,
+        streak: st.streak,
+        streakSaved: st.used > 0 ? todayKey() : d.streakSaved,
+        courses: d.courses.map((x) => (x.id === id ? { ...x, paused: snapshot } : x)),
+      };
+    });
+    setQuitOpen(false);
+    back();
+  };
+
+  // Ohne Speichern beenden: auch einen alten Zwischenstand verwerfen
+  const discard = () => {
+    setQuitOpen(false);
+    if (resume) update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? { ...x, paused: undefined } : x)) }));
+    back();
+  };
 
   const correct = picked !== null && ex.kind !== 'pairs' && (ex.kind === 'build' ? picked.trim().toLowerCase() === ex.answer.toLowerCase() : picked === ex.answer);
 
   return (
     <View style={{ gap: 22, flex: 1 }}>
+      <QuitSheet visible={quitOpen} canSave onContinue={() => setQuitOpen(false)} onSave={saveAndLeave} onDiscard={discard} />
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
         <Pressable onPress={quit} accessibilityRole="button" accessibilityLabel="Lektion abbrechen" hitSlop={12}>
           <Text style={{ color: t.muted, fontSize: 26, fontWeight: '600' }}>×</Text>
@@ -532,6 +586,7 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, dat
   return (
     <View style={{ gap: 24, paddingTop: 30 }}>
       <H1>{title}</H1>
+      {passed && <StarsBurst n={starsFor(pct)} />}
       <View style={{ flexDirection: 'row', gap: 12 }}>
         {[
           [`${pct} %`, 'richtig'],

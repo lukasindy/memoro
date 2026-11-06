@@ -6,6 +6,7 @@ import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
 import { MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { canSpeak } from '../platform';
+import { Stars, starsFor } from './Stars';
 import { clozeStatus, codeOf } from '../data/generate';
 import { AppData, Course as CourseT, DEFAULT_MIX, FREE_WORD_LIMIT, Mix } from '../store';
 
@@ -160,7 +161,7 @@ function LearnTab({ c, go, sec, setSec, openVocab }: { c: CourseT; go: ScreenPro
             </View>
             <View style={{ alignItems: 'center', gap: 22 }}>
               {u.nodes.map((n, k) => (
-                <PathStep key={n.key} node={n} color={color} best={c.best[n.key]} offset={OFFSETS[k % OFFSETS.length]} onPress={() => open(n)} />
+                <PathStep key={n.key} node={n} color={color} best={c.best[n.key]} paused={c.paused?.key === n.key} offset={OFFSETS[k % OFFSETS.length]} onPress={() => open(n)} />
               ))}
             </View>
           </View>
@@ -210,7 +211,7 @@ function Pulse({ color, w, h, radius }: { color: string; w: number; h: number; r
 }
 
 // Mini-Prüfung: abgerundetes Rechteck mit Pokal
-function MiniStep({ node, color, best, offset, onPress }: { node: PathNode; color: string; best?: number; offset: number; onPress: () => void }) {
+function MiniStep({ node, color, best, offset, onPress }: { node: PathNode; color: string; best?: number; paused?: boolean; offset: number; onPress: () => void }) {
   const t = useTheme();
   const { status } = node;
   const current = status === 'current';
@@ -254,14 +255,15 @@ function MiniStep({ node, color, best, offset, onPress }: { node: PathNode; colo
         {node.title}
         {done && best ? ` · ${best} %` : ''}
       </Text>
+      {done && best != null ? <View style={{ marginTop: 4 }}><Stars n={starsFor(best)} size={18} /></View> : null}
     </View>
   );
 }
 
 // Lernpfad-Schritt als Karteikarte (Memoro-eigene Optik)
-function PathStep(props: { node: PathNode; color: string; best?: number; offset: number; onPress: () => void }) {
+function PathStep(props: { node: PathNode; color: string; best?: number; paused?: boolean; offset: number; onPress: () => void }) {
   if (props.node.kind === 'unitTest') return <MiniStep {...props} />;
-  const { node, color, best, offset, onPress } = props;
+  const { node, color, best, paused, offset, onPress } = props;
   const t = useTheme();
   const { status, kind } = node;
   const current = status === 'current';
@@ -269,17 +271,18 @@ function PathStep(props: { node: PathNode; color: string; best?: number; offset:
   const locked = status === 'locked';
   const mini = kind === 'unitTest';
   const exam = kind === 'exam';
-  const w = exam ? 118 : mini ? 100 : 92;
-  const h = exam ? 84 : mini ? 76 : 68;
+  const lesson = !mini && !exam;
+  const w = exam ? 118 : mini ? 100 : 100;
+  const h = exam ? 84 : mini ? 76 : 76;
   const radius = 12;
   const tilt = offset > 0 ? '3deg' : offset < 0 ? '-3deg' : '0deg';
 
-  const bg = locked ? t.line : mini && !done ? t.card : color;
-  const fg = locked ? t.muted : mini && !done ? t.onCard : t.onLvl;
+  const bg = lesson ? (locked ? t.line : '#FBF7EA') : locked ? t.line : mini && !done ? t.card : color;
+  const fg = locked ? t.muted : lesson ? color : mini && !done ? t.onCard : t.onLvl;
   const icon: keyof typeof Ionicons.glyphMap = locked
     ? 'lock-closed-outline'
     : done
-      ? 'checkmark-done'
+      ? 'ribbon'
       : exam
         ? 'medal'
         : mini
@@ -326,11 +329,32 @@ function PathStep(props: { node: PathNode; color: string; best?: number; offset:
             elevation: locked ? 0 : 4,
           })}
         >
-          {/* Linien wie auf einer Karteikarte */}
-          {!locked && !mini && !exam && (
-            <View style={{ position: 'absolute', left: 12, right: 12, top: 14, height: 2, backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 1 }} />
+          {/* Karteikarte: Farbstreifen oben, rote Kopflinie, blaue Zeilen */}
+          {lesson && (
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, overflow: 'hidden', borderWidth: locked ? 2 : 0, borderStyle: 'dashed', borderColor: t.muted }}>
+              <View style={{ height: 10, backgroundColor: locked ? t.muted : color, opacity: locked ? 0.35 : 1 }} />
+              <View style={{ height: 2, marginTop: 6, backgroundColor: '#E2605A', opacity: locked ? 0.2 : 0.65 }} />
+              {[0, 1, 2].map((i) => (
+                <View key={i} style={{ height: 1, marginTop: 11, backgroundColor: '#7FA3CF', opacity: locked ? 0.15 : 0.45 }} />
+              ))}
+            </View>
           )}
-          <Ionicons name={icon} size={exam ? 38 : mini ? 34 : 30} color={fg} />
+          {lesson && done && best != null ? (
+            <View style={{ marginTop: 14, backgroundColor: '#FBF7EA', paddingHorizontal: 6, borderRadius: 8 }}>
+              <Stars n={starsFor(best)} size={20} gap={1} />
+            </View>
+          ) : lesson ? (
+            <View style={{ marginTop: 12, backgroundColor: locked ? 'transparent' : '#FBF7EA', borderRadius: 14, paddingHorizontal: 6 }}>
+              <Ionicons name={icon} size={30} color={fg} />
+            </View>
+          ) : (
+            <Ionicons name={icon} size={exam ? 38 : mini ? 34 : 30} color={fg} />
+          )}
+          {paused && !done && (
+            <View style={{ position: 'absolute', top: -6, right: -6, backgroundColor: t.card, borderRadius: 12, padding: 4 }}>
+              <Ionicons name="pause" size={14} color={t.onCard} />
+            </View>
+          )}
         </Pressable>
       </View>
       {kind !== 'lesson' && (
@@ -339,6 +363,7 @@ function PathStep(props: { node: PathNode; color: string; best?: number; offset:
           {done && best ? ` · ${best} %` : ''}
         </Text>
       )}
+      {kind !== 'lesson' && done && best != null ? <View style={{ marginTop: 4 }}><Stars n={starsFor(best)} size={16} /></View> : null}
     </View>
   );
 }
