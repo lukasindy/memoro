@@ -55,7 +55,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingTop: 8, paddingBottom: Math.max(6, insets.bottom - 8) }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingTop: 8, paddingBottom: (Platform.OS === 'web' ? 'max(6px, calc(env(safe-area-inset-bottom) - 10px))' : Math.max(6, insets.bottom - 8)) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
@@ -334,14 +334,15 @@ function PathStep(props: { node: PathNode; color: string; best?: number; paused?
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, overflow: 'hidden', borderWidth: locked ? 2 : 0, borderStyle: 'dashed', borderColor: t.muted }}>
               <View style={{ height: 10, backgroundColor: locked ? t.muted : color, opacity: locked ? 0.35 : 1 }} />
               <View style={{ height: 2, marginTop: 6, backgroundColor: '#E2605A', opacity: locked ? 0.2 : 0.65 }} />
-              {[0, 1, 2].map((i) => (
-                <View key={i} style={{ height: 1, marginTop: 11, backgroundColor: '#7FA3CF', opacity: locked ? 0.15 : 0.45 }} />
-              ))}
+              {!(done && best != null) &&
+                [0, 1, 2].map((i) => (
+                  <View key={i} style={{ height: 1, marginTop: 11, backgroundColor: '#7FA3CF', opacity: locked ? 0.15 : 0.45 }} />
+                ))}
             </View>
           )}
           {lesson && done && best != null ? (
-            <View style={{ marginTop: 14, backgroundColor: '#FBF7EA', paddingHorizontal: 6, borderRadius: 8 }}>
-              <Stars n={starsFor(best)} size={20} gap={1} />
+            <View style={{ marginTop: 12 }}>
+              <Stars n={starsFor(best)} size={22} gap={0} stamp />
             </View>
           ) : lesson ? (
             <View style={{ marginTop: 12, backgroundColor: locked ? 'transparent' : '#FBF7EA', borderRadius: 14, paddingHorizontal: 6 }}>
