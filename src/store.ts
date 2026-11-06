@@ -45,6 +45,7 @@ export type Course = {
   best: Record<string, number>; // beste Prozentzahl je Lernpfad-Knoten
   pending: { a: string; b: string }[]; // wegen Gratis-Limit geparkte Wörter
   gen?: { a: string; b: string }; // Sprachcodes, wenn automatisch erstellt (für Lückensätze)
+  clozeAny?: boolean; // Lückensätze auch mit noch unbekannten Wörtern erstellen
   lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
 };

@@ -126,8 +126,47 @@ export function canSpeak(name: string) {
   return true;
 }
 
-export function speak(text: string, langName: string) {
+// Beste verfügbare Stimme je Sprache: hochwertige ("Natural", "Neural", "Enhanced", "Premium",
+// Google-Netzstimmen) vor einfachen Standard- und Kompaktstimmen.
+type Voice = { identifier: string; name: string; language: string; quality?: string };
+const voiceCache: Record<string, string | null> = {};
+
+function score(v: Voice) {
+  const n = v.name.toLowerCase();
+  let s = 0;
+  if (/natural|neural|online/.test(n)) s += 50;
+  if (/premium|enhanced|siri/.test(n) || v.quality === 'Enhanced') s += 40;
+  if (/google/.test(n)) s += 30;
+  if (/compact|eloquence|espeak|novelty|zarvox|whisper|bad |good news|bells|bubbles|cellos|organ|trinoids|boing|albert|junior|ralph|kathy|fred/.test(n)) s -= 60;
+  return s;
+}
+
+async function bestVoice(language: string): Promise<string | undefined> {
+  if (language in voiceCache) return voiceCache[language] ?? undefined;
+  try {
+    const all = ((await Speech.getAvailableVoicesAsync()) as Voice[]) ?? [];
+    const lang = language.toLowerCase().replace('_', '-');
+    const base = lang.split('-')[0];
+    const exact = all.filter((v) => v.language.toLowerCase().replace('_', '-') === lang);
+    const pool = exact.length > 0 ? exact : all.filter((v) => v.language.toLowerCase().startsWith(base));
+    const best = [...pool].sort((x, y) => score(y) - score(x))[0];
+    voiceCache[language] = best && score(best) > -60 ? best.identifier : null;
+  } catch {
+    voiceCache[language] = null;
+  }
+  return voiceCache[language] ?? undefined;
+}
+
+// Stimmenliste wird im Browser oft erst nach dem Start geladen: Cache dann neu aufbauen
+if (Platform.OS === 'web' && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    Object.keys(voiceCache).forEach((k) => delete voiceCache[k]);
+  };
+}
+
+export async function speak(text: string, langName: string) {
   const language = ttsLang(langName) ?? undefined;
+  const voice = language ? await bestVoice(language) : undefined;
   Speech.stop();
-  Speech.speak(text, { language, rate: 0.85 });
+  Speech.speak(text, { language, voice, rate: 0.9, pitch: 1 });
 }
