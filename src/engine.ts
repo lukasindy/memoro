@@ -506,7 +506,32 @@ export function levelInfo(xp: number) {
   return { level, into: xp - base, need, progress: (xp - base) / need };
 }
 
-export type LevelUp = { from: number; to: number; freezes: number; boost: boolean; minutes: number };
+export type LevelUp = { from: number; to: number; freezes: number; boost: boolean; minutes: number; shields: number; title: string | null };
+
+export const MAX_SHIELDS = 5;
+export const GOAL_BONUS = 20; // Bonus-XP fürs Erreichen des Tagesziels
+export const COMBO_STEP = 5; // alle 5 richtigen Antworten in Folge gibt es Bonus-XP
+export const COMBO_BONUS = 5;
+
+const TITLES = ['Neuling', 'Wortsammler', 'Vokabelfuchs', 'Wörterjäger', 'Sprachtalent', 'Wortakrobat', 'Vokabelprofi', 'Sprachmeister', 'Wortmagier', 'Legende'];
+export const levelTitle = (level: number) => TITLES[Math.min(TITLES.length - 1, Math.floor((level - 1) / 2))];
+
+// Tagesziel: selbst gewählt, sonst automatisch passend zum Level
+export function goalTarget(d: { goal: number; xp: number }) {
+  if (d.goal > 0) return d.goal;
+  return Math.min(150, 40 + levelInfo(d.xp).level * 10);
+}
+
+// Belohnungen für Serien (Tage in Folge)
+export type StreakReward = { days: number; freezes: number; boosters: number; minutes: number; shields: number };
+export const STREAK_REWARDS: StreakReward[] = [
+  { days: 3, freezes: 0, boosters: 0, minutes: 5, shields: 1 },
+  { days: 7, freezes: 1, boosters: 1, minutes: 10, shields: 0 },
+  { days: 14, freezes: 0, boosters: 1, minutes: 15, shields: 1 },
+  { days: 30, freezes: 2, boosters: 2, minutes: 30, shields: 2 },
+  { days: 60, freezes: 0, boosters: 2, minutes: 45, shields: 2 },
+  { days: 100, freezes: 3, boosters: 3, minutes: 60, shields: 3 },
+];
 
 // Social-Media-Zeit pro Level: normal 5, jedes 5. Level 10, jedes 10. Level 30 Minuten
 export function levelMinutes(level: number) {
@@ -517,12 +542,12 @@ export function levelMinutes(level: number) {
 export function upcomingRewards(level: number, count = 5) {
   return Array.from({ length: count }, (_, k) => {
     const l = level + 1 + k;
-    return { level: l, booster: l % 5 === 0, minutes: levelMinutes(l) };
+    return { level: l, booster: l % 5 === 0, minutes: levelMinutes(l), shield: l % 2 === 0, title: levelTitle(l) !== levelTitle(l - 1) ? levelTitle(l) : null };
   });
 }
 
 // XP gutschreiben (mit Booster doppelt) und Level-Boni vergeben
-export function gainXp(d: { xp: number; freezes: number; boost: number; boosters?: number; screenMinutes?: number }, base: number) {
+export function gainXp(d: { xp: number; freezes: number; boost: number; boosters?: number; screenMinutes?: number; shields?: number }, base: number) {
   const boosted = d.boost > 0 && base > 0;
   const gained = boosted ? base * 2 : base;
   const from = levelInfo(d.xp).level;
@@ -533,7 +558,13 @@ export function gainXp(d: { xp: number; freezes: number; boost: number; boosters
   let minutes = 0;
   let freezeGain = 0;
   let boostGain = false;
+  let shields = d.shields ?? 0;
+  let shieldGain = 0;
   for (let l = from + 1; l <= to; l++) {
+    if (l % 2 === 0 && shields < MAX_SHIELDS) {
+      shields++;
+      shieldGain++;
+    }
     minutes += levelMinutes(l);
     if (freezes < MAX_FREEZES) {
       freezes++;
@@ -544,6 +575,61 @@ export function gainXp(d: { xp: number; freezes: number; boost: number; boosters
       boostGain = true;
     }
   }
-  const up: LevelUp | null = to > from ? { from, to, freezes: freezeGain, boost: boostGain, minutes } : null;
-  return { xp: d.xp + gained, gained, boosted, freezes, boost, boosters, screenMinutes: (d.screenMinutes ?? 0) + minutes, up };
+  const up: LevelUp | null =
+    to > from ? { from, to, freezes: freezeGain, boost: boostGain, minutes, shields: shieldGain, title: levelTitle(to) !== levelTitle(from) ? levelTitle(to) : null } : null;
+  return { xp: d.xp + gained, gained, boosted, freezes, boost, boosters, shields, screenMinutes: (d.screenMinutes ?? 0) + minutes, up };
+}
+
+export type Extra = { goal: boolean; reward: StreakReward | null; combo: number };
+
+// XP gutschreiben und alles daran Hängende berechnen: Level, Tagesziel, Serie, Serien-Belohnungen.
+// Wird für die Anzeige und (mit dem aktuellen Stand) beim Speichern aufgerufen.
+export function settleXp(d: AppData, base: number) {
+  const today = todayKey();
+  const daily0 = d.daily?.day === today ? d.daily : { day: today, xp: 0, done: false };
+  const target = goalTarget(d);
+  let g = gainXp(d, base);
+  let reached = false;
+  if (base > 0 && !daily0.done && daily0.xp + g.gained >= target) {
+    reached = true;
+    g = gainXp(d, base + GOAL_BONUS);
+  }
+  const daily = { day: today, xp: daily0.xp + g.gained, done: daily0.done || reached };
+  const st = nextStreak(d.streak, g.freezes);
+  let freezes = g.freezes - st.used;
+  let boosters = g.boosters;
+  let screenMinutes = g.screenMinutes;
+  let shields = g.shields;
+  let claimed = d.streakClaimed ?? 0;
+  if (st.streak.count <= 1) claimed = 0;
+  let reward: StreakReward | null = null;
+  if (st.streak.day !== d.streak.day) {
+    for (const r of STREAK_REWARDS) {
+      if (r.days <= st.streak.count && r.days > claimed) {
+        reward = reward
+          ? { days: r.days, freezes: reward.freezes + r.freezes, boosters: reward.boosters + r.boosters, minutes: reward.minutes + r.minutes, shields: reward.shields + r.shields }
+          : { ...r };
+        claimed = r.days;
+      }
+    }
+  }
+  if (reward) {
+    freezes = Math.min(MAX_FREEZES, freezes + reward.freezes);
+    boosters += reward.boosters;
+    screenMinutes += reward.minutes;
+    shields = Math.min(MAX_SHIELDS, shields + reward.shields);
+  }
+  const patch = {
+    xp: g.xp,
+    freezes,
+    boost: g.boost,
+    boosters,
+    screenMinutes,
+    shields,
+    streak: st.streak,
+    streakSaved: st.used > 0 ? today : d.streakSaved,
+    daily,
+    streakClaimed: claimed,
+  };
+  return { g, patch, reached, reward };
 }

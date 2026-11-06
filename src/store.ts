@@ -74,6 +74,12 @@ export type AppData = {
   screenMinutes: number; // Social-Media-Zeit-Guthaben in Minuten
   screenUntil: number; // Ende der eingelösten Social-Media-Zeit (Zeitstempel)
   premium: boolean; // Testschalter, später In-App-Kauf
+  combo: number; // richtige Antworten in Folge, über Übungen und Lektionen hinaus
+  bestCombo: number; // längste Serie ohne Fehler
+  shields: number; // Combo-Schutz: rettet eine Serie ab 5 bei einem Fehler
+  goal: number; // Tagesziel in XP, 0 = automatisch
+  daily: { day: string; xp: number; done: boolean }; // Fortschritt zum Tagesziel
+  streakClaimed: number; // höchster schon abgeholter Serien-Meilenstein (Tage)
 };
 
 const KEY = 'memoro:data';
@@ -90,6 +96,12 @@ export const emptyData = (): AppData => ({
   screenMinutes: 0,
   screenUntil: 0,
   premium: false,
+  combo: 0,
+  bestCombo: 0,
+  shields: 0,
+  goal: 0,
+  daily: { day: '', xp: 0, done: false },
+  streakClaimed: 0,
 });
 
 // Ältere Daten auf das aktuelle Format bringen
