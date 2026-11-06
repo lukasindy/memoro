@@ -2,6 +2,7 @@
 import { Course, Word, uid } from '../store';
 import { VOCAB } from './vocab';
 import { VOCAB2 } from './vocab2';
+import { VOCAB3 } from './vocab3';
 import { SENTENCES } from './sentences';
 
 export const GEN_LANGS = [
@@ -20,10 +21,18 @@ type Row = Record<LangCode, string>;
 let rows: Row[] | null = null;
 function vocab(): Row[] {
   if (!rows) {
-    rows = (VOCAB.trim() + '\n' + VOCAB2.trim())
+    const seen = new Set<string>();
+    rows = (VOCAB.trim() + '\n' + VOCAB2.trim() + '\n' + VOCAB3.trim())
       .split('\n')
       .map((l) => l.split('|').map((x) => x.trim()))
       .filter((p) => p.length === COLS.length && p.every(Boolean))
+      .filter((p) => {
+        // Doppelte englische Schlüssel nur einmal nehmen
+        const k = p[0].toLowerCase();
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      })
       .map((p) => Object.fromEntries(COLS.map((c, i) => [c, p[i]])) as Row);
   }
   return rows;
@@ -98,10 +107,31 @@ function index(code: LangCode) {
   return indexes[code]!;
 }
 
+const byKey = new Map<string, Row>();
+function rowOf(key: string): Row | undefined {
+  if (byKey.size === 0) vocab().forEach((r) => byKey.set(r.en, r));
+  return byKey.get(key);
+}
+
 // Begriff im Wortschatz für ein (auch selbst eingepflegtes) Wort
 function keyOf(w: Word, a?: LangCode, b?: LangCode) {
   if (w.k) return w.k;
   return (a && index(a).get(normW(w.a))) || (b && index(b).get(normW(w.b))) || undefined;
+}
+
+// Unbekannte Wörter im Satz: Wort (klein, ohne Satzzeichen) -> Bedeutung in der Zweitsprache
+function glossFor(text: string, a: LangCode, b: LangCode | undefined, learned: Set<string>) {
+  const out: Record<string, string> = {};
+  if (!b) return out;
+  for (const tok of text.split(/\s+/)) {
+    const w = tok.replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '').toLowerCase();
+    if (!w) continue;
+    const key = index(a).get(w);
+    if (!key || learned.has(key)) continue;
+    const row = rowOf(key);
+    if (row) out[w] = core(row[b]);
+  }
+  return out;
 }
 
 // Lückensatz aus einem eigenen Beispielsatz
@@ -122,11 +152,12 @@ function ownCloze(c: Course, w: Word) {
     translation: w.exT ?? `(${w.b})`,
     options: [answer, ...others].sort(() => Math.random() - 0.5),
     word: w,
+    gloss: {} as Record<string, string>,
   };
 }
 
 // Lückensatz für ein Wort: eigener Beispielsatz, sonst eingebaute Sätze, bei denen
-// alle übrigen Wörter schon gelernt sind
+// alle übrigen Wörter schon gelernt sind. Mit "clozeAny" auch Sätze mit noch unbekannten Wörtern.
 export function clozeFor(c: Course, w: Word) {
   const own = ownCloze(c, w);
   if (own) return own;
@@ -140,12 +171,19 @@ export function clozeFor(c: Course, w: Word) {
     const wk = keyOf(w, a, b);
     let fits = wk ? sentences().filter((s) => s.blank === wk && s.keys.slice(1).every((k) => learned.has(k))) : [];
     if (fits.length === 0) fits = sentences().filter((s) => s.keys.every((k) => learned.has(k)));
+    if (fits.length === 0 && c.clozeAny) {
+      // Trotzdem Sätze bilden: erst zum Wort, dann zu irgendeinem Kurswort
+      fits = wk ? sentences().filter((s) => s.blank === wk) : [];
+      if (fits.length === 0) fits = sentences().filter((s) => inCourse.has(s.blank));
+    }
     if (fits.length > 0) {
       const s = fits[Math.floor(Math.random() * fits.length)];
       const parts = split(s.text[a]);
       if (parts) {
         const others = [...new Set(sentences().map((x) => split(x.text[a])?.answer).filter((x): x is string => !!x && x.toLowerCase() !== parts.answer.toLowerCase()))];
         const options = [parts.answer, ...others.sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
+        // Das Lösungswort selbst nicht erklären, sonst steht die Antwort da
+        const gloss = glossFor(parts.before + ' ' + parts.after, a, b, learned);
         return {
           before: parts.before,
           after: parts.after,
@@ -153,6 +191,7 @@ export function clozeFor(c: Course, w: Word) {
           translation: b ? plain(s.text[b]) : '',
           options,
           word: inCourse.get(s.blank) ?? w,
+          gloss,
         };
       }
     }
@@ -167,30 +206,35 @@ export function clozeFor(c: Course, w: Word) {
   return null;
 }
 
-// Kann Memoro für diesen Kurs gerade Lückensätze bilden? Mit Begründung für die Einstellungen.
-export function clozeStatus(c: Course): { ready: boolean; reason: string } {
-  if (c.words.some((w) => ownCloze(c, w))) return { ready: true, reason: '' };
+// Kann Memoro für diesen Kurs gerade Lückensätze bilden? Mit Begründung und Anzahl fehlender Wörter.
+export function clozeStatus(c: Course): { ready: boolean; reason: string; missing: number | null } {
+  if (c.words.some((w) => ownCloze(c, w))) return { ready: true, reason: '', missing: 0 };
   const a = (c.gen?.a as LangCode | undefined) ?? codeOf(c.langA);
   const b = (c.gen?.b as LangCode | undefined) ?? codeOf(c.langB);
   if (!a) {
     return {
       ready: false,
+      missing: null,
       reason: `Für ${c.langA} gibt es keine eingebauten Sätze. Trag in der Vokabelliste zu einigen Wörtern Beispielsätze ein, dann kommen Lückensätze.`,
     };
   }
   const keyed = c.words.map((x) => ({ x, k: keyOf(x, a, b) }));
   const learned = new Set(keyed.filter((e) => e.k && e.x.lp).map((e) => e.k!));
   const inCourse = new Set(keyed.filter((e) => e.k).map((e) => e.k!));
-  const ok = sentences().some((s) => inCourse.has(s.blank) && s.keys.slice(1).every((k) => learned.has(k)));
-  if (ok) return { ready: true, reason: '' };
-  if (inCourse.size < 3) {
+  const open = sentences().filter((s) => inCourse.has(s.blank));
+  const missingOf = (s: Sentence) => new Set(s.keys.slice(1).filter((k) => !learned.has(k))).size;
+  if (open.some((s) => missingOf(s) === 0)) return { ready: true, reason: '', missing: 0 };
+  if (inCourse.size < 3 || open.length === 0) {
     return {
       ready: false,
+      missing: null,
       reason: 'In deinem Kurs stehen kaum Wörter, die Memoro für Sätze nutzen kann. Trag Beispielsätze in der Vokabelliste ein oder füge Grundwortschatz hinzu.',
     };
   }
+  const missing = Math.min(...open.map(missingOf));
   return {
     ready: false,
-    reason: `Du kennst noch nicht genug Wörter für Lückensätze. Lern noch ein paar Lektionen weiter (bisher ${learned.size} passende Wörter gelernt), dann tauchen sie automatisch auf.`,
+    missing,
+    reason: `Dir fehlen noch ${missing} ${missing === 1 ? 'Wort' : 'Wörter'} für den ersten Lückensatz (bisher ${learned.size} passende Wörter gelernt). Lern noch ein paar Lektionen weiter, dann tauchen Lückensätze automatisch auf.`,
   };
 }
