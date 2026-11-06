@@ -139,6 +139,8 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
   const base = c.goalToday?.day === dayNow ? c.goalToday.base : learnedNow;
   const dayGoal = late || plan.daysLeft === 0 ? plan.remaining + (learnedNow - base) : Math.ceil((plan.total - base) / plan.daysLeft);
   const todayLeft = Math.max(0, dayGoal - (learnedNow - base));
+  const doneToday = Math.min(dayGoal, Math.max(0, learnedNow - base));
+  const lessonsToday = Math.max(1, Math.ceil(dayGoal / Math.max(1, c.wordsPerLesson)));
   const todayLine = done ? null : todayLeft > 0 ? `Heute noch ${todayLeft} ${todayLeft === 1 ? 'Wort' : 'Wörter'} lernen, um im Plan zu bleiben.` : 'Tagesziel erreicht! Für heute bist du im Plan.';
   const sub = done ? null : late ? 'Passe das Datum in den Einstellungen an.' : plan.behind > 0 ? `Du liegst etwa ${plan.behind} Wörter hinter dem Plan.` : 'Du liegst im Plan.';
   return (
@@ -160,6 +162,16 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
         </View>
         <Ionicons name="chevron-forward" size={18} color={t.muted} />
       </View>
+      {!done && dayGoal > 0 && (
+        <View style={{ backgroundColor: t.surface, borderRadius: 14, padding: 12, gap: 6 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
+            <Text style={{ color: t.ink, fontSize: 13, fontWeight: '700' }}>Heute mindestens</Text>
+            <Text style={{ color: t.ink, fontSize: 22, fontWeight: '900' }}>{doneToday} / {dayGoal} Wörter</Text>
+          </View>
+          <Progress value={doneToday / dayGoal} color={todayLeft === 0 ? t.right : t.card} />
+          <Text style={{ color: t.muted, fontSize: 12 }}>{`Das sind etwa ${lessonsToday} ${lessonsToday === 1 ? 'Lektion' : 'Lektionen'} (je ${c.wordsPerLesson} Wörter).`}</Text>
+        </View>
+      )}
       {todayLine && <Text style={{ color: t.ink, fontSize: 15, fontWeight: '900' }}>{todayLine}</Text>}
       <Text style={{ color: t.ink, fontSize: 14, fontWeight: '700' }}>{line}</Text>
       {sub && <Text style={{ color: t.muted, fontSize: 13 }}>{sub}</Text>}
