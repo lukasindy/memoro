@@ -5,7 +5,7 @@ import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
 import { MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { canSpeak } from '../platform';
-import { codeOf } from '../data/generate';
+import { clozeStatus, codeOf } from '../data/generate';
 import { AppData, Course as CourseT, DEFAULT_MIX, FREE_WORD_LIMIT, Mix } from '../store';
 
 export type CourseTab = 'learn' | 'vocab' | 'stats' | 'settings';
@@ -648,6 +648,21 @@ function StatsTab({ c }: { c: CourseT }) {
 
 // ---------- Einstellungen ----------
 
+// Hinweis, wenn gerade keine Lückensätze möglich sind
+function ClozeInfo({ c }: { c: CourseT }) {
+  const t = useTheme();
+  const st = clozeStatus(c);
+  if (st.ready) return null;
+  return (
+    <View style={{ flexDirection: 'row', gap: 10, backgroundColor: t.bg, borderRadius: 12, borderWidth: 1, borderColor: t.card, padding: 12, alignItems: 'flex-start' }}>
+      <Ionicons name="information-circle" size={20} color="#D99A00" />
+      <Text style={{ flex: 1, color: t.ink, fontSize: 14, lineHeight: 20 }}>
+        {st.reason} Bis dahin wird die Übung in Lektionen übersprungen.
+      </Text>
+    </View>
+  );
+}
+
 const scaledTotal = (m: Mix, words: number) => {
   const s = scaledMix(m, words);
   return s.ab + s.ba + s.pairs + s.spelling + s.listen + s.build + s.cloze;
@@ -737,6 +752,7 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
         <Stepper label="Hörübung" hint={canSpeak(c.langA) ? 'Wort hören, Bedeutung wählen' : `Für ${c.langA} gibt es keine Sprachausgabe`} value={m.listen} min={0} max={10} onChange={(v) => setMix('listen', v)} />
         <Stepper label="Buchstaben-Puzzle" hint="Wort aus Buchstaben zusammensetzen" value={m.build} min={0} max={10} onChange={(v) => setMix('build', v)} />
         <Stepper label="Lückensatz" hint={codeOf(c.langA) || c.gen ? 'Satz mit bekannten Wörtern vervollständigen' : 'Mit eigenen Beispielsätzen in der Vokabelliste'} value={m.cloze} min={0} max={10} onChange={(v) => setMix('cloze', v)} />
+        {m.cloze > 0 && <ClozeInfo c={c} />}
         <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.' : `Gilt für ${MIX_BASE_WORDS} Wörter. Bei ${c.wordsPerLesson} Wörtern pro Lektion rechnet Memoro automatisch auf ${scaledTotal(m, c.wordsPerLesson)} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
       </Panel>
 

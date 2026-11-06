@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Pressable, Switch, Text, View } from 'react-native';
+import { Pressable, Switch, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, TopBar, confirm, notify, useTheme } from '../ui';
-import { buildPath, levelInfo } from '../engine';
+import { MIN_WORDS, buildPath, levelInfo } from '../engine';
 import { GEN_LANGS, GEN_MAX, LangCode, generateWords, langName } from '../data/generate';
 import { releasePending } from '../engine';
 import { DEFAULT_LESSONS_PER_UNIT, DEFAULT_MIX, DEFAULT_WORDS_PER_LESSON, FREE_COURSE_LIMIT, FREE_WORD_LIMIT, isValidBackup, emptyData, migrate, uid } from '../store';
@@ -224,6 +224,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
   const [genB, setGenB] = useState<LangCode>('de');
   const max = GEN_MAX();
   const [count, setCount] = useState(Math.min(FREE_WORD_LIMIT, max));
+  const [countText, setCountText] = useState('');
   const limitReached = !data.premium && data.courses.length >= FREE_COURSE_LIMIT;
   const amount = data.premium ? count : Math.min(FREE_WORD_LIMIT, max);
   const thirds = [0, 1, 2].map((i) => Math.round((amount * (i + 1)) / 3) - Math.round((amount * i) / 3));
@@ -335,17 +336,41 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
             </View>
             {data.premium ? (
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                {[150, 300, 600, 1000, max].filter((v, i, arr) => v <= max && arr.indexOf(v) === i).map((v) => (
+                {[150, 300, 600, 1000].filter((v) => v <= max).map((v) => (
                   <Pressable
                     key={v}
                     accessibilityRole="button"
-                    accessibilityState={{ selected: count === v }}
-                    onPress={() => setCount(v)}
-                    style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, borderWidth: 2, borderColor: count === v ? t.primary : t.line, backgroundColor: count === v ? t.primary : t.surface }}
+                    accessibilityState={{ selected: count === v && !countText }}
+                    onPress={() => {
+                      setCount(v);
+                      setCountText('');
+                    }}
+                    style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, borderWidth: 2, borderColor: count === v && !countText ? t.primary : t.line, backgroundColor: count === v && !countText ? t.primary : t.surface }}
                   >
-                    <Text style={{ color: count === v ? t.onPrimary : t.ink, fontWeight: '800' }}>{v === max ? `Alle ${max}` : v}</Text>
+                    <Text style={{ color: count === v && !countText ? t.onPrimary : t.ink, fontWeight: '800' }}>{v}</Text>
                   </Pressable>
                 ))}
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexBasis: '100%' }}>
+                  <Text style={{ color: t.muted, fontSize: 14, fontWeight: '600' }}>Eigene Anzahl:</Text>
+                  <TextInput
+                    value={countText}
+                    onChangeText={(v) => {
+                      const digits = v.replace(/[^0-9]/g, '');
+                      setCountText(digits);
+                      const n = parseInt(digits, 10);
+                      if (n >= 1) setCount(Math.min(n, max));
+                    }}
+                    keyboardType="number-pad"
+                    placeholder="z. B. 750"
+                    placeholderTextColor={t.muted}
+                    accessibilityLabel="Eigene Anzahl Wörter"
+                    style={{ flex: 1, color: t.ink, backgroundColor: t.surface, borderWidth: 1.5, borderColor: t.line, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 9, fontSize: 16 }}
+                  />
+                </View>
+                {parseInt(countText, 10) > max && (
+                  <P muted style={{ fontSize: 13 }}>Derzeit sind {max} Wörter im Grundwortschatz verfügbar, Memoro nimmt alle davon.</P>
+                )}
+                {amount < MIN_WORDS && <P muted style={{ fontSize: 13 }}>Für Lektionen brauchst du mindestens {MIN_WORDS} Wörter.</P>}
               </View>
             ) : (
               <P muted>In der Gratis-Version bekommst du die {amount} wichtigsten Wörter. Mit Premium wählst du die Anzahl selbst.</P>
@@ -423,7 +448,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.6 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.8 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }
