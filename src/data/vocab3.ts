@@ -203,14 +203,13 @@ to balance|balancieren|equilibrar|équilibrer|bilanciare
 to stroll|schlendern|pasear|flâner|passeggiare
 to wander|umherirren|vagar|errer|vagare
 to rush|hetzen|precipitarse|se précipiter|precipitarsi
-to hesitate over|zaudern|titubear|tergiverser|titubare
 to grumble|murren|refunfuñar|grogner|brontolare
 to giggle|kichern|reírse tontamente|glousser|ridacchiare
 to sigh|seufzen|suspirar|soupirer|sospirare
 to gasp|nach Luft schnappen|jadear|haleter|boccheggiare
 to sob|schluchzen|sollozar|sangloter|singhiozzare
 to scream|kreischen|chillar|hurler|strillare
-to murmur|flüstern leise|murmurar suavemente|murmurer|mormorare
+to murmur|murmeln|murmurar|murmurer|mormorare
 to stutter|stottern|tartamudear|bégayer|balbettare
 to chatter|schwatzen|parlotear|jacasser|cianciare
 to rehearse|proben|ensayar|répéter|provare
@@ -235,7 +234,7 @@ to execute|hinrichten|ejecutar|exécuter|giustiziare
 to pardon|begnadigen|indultar|gracier|graziare
 to sue|verklagen|demandar|poursuivre en justice|citare in giudizio
 to appeal against|Berufung einlegen|apelar|faire appel|fare appello
-to ban|verbannen|vetar|interdire (loi)|bandire
+to ban|verbieten|prohibir|interdire|vietare
 to legalize|legalisieren|legalizar|légaliser|legalizzare
 achievement|die Leistung|el logro|la réussite|il traguardo
 agreement|die Vereinbarung|el acuerdo|l'accord|l'accordo
@@ -627,7 +626,7 @@ desperate|verzweifelt|desesperado|désespéré|disperato
 determined|entschlossen|decidido|déterminé|determinato
 diligent|fleißig|diligente|diligent|diligente
 direct|direkt|directo|direct|diretto
-disabled|behindert|discapacitado|handicapé|disabile
+disabled|mit Behinderung|con discapacidad|en situation de handicap|con disabilità
 distant|fern|lejano|lointain|lontano
 domestic|inländisch|nacional|national|nazionale
 dramatic|dramatisch|dramático|dramatique|drammatico
@@ -652,7 +651,7 @@ extreme|extrem|extremo|extrême|estremo
 faithful|treu|fiel|fidèle|fedele
 familiar|vertraut|familiar (conocido)|familier|familiare
 fatal|tödlich|fatal|fatal|fatale
-federal|bundesweit|federal|fédéral|federale
+federal|bundesstaatlich|federal|fédéral|federale
 fierce|heftig|feroz|féroce|feroce
 financial|finanziell|financiero|financier|finanziario
 firm|fest (stabil)|firme|ferme|fermo
@@ -730,7 +729,7 @@ bell|die Glocke|la campana|la cloche|la campana
 belt|der Gürtel|el cinturón|la ceinture|la cintura
 bench|die Bank|el banco|le banc|la panchina
 blender|der Mixer|la batidora|le mixeur|il frullatore
-bolt|die Schraube mit Mutter|el perno|le boulon|il bullone
+bolt|der Bolzen|el perno|le boulon|il bullone
 bookshelf|das Bücherregal|la estantería|la bibliothèque (meuble)|la libreria (mobile)
 bottle opener|der Flaschenöffner|el abrebotellas|l'ouvre-bouteille|l'apribottiglie
 bracelet|das Armband|la pulsera|le bracelet|il braccialetto
@@ -752,7 +751,7 @@ compass|der Kompass|la brújula|la boussole|la bussola
 cord|die Schnur|el cordel|la ficelle|lo spago
 cork|der Korken|el corcho|le bouchon|il tappo di sughero
 cradle|die Wiege|la cuna|le berceau|la culla
-crayon|der Buntstift|la cera|le crayon de cire|il pastello
+crayon|der Wachsmalstift|la cera|le crayon de cire|il pastello a cera
 curtain rod|die Gardinenstange|la barra de cortina|la tringle|il bastone per tende
 cushion|das Kissen (Sofa)|el cojín|le coussin|il cuscino
 doorknob|der Türgriff|el pomo|la poignée|la maniglia
@@ -876,7 +875,7 @@ lentil|die Linse|la lenteja|la lentille|la lenticchia
 lettuce|der Salat (Kopf)|la lechuga|la laitue|la lattuga
 mango|die Mango|el mango|la mangue|il mango
 mint|die Minze|la menta|la menthe|la menta
-noodle|die Nudel|el fideo|la nouille|il tagliolino
+noodle|die Nudel|el fideo|la nouille|la tagliatella
 nut|die Nuss|la nuez|la noix|la noce
 oat|der Hafer|la avena|l'avoine|l'avena
 onion|die Zwiebel|la cebolla|l'oignon|la cipolla
@@ -888,7 +887,7 @@ raisin|die Rosine|la pasa|le raisin sec|l'uvetta
 rice|der Reis|el arroz|le riz|il riso
 strawberry|die Erdbeere|la fresa|la fraise|la fragola
 vanilla|die Vanille|la vainilla|la vanille|la vaniglia
-walnut|die Walnuss|la nuez de nogal|la noix (noyer)|la noce (noce comune)
+walnut|die Walnuss|la nuez|la noix|la noce
 watermelon|die Wassermelone|la sandía|la pastèque|l'anguria
 yeast|die Hefe|la levadura|la levure|il lievito
 zucchini|die Zucchini|el calabacín|la courgette|la zucchina
