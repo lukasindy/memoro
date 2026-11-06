@@ -58,6 +58,8 @@ export type Course = {
   gen?: { a: string; b: string }; // Sprachcodes, wenn automatisch erstellt (für Lückensätze)
   clozeAny?: boolean; // Lückensätze auch mit noch unbekannten Wörtern erstellen
   paused?: Paused; // gespeicherte, später fortsetzbare Lektion
+  target?: { date: string; start: string; startLearned: number }; // Lernziel: bis wann alle Wörter gelernt sein sollen
+  targetAsked?: boolean; // Erinnerung an das Lernziel wurde weggeklickt
   lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
 };

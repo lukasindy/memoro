@@ -587,13 +587,9 @@ export type Extra = { goal: boolean; reward: StreakReward | null; combo: number 
 export function settleXp(d: AppData, base: number) {
   const today = todayKey();
   const daily0 = d.daily?.day === today ? d.daily : { day: today, xp: 0, done: false };
-  const target = goalTarget(d);
-  let g = gainXp(d, base);
-  let reached = false;
-  if (base > 0 && !daily0.done && daily0.xp + g.gained >= target) {
-    reached = true;
-    g = gainXp(d, base + GOAL_BONUS);
-  }
+  // Das XP-Tagesziel gibt es nicht mehr – stattdessen das Lernziel mit Datum (pro Kurs)
+  const g = gainXp(d, base);
+  const reached = false;
   const daily = { day: today, xp: daily0.xp + g.gained, done: daily0.done || reached };
   const st = nextStreak(d.streak, g.freezes);
   let freezes = g.freezes - st.used;
@@ -632,4 +628,58 @@ export function settleXp(d: AppData, base: number) {
     streakClaimed: claimed,
   };
   return { g, patch, reached, reward };
+}
+
+// ---------- Lernziel (Datum, bis wann alle Wörter gelernt sein sollen) ----------
+
+export function addDays(iso: string, n: number) {
+  const d = new Date(iso + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+export function addMonths(iso: string, n: number) {
+  const d = new Date(iso + 'T00:00:00Z');
+  d.setUTCMonth(d.getUTCMonth() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+export function daysBetween(a: string, b: string) {
+  return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / DAY);
+}
+
+export const fmtDate = (iso: string) => {
+  const [y, m, d] = iso.split('-');
+  return `${d}.${m}.${y}`;
+};
+
+// "24.12.2026", "24.12.26" oder "24.12." (dann das nächste Mal) -> "2026-12-24"
+export function parseDate(text: string): string | null {
+  const m = text.trim().match(/^(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{2,4})?$/);
+  if (!m) return null;
+  const day = +m[1];
+  const mon = +m[2];
+  let year = m[3] ? +m[3] : new Date().getUTCFullYear();
+  if (year < 100) year += 2000;
+  const iso = `${year}-${String(mon).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  const d = new Date(iso + 'T00:00:00Z');
+  if (isNaN(d.getTime()) || d.getUTCDate() !== day || d.getUTCMonth() + 1 !== mon) return null;
+  if (!m[3] && iso < todayKey()) return addMonths(iso, 12);
+  return iso;
+}
+
+export function targetPlan(c: Course) {
+  const t = c.target;
+  if (!t) return null;
+  const total = c.words.length + (c.pending?.length ?? 0);
+  const learned = c.words.filter((w) => w.lp).length;
+  const remaining = Math.max(0, total - learned);
+  const today = todayKey();
+  const daysLeft = Math.max(0, daysBetween(today, t.date));
+  const perDay = remaining === 0 ? 0 : Math.ceil(remaining / Math.max(1, daysLeft));
+  const span = Math.max(1, daysBetween(t.start, t.date));
+  const elapsed = Math.min(span, Math.max(0, daysBetween(t.start, today)));
+  const expected = t.startLearned + ((total - t.startLearned) * elapsed) / span;
+  const behind = Math.max(0, Math.ceil(expected - learned));
+  return { total, learned, remaining, daysLeft, perDay, behind, overdue: daysLeft === 0 && remaining > 0 && today > t.date };
 }
