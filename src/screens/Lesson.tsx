@@ -7,6 +7,7 @@ import { canSpeak, speak } from '../platform';
 import { clozeFor } from '../data/generate';
 import { ClozeCard } from './ClozeCard';
 import { QuitSheet } from './QuitSheet';
+import { VoiceSheet } from './VoiceSheet';
 import { StarsBurst, starsFor } from './Stars';
 import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
@@ -397,11 +398,14 @@ function ComboBadge({ n, shield }: { n: number; shield: boolean }) {
 // Hörübung: Lautsprecher-Karte, spielt das Wort beim Öffnen und auf Tippen ab
 function ListenCard({ text, lang, reveal }: { text: string; lang: string; reveal: boolean }) {
   const t = useTheme();
+  const [voiceOpen, setVoiceOpen] = useState(false);
   useEffect(() => {
     const id = setTimeout(() => speak(text, lang), 250);
     return () => clearTimeout(id);
   }, [text]);
   return (
+    <View style={{ gap: 8 }}>
+    <VoiceSheet visible={voiceOpen} langName={lang} onClose={() => { setVoiceOpen(false); speak(text, lang); }} />
     <Pressable
       accessibilityRole="button"
       accessibilityLabel="Nochmal anhören"
@@ -413,6 +417,11 @@ function ListenCard({ text, lang, reveal }: { text: string; lang: string; reveal
       </View>
       <Text style={{ color: t.onCard, fontSize: reveal ? 24 : 14, fontWeight: reveal ? '800' : '700' }}>{reveal ? text : 'Tippen zum Anhören'}</Text>
     </Pressable>
+    <Pressable accessibilityRole="button" onPress={() => setVoiceOpen(true)} hitSlop={8} style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 4 }}>
+      <Ionicons name="options" size={16} color={t.muted} />
+      <Text style={{ color: t.muted, fontSize: 14, fontWeight: '700' }}>Stimme ändern</Text>
+    </Pressable>
+    </View>
   );
 }
 
