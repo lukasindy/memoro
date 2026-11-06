@@ -3,7 +3,7 @@ import { Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenProps } from '../nav';
 import { Btn, H1, H2, P, Panel, Progress, TopBar, useTheme } from '../ui';
-import { BOOST_LESSONS, MAX_FREEZES, levelInfo, upcomingRewards } from '../engine';
+import { BOOST_LESSONS, MAX_FREEZES, MAX_SHIELDS, STREAK_REWARDS, levelInfo, levelTitle, upcomingRewards } from '../engine';
 
 const FREEZE_BLUE = '#4A9BD9';
 const BOOST_ORANGE = '#E8742C';
@@ -70,7 +70,7 @@ export function Inventory({ data, update, back }: ScreenProps) {
             <Text style={{ color: t.card, fontSize: 24, fontWeight: '900' }}>{lv.level}</Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: t.onCard, fontSize: 20, fontWeight: '900' }}>Level {lv.level}</Text>
+            <Text style={{ color: t.onCard, fontSize: 20, fontWeight: '900' }}>Level {lv.level} · {levelTitle(lv.level)}</Text>
             <Text style={{ color: t.onCard, fontSize: 14 }}>
               Noch {lv.need - lv.into} XP bis Level {lv.level + 1}
             </Text>
@@ -104,6 +104,14 @@ export function Inventory({ data, update, back }: ScreenProps) {
             ))}
           </View>
         ),
+      })}
+
+      {item({
+        icon: 'shield-checkmark',
+        color: '#2F7FC0',
+        title: 'Combo-Schutz',
+        count: `${data.shields ?? 0} / ${MAX_SHIELDS}`,
+        text: `Rettet deine Serie ohne Fehler, wenn du ab 5 richtigen Antworten in Folge einen Fehler machst. Wird automatisch eingesetzt. Du bekommst einen bei jedem 2. Level und bei Serien-Meilensteinen. Deine längste Serie: ${data.bestCombo ?? 0}.`,
       })}
 
       {item({
@@ -172,6 +180,27 @@ export function Inventory({ data, update, back }: ScreenProps) {
       })}
 
       <Panel style={{ gap: 12 }}>
+        <H2>Serien-Belohnungen</H2>
+        <P muted style={{ fontSize: 13 }}>Lerne an aufeinanderfolgenden Tagen. Aktuell: {data.streak.count} {data.streak.count === 1 ? 'Tag' : 'Tage'}.</P>
+        {STREAK_REWARDS.map((r) => {
+          const got = data.streak.count >= r.days;
+          return (
+            <View key={r.days} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, opacity: got ? 0.55 : 1 }}>
+              <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: got ? '#2E8B5E' : 'transparent', borderWidth: got ? 0 : 2, borderColor: t.line, alignItems: 'center', justifyContent: 'center' }}>
+                {got ? <Ionicons name="checkmark" size={18} color="#FFFFFF" /> : <Ionicons name="flame" size={18} color="#E8742C" />}
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: t.ink, fontSize: 15, fontWeight: '800' }}>{r.days} Tage</Text>
+                <Text style={{ color: t.muted, fontSize: 13 }}>
+                  {[r.minutes ? `+${r.minutes} Min.` : '', r.boosters ? `${r.boosters} Booster` : '', r.freezes ? `${r.freezes} Streak-Schutz` : '', r.shields ? `${r.shields} Combo-Schutz` : ''].filter(Boolean).join(' · ')}
+                </Text>
+              </View>
+            </View>
+          );
+        })}
+      </Panel>
+
+      <Panel style={{ gap: 12 }}>
         <H2>Nächste Belohnungen</H2>
         {rewards.map((r) => (
           <View key={r.level} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -187,6 +216,13 @@ export function Inventory({ data, update, back }: ScreenProps) {
                 <Ionicons name="phone-portrait" size={16} color={SOCIAL_PINK} />
                 <Text style={{ color: t.ink, fontSize: 14, fontWeight: r.minutes > 5 ? '800' : '400' }}>+{r.minutes} Min.</Text>
               </View>
+              {r.shield && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Ionicons name="shield-checkmark" size={16} color="#2F7FC0" />
+                  <Text style={{ color: t.ink, fontSize: 14 }}>Combo-Schutz</Text>
+                </View>
+              )}
+              {r.title && <Text style={{ color: t.ink, fontSize: 14, fontWeight: '900' }}>Titel: {r.title}</Text>}
               {r.booster && (
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                   <Ionicons name="rocket" size={16} color={BOOST_ORANGE} />

@@ -8,31 +8,15 @@ export const STAR_STEPS = { three: 95, two: 80 };
 export const starsFor = (pct: number) => (pct >= STAR_STEPS.three ? 3 : pct >= STAR_STEPS.two ? 2 : 1);
 
 const GOLD = '#F2B01E';
-const INK = '#5A4A1E';
 const EMPTY = 'rgba(120,120,120,0.35)';
 
-// Kleine Sternreihe. Mit "stamp": wie mit Stift/Stempel auf die Karteikarte gesetzt
-// (leicht schief, mittlerer Stern höher, dunkle Kontur, kein Hintergrund)
-export function Stars({ n, size = 16, gap = 2, stamp }: { n: number; size?: number; gap?: number; stamp?: boolean }) {
+// Kleine Sternreihe, z. B. auf der Lernpfad-Karte
+export function Stars({ n, size = 16, gap = 2 }: { n: number; size?: number; gap?: number }) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap }}>
-      {[1, 2, 3].map((i) => {
-        const on = i <= n;
-        const star = (
-          <View style={{ width: size, height: size }}>
-            {stamp && on && (
-              <Ionicons name="star" size={size + 3} color={INK} style={{ position: 'absolute', left: -1.5, top: -1.5 }} />
-            )}
-            <Ionicons name="star" size={size} color={on ? GOLD : stamp ? 'rgba(90,80,60,0.28)' : EMPTY} style={{ position: 'absolute', left: 0, top: 0 }} />
-          </View>
-        );
-        if (!stamp) return <View key={i}>{star}</View>;
-        return (
-          <View key={i} style={{ transform: [{ translateY: i === 2 ? -5 : 0 }, { rotate: i === 1 ? '-14deg' : i === 3 ? '14deg' : '3deg' }] }}>
-            {star}
-          </View>
-        );
-      })}
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap }}>
+      {[1, 2, 3].map((i) => (
+        <Ionicons key={i} name="star" size={size} color={i <= n ? GOLD : EMPTY} />
+      ))}
     </View>
   );
 }

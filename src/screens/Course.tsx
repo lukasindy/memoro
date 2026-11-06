@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
-import { MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
+import { GOAL_BONUS, goalTarget, MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { canSpeak } from '../platform';
 import { Stars, starsFor } from './Stars';
 import { clozeStatus, codeOf } from '../data/generate';
@@ -37,6 +37,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
       <ScrollView key={tab} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} keyboardShouldPersistTaps="handled">
         <View style={{ width: '100%', maxWidth: 620, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 40, gap: 20 }}>
           <TopBar onBack={back} right={<StatPills streak={data.streak.count} xp={data.xp} saved={data.streakSaved === todayKey()} boost={data.boost} onInventory={() => go({ name: 'inventory' })} hasItems={data.boosters > 0 || data.screenMinutes > 0} />} />
+          {tab === 'learn' && <GoalCard data={data} update={update} />}
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
           {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} data={data} update={update} />}
           {tab === 'stats' && <StatsTab c={c} />}
@@ -55,7 +56,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingTop: 8, paddingBottom: (Platform.OS === 'web' ? 'max(6px, calc(env(safe-area-inset-bottom) - 10px))' : Math.max(6, insets.bottom - 8)) as any }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingTop: 8, paddingBottom: (Platform.OS === 'web' ? 'max(8px, env(safe-area-inset-bottom))' : Math.max(6, insets.bottom - 8)) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
@@ -73,6 +74,56 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
           );
         })}
       </View>
+    </View>
+  );
+}
+
+// ---------- Tagesziel ----------
+
+const GOALS = [30, 50, 100, 150];
+
+function GoalCard({ data, update }: { data: AppData; update: ScreenProps['update'] }) {
+  const t = useTheme();
+  const [open, setOpen] = useState(false);
+  const target = goalTarget(data);
+  const today = data.daily?.day === todayKey() ? data.daily : { day: '', xp: 0, done: false };
+  const done = today.done || today.xp >= target;
+  const set = (g: number) => update((d) => ({ ...d, goal: g }));
+  return (
+    <View style={{ backgroundColor: done ? t.rightBg : t.surface, borderWidth: 1.5, borderColor: done ? t.right : t.line, borderRadius: 20, padding: 14, gap: 10 }}>
+      <Pressable accessibilityRole="button" accessibilityLabel="Tagesziel ändern" onPress={() => setOpen(!open)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: done ? t.right : t.card, alignItems: 'center', justifyContent: 'center' }}>
+          <Ionicons name={done ? 'checkmark' : 'flag'} size={24} color={done ? '#FFFFFF' : t.onCard} />
+        </View>
+        <View style={{ flex: 1, gap: 6 }}>
+          <Text style={{ color: t.ink, fontSize: 16, fontWeight: '900' }}>
+            {done ? 'Tagesziel geschafft!' : 'Tagesziel'} <Text style={{ color: t.muted, fontWeight: '700' }}>{Math.min(today.xp, 9999)} / {target} XP</Text>
+          </Text>
+          <Progress value={today.xp / target} color={done ? t.right : t.card} />
+        </View>
+        <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={t.muted} />
+      </Pressable>
+      {!done && !open && <Text style={{ color: t.muted, fontSize: 13 }}>Erreichst du es, gibt es +{GOAL_BONUS} Bonus-XP.</Text>}
+      {open && (
+        <View style={{ gap: 8 }}>
+          <Text style={{ color: t.muted, fontSize: 14 }}>Wie viele XP willst du heute schaffen? „Auto“ passt sich deinem Level an.</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            {[0, ...GOALS].map((g) => {
+              const on = data.goal === g;
+              return (
+                <Pressable
+                  key={g}
+                  accessibilityRole="button"
+                  onPress={() => set(g)}
+                  style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, borderWidth: 2, borderColor: on ? t.primary : t.line, backgroundColor: on ? t.primary : 'transparent' }}
+                >
+                  <Text style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 14 }}>{g === 0 ? `Auto (${goalTarget({ ...data, goal: 0 })})` : `${g} XP`}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -334,15 +385,14 @@ function PathStep(props: { node: PathNode; color: string; best?: number; paused?
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, overflow: 'hidden', borderWidth: locked ? 2 : 0, borderStyle: 'dashed', borderColor: t.muted }}>
               <View style={{ height: 10, backgroundColor: locked ? t.muted : color, opacity: locked ? 0.35 : 1 }} />
               <View style={{ height: 2, marginTop: 6, backgroundColor: '#E2605A', opacity: locked ? 0.2 : 0.65 }} />
-              {!(done && best != null) &&
-                [0, 1, 2].map((i) => (
-                  <View key={i} style={{ height: 1, marginTop: 11, backgroundColor: '#7FA3CF', opacity: locked ? 0.15 : 0.45 }} />
-                ))}
+              {[0, 1, 2].map((i) => (
+                <View key={i} style={{ height: 1, marginTop: 11, backgroundColor: '#7FA3CF', opacity: locked ? 0.15 : 0.45 }} />
+              ))}
             </View>
           )}
           {lesson && done && best != null ? (
-            <View style={{ marginTop: 12 }}>
-              <Stars n={starsFor(best)} size={22} gap={0} stamp />
+            <View style={{ marginTop: 14, backgroundColor: '#FBF7EA', paddingHorizontal: 6, borderRadius: 8 }}>
+              <Stars n={starsFor(best)} size={20} gap={1} />
             </View>
           ) : lesson ? (
             <View style={{ marginTop: 12, backgroundColor: locked ? 'transparent' : '#FBF7EA', borderRadius: 14, paddingHorizontal: 6 }}>

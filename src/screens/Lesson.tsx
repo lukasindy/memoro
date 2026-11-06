@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Platform, Pressable, Text, View } from 'react-native';
 import { ScreenProps } from '../nav';
 import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
-import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, oldWordsFor, scaledMix, similarity, todayKey, wordsByIds } from '../engine';
+import { COMBO_BONUS, COMBO_STEP, GOAL_BONUS, Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, levelTitle, settleXp, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, oldWordsFor, scaledMix, similarity, todayKey, wordsByIds } from '../engine';
 import { canSpeak, speak } from '../platform';
 import { clozeFor } from '../data/generate';
 import { ClozeCard } from './ClozeCard';
@@ -11,7 +11,7 @@ import { StarsBurst, starsFor } from './Stars';
 import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
 import { Ionicons } from '@expo/vector-icons';
-import type { LevelUp } from '../engine';
+import type { Extra, LevelUp } from '../engine';
 
 type Item = Exercise & { retry?: boolean };
 
@@ -43,6 +43,19 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   const [queue, setQueue] = useState<Item[]>(initial);
   const [pos, setPos] = useState(resume ? Math.min(resume.pos, Math.max(0, initial.length - 1)) : 0);
   const [quitOpen, setQuitOpen] = useState(false);
+  // Serie ohne Fehler: gilt über Übungen und Lektionen hinweg
+  const [combo, setCombo] = useState(data.combo ?? 0);
+  const [shieldsLeft, setShieldsLeft] = useState(data.shields ?? 0);
+  const bestRun = useRef(data.combo ?? 0);
+  const sessionBest = useRef(0);
+  const shieldsUsed = useRef(0);
+  const pairsFailed = useRef(-1);
+  const [flash, setFlash] = useState<{ icon: keyof typeof Ionicons.glyphMap; text: string; color: string } | null>(null);
+  useEffect(() => {
+    if (!flash) return;
+    const id = setTimeout(() => setFlash(null), 2200);
+    return () => clearTimeout(id);
+  }, [flash]);
   const [picked, setPicked] = useState<string | null>(null);
   const [pairsDone, setPairsDone] = useState(false);
   const results = useRef(new Map<string, boolean>(resume ? resume.results : []));
@@ -81,33 +94,57 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
     else if (!ok) results.current.set(wordId, false);
   };
 
+  // Combo-Stand in die Daten übernehmen (beim Abschluss, Speichern und Beenden)
+  const comboPatch = (d: typeof data) => ({
+    combo,
+    bestCombo: Math.max(d.bestCombo ?? 0, bestRun.current),
+    shields: Math.max(0, (d.shields ?? 0) - shieldsUsed.current),
+  });
+
+  // Richtig/Falsch in die Serie einrechnen
+  const hit = (ok: boolean) => {
+    if (ok) {
+      const n = combo + 1;
+      setCombo(n);
+      bestRun.current = Math.max(bestRun.current, n);
+      sessionBest.current = Math.max(sessionBest.current, n);
+      if (n % COMBO_STEP === 0) {
+        score.current.xp += COMBO_BONUS;
+        setFlash({ icon: 'flash', text: `${n} in Folge! +${COMBO_BONUS} XP`, color: '#F2B01E' });
+      }
+    } else if (combo >= COMBO_STEP && shieldsLeft > 0) {
+      setShieldsLeft(shieldsLeft - 1);
+      shieldsUsed.current++;
+      setFlash({ icon: 'shield-checkmark', text: `Combo-Schutz rettet deine ${combo}er Serie`, color: '#4A9BD9' });
+    } else {
+      setCombo(0);
+    }
+  };
+
   const finish = () => {
     const errors = total - score.current.firstTry;
     const pct = Math.round(((total - errors) / total) * 100);
     const need = kind === 'skip' ? SKIP_PASS : PASS;
     const passed = !isTest || pct >= need;
     const base = score.current.xp + (errors === 0 ? 10 : 0) + (isTest && passed ? (kind === 'unitTest' ? 20 : 50) : 0);
-    const g = gainXp(data, base);
+    const s0 = settleXp(data, base);
+    const g = s0.g;
     update((d) => {
-      const gx = gainXp(d, base);
-      const st = nextStreak(d.streak, gx.freezes);
+      const s1 = settleXp(d, base);
       return {
-      ...d,
-      xp: gx.xp,
-      freezes: gx.freezes - st.used,
-      boost: gx.boost,
-      boosters: gx.boosters,
-      screenMinutes: gx.screenMinutes,
-      streak: st.streak,
-      streakSaved: st.used > 0 ? todayKey() : d.streakSaved,
-      courses: d.courses.map((x) => {
-        if (x.id !== id) return x;
-        const updated = applyResults({ ...x, paused: undefined }, results.current);
-        return node ? markProgress(updated, node.kind, node.wordIds, pct, node.kind === 'skip' ? undefined : node.key) : updated;
-      }),
+        ...d,
+        ...s1.patch,
+        ...comboPatch(d),
+        shields: Math.max(0, s1.patch.shields - shieldsUsed.current),
+        courses: d.courses.map((x) => {
+          if (x.id !== id) return x;
+          const updated = applyResults({ ...x, paused: undefined }, results.current);
+          return node ? markProgress(updated, node.kind, node.wordIds, pct, node.kind === 'skip' ? undefined : node.key) : updated;
+        }),
       };
     });
-    replace({ name: 'result', id, total, errors, xp: g.gained, kind, passed, boosted: g.boosted, up: g.up });
+    const extra: Extra = { goal: s0.reached, reward: s0.reward, combo: sessionBest.current };
+    replace({ name: 'result', id, total, errors, xp: g.gained, kind, passed, boosted: g.boosted, up: g.up, extra });
   };
 
   const next = () => {
@@ -122,6 +159,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
     setPicked(opt);
     const ok = ex.kind === 'build' ? opt.trim().toLowerCase() === ex.answer.toLowerCase() : opt === ex.answer;
     mark(ex.word.id, ok);
+    hit(ok);
     if (ok && !ex.retry) {
       score.current.firstTry++;
       score.current.xp += 10;
@@ -145,23 +183,18 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
       queue: JSON.parse(JSON.stringify(queue)),
       pos: done,
       total,
-      results: Array.from(results.current.entries()),
+      results: Array.from(results.current.entries()) as [string, boolean][],
       firstTry: score.current.firstTry,
       savedAt: Date.now(),
     };
     update((d) => {
-      const gx = gainXp(d, xpNow);
-      const st = nextStreak(d.streak, gx.freezes);
+      const s1 = settleXp(d, xpNow);
       return {
         ...d,
-        xp: gx.xp,
-        freezes: gx.freezes - st.used,
-        boost: gx.boost,
-        boosters: gx.boosters,
-        screenMinutes: gx.screenMinutes,
-        streak: st.streak,
-        streakSaved: st.used > 0 ? todayKey() : d.streakSaved,
+        ...s1.patch,
         courses: d.courses.map((x) => (x.id === id ? { ...x, paused: snapshot } : x)),
+        ...comboPatch(d),
+        shields: Math.max(0, s1.patch.shields - shieldsUsed.current),
       };
     });
     setQuitOpen(false);
@@ -171,7 +204,11 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   // Ohne Speichern beenden: auch einen alten Zwischenstand verwerfen
   const discard = () => {
     setQuitOpen(false);
-    if (resume) update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? { ...x, paused: undefined } : x)) }));
+    update((d) => ({
+      ...d,
+      ...comboPatch(d),
+      courses: resume ? d.courses.map((x) => (x.id === id ? { ...x, paused: undefined } : x)) : d.courses,
+    }));
     back();
   };
 
@@ -185,17 +222,31 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
           <Text style={{ color: t.muted, fontSize: 26, fontWeight: '600' }}>×</Text>
         </Pressable>
         <View style={{ flex: 1 }}>
-          <Progress value={progress} />
+          <LessonBar value={progress} hot={combo >= COMBO_STEP} />
         </View>
+        <ComboBadge n={combo} shield={shieldsLeft > 0 && combo >= COMBO_STEP} />
       </View>
+      {flash && (
+        <View style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: t.surface, borderWidth: 2, borderColor: flash.color, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 8 }}>
+          <Ionicons name={flash.icon} size={20} color={flash.color} />
+          <Text style={{ color: t.ink, fontSize: 15, fontWeight: '900' }}>{flash.text}</Text>
+        </View>
+      )}
 
       {ex.kind === 'pairs' ? (
         <PairsView
           key={pos}
           ex={ex}
-          onMistake={(wid) => mark(wid, false)}
+          onMistake={(wid) => {
+            mark(wid, false);
+            if (pairsFailed.current !== pos) {
+              pairsFailed.current = pos;
+              hit(false);
+            }
+          }}
           onDone={(clean) => {
             ex.words.forEach((w) => mark(w.id, true));
+            if (clean) hit(true);
             if (clean) score.current.firstTry++;
             score.current.xp += clean ? 10 : 5;
             setPairsDone(true);
@@ -213,7 +264,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
                   <Text style={{ color: t.muted, fontSize: 12, fontWeight: '800' }}>Wiederholung</Text>
                 </View>
               )}
-              <P muted style={{ flex: 1 }}>
+              <Instruction style={{ flex: 1 }} small={isTest && pos === 0}>
                 {ex.retry
                   ? 'Noch einmal'
                   : isTest && pos === 0
@@ -227,7 +278,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
                           : ex.dir === 'ab'
                             ? ex.isNew ? `Neues Wort. Was heißt das auf ${c.langB}?` : `Was heißt das auf ${c.langB}?`
                             : `Was heißt das auf ${c.langA}?`}
-              </P>
+              </Instruction>
             </View>
             {ex.kind === 'listen' ? (
               <ListenCard key={pos} text={ex.prompt} lang={c.langA} reveal={!!picked} />
@@ -292,6 +343,57 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
   );
 }
 
+// Aufgabentext: groß und deutlich, nicht zu übersehen
+function Instruction({ children, style, small }: { children: React.ReactNode; style?: any; small?: boolean }) {
+  const t = useTheme();
+  return (
+    <Text style={[{ color: t.ink, fontSize: small ? 17 : 23, lineHeight: small ? 24 : 29, fontWeight: '900', letterSpacing: -0.4 }, style]}>{children}</Text>
+  );
+}
+
+// Fortschrittsbalken: dick, weich animiert, mit Glanzlicht; golden, solange die Serie läuft
+function LessonBar({ value, hot }: { value: number; hot: boolean }) {
+  const t = useTheme();
+  const v = useRef(new Animated.Value(value)).current;
+  useEffect(() => {
+    Animated.timing(v, { toValue: Math.max(0, Math.min(1, value)), duration: 380, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start();
+  }, [value]);
+  const w = v.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] });
+  const color = hot ? '#F2B01E' : t.primary;
+  return (
+    <View style={{ height: 22, borderRadius: 11, backgroundColor: t.line, overflow: 'hidden', padding: 3 }}>
+      <Animated.View style={{ height: '100%', width: w, minWidth: 16, borderRadius: 8, backgroundColor: color, justifyContent: 'center' }}>
+        <View style={{ marginHorizontal: 6, height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.4)', marginBottom: 4 }} />
+      </Animated.View>
+    </View>
+  );
+}
+
+// Serien-Anzeige: eigenes Blitz-Symbol, poppt bei jeder richtigen Antwort
+function ComboBadge({ n, shield }: { n: number; shield: boolean }) {
+  const t = useTheme();
+  const pop = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (n === 0) return;
+    pop.setValue(1.35);
+    Animated.spring(pop, { toValue: 1, friction: 4, tension: 140, useNativeDriver: Platform.OS !== 'web' }).start();
+  }, [n]);
+  const on = n >= 2;
+  const hot = n >= COMBO_STEP;
+  const bg = hot ? '#F2B01E' : on ? t.card : t.surface;
+  const fg = on ? '#2B2410' : t.muted;
+  return (
+    <Animated.View
+      accessibilityLabel={`${n} richtige Antworten in Folge`}
+      style={{ transform: [{ scale: pop }], flexDirection: 'row', alignItems: 'center', gap: 3, backgroundColor: bg, borderRadius: 999, borderWidth: 2, borderColor: on ? 'transparent' : t.line, paddingHorizontal: 10, paddingVertical: 4 }}
+    >
+      <Ionicons name="flash" size={16} color={fg} />
+      <Text style={{ color: fg, fontSize: 16, fontWeight: '900' }}>{n}</Text>
+      {shield && <Ionicons name="shield-checkmark" size={14} color="#2F7FC0" />}
+    </Animated.View>
+  );
+}
+
 // Hörübung: Lautsprecher-Karte, spielt das Wort beim Öffnen und auf Tippen ab
 function ListenCard({ text, lang, reveal }: { text: string; lang: string; reveal: boolean }) {
   const t = useTheme();
@@ -330,7 +432,7 @@ function BuildView({ ex, langA, picked, onSubmit, retry }: { ex: Extract<Exercis
   return (
     <View style={{ gap: 22 }}>
       <View style={{ gap: 8 }}>
-        <P muted>{retry ? 'Noch einmal' : `Setz das Wort auf ${langA} zusammen.`}</P>
+        <Instruction>{retry ? 'Noch einmal' : `Setz das Wort auf ${langA} zusammen.`}</Instruction>
         <View style={{ backgroundColor: t.card, borderRadius: 6, paddingVertical: 28, paddingHorizontal: 20, alignItems: 'center', transform: [{ rotate: '-1deg' }] }}>
           <Text style={{ color: t.onCard, fontSize: 28, fontWeight: '800', textAlign: 'center' }}>{ex.prompt}</Text>
         </View>
@@ -558,7 +660,7 @@ function PairsView({ ex, onMistake, onDone }: { ex: Extract<Exercise, { kind: 'p
 
   return (
     <View style={{ gap: 16 }}>
-      <P muted>Finde die Paare.</P>
+      <Instruction>Finde die Paare.</Instruction>
       <View style={{ flexDirection: 'row', gap: 12 }}>
         <View style={{ flex: 1, gap: 10 }}>{ex.words.map((w) => tile(w.a, w.id, 'l'))}</View>
         <View style={{ flex: 1, gap: 10 }}>{right.map((w) => tile(w.b, w.id, 'r'))}</View>
@@ -567,7 +669,7 @@ function PairsView({ ex, onMistake, onDone }: { ex: Extract<Exercise, { kind: 'p
   );
 }
 
-export function Result({ total, errors, xp, back, kind, passed, boosted, up, data }: ScreenProps & { id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean; boosted?: boolean; up?: LevelUp | null }) {
+export function Result({ total, errors, xp, back, kind, passed, boosted, up, extra, data }: ScreenProps & { id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean; boosted?: boolean; up?: LevelUp | null; extra?: Extra }) {
   const t = useTheme();
   const lv = levelInfo(data.xp);
   const pct = Math.round(((total - errors) / total) * 100);
@@ -599,6 +701,32 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, dat
           </Panel>
         ))}
       </View>
+      {extra && extra.combo >= 2 && (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Ionicons name="flash" size={18} color="#D99A00" />
+          <P>Längste Serie in dieser Lektion: {extra.combo} richtige Antworten in Folge.</P>
+        </View>
+      )}
+      {extra?.goal && (
+        <View style={{ backgroundColor: t.rightBg, borderRadius: 18, padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Ionicons name="flag" size={30} color={t.right} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: t.right, fontSize: 18, fontWeight: '900' }}>Tagesziel erreicht!</Text>
+            <Text style={{ color: t.ink, fontSize: 14 }}>+{GOAL_BONUS} Bonus-XP für heute.</Text>
+          </View>
+        </View>
+      )}
+      {extra?.reward && (
+        <View style={{ backgroundColor: t.card, borderRadius: 22, padding: 18, gap: 8, alignItems: 'center' }}>
+          <Ionicons name="flame" size={40} color="#C4531A" />
+          <Text style={{ color: t.onCard, fontSize: 22, fontWeight: '900' }}>{extra.reward.days} Tage in Folge!</Text>
+          <Text style={{ color: t.onCard, fontSize: 15, fontWeight: '700' }}>Deine Serien-Belohnung:</Text>
+          {extra.reward.minutes > 0 && <Text style={{ color: t.onCard, fontSize: 15 }}>+{extra.reward.minutes} Minuten Social-Media-Zeit</Text>}
+          {extra.reward.boosters > 0 && <Text style={{ color: t.onCard, fontSize: 15 }}>+{extra.reward.boosters} XP-Booster</Text>}
+          {extra.reward.freezes > 0 && <Text style={{ color: t.onCard, fontSize: 15 }}>+{extra.reward.freezes} Streak-Schutz</Text>}
+          {extra.reward.shields > 0 && <Text style={{ color: t.onCard, fontSize: 15 }}>+{extra.reward.shields} Combo-Schutz</Text>}
+        </View>
+      )}
       {boosted && (
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Ionicons name="rocket" size={18} color={t.primary} />
@@ -632,12 +760,19 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, dat
               <Text style={{ color: t.onCard, fontSize: 15, fontWeight: '800' }}>+{up.minutes} Minuten Social-Media-Zeit</Text>
             </View>
           )}
+          {up.shields > 0 && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="shield-checkmark" size={18} color={t.onCard} />
+              <Text style={{ color: t.onCard, fontSize: 15 }}>+{up.shields} Combo-Schutz (rettet deine Serie bei einem Fehler)</Text>
+            </View>
+          )}
+          {up.title && <Text style={{ color: t.onCard, fontSize: 16, fontWeight: '900' }}>Neuer Titel: {up.title}</Text>}
           {up.freezes === 0 && <Text style={{ color: t.onCard, fontSize: 13, opacity: 0.8 }}>Streak-Schutz ist schon voll (max. 3).</Text>}
         </View>
       )}
       <View style={{ gap: 6 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ color: t.ink, fontWeight: '800', fontSize: 15 }}>Level {lv.level}</Text>
+          <Text style={{ color: t.ink, fontWeight: '800', fontSize: 15 }}>Level {lv.level} · {levelTitle(lv.level)}</Text>
           <P muted>{lv.into} / {lv.need} XP</P>
         </View>
         <Progress value={lv.progress} color={t.card} />
