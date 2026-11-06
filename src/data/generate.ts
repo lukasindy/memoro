@@ -165,3 +165,31 @@ export function clozeFor(c: Course, w: Word) {
   }
   return null;
 }
+
+// Kann Memoro für diesen Kurs gerade Lückensätze bilden? Mit Begründung für die Einstellungen.
+export function clozeStatus(c: Course): { ready: boolean; reason: string } {
+  if (c.words.some((w) => ownCloze(c, w))) return { ready: true, reason: '' };
+  const a = (c.gen?.a as LangCode | undefined) ?? codeOf(c.langA);
+  const b = (c.gen?.b as LangCode | undefined) ?? codeOf(c.langB);
+  if (!a) {
+    return {
+      ready: false,
+      reason: `Für ${c.langA} gibt es keine eingebauten Sätze. Trag in der Vokabelliste zu einigen Wörtern Beispielsätze ein, dann kommen Lückensätze.`,
+    };
+  }
+  const keyed = c.words.map((x) => ({ x, k: keyOf(x, a, b) }));
+  const learned = new Set(keyed.filter((e) => e.k && e.x.lp).map((e) => e.k!));
+  const inCourse = new Set(keyed.filter((e) => e.k).map((e) => e.k!));
+  const ok = sentences().some((s) => inCourse.has(s.blank) && s.keys.slice(1).every((k) => learned.has(k)));
+  if (ok) return { ready: true, reason: '' };
+  if (inCourse.size < 3) {
+    return {
+      ready: false,
+      reason: 'In deinem Kurs stehen kaum Wörter, die Memoro für Sätze nutzen kann. Trag Beispielsätze in der Vokabelliste ein oder füge Grundwortschatz hinzu.',
+    };
+  }
+  return {
+    ready: false,
+    reason: `Du kennst noch nicht genug Wörter für Lückensätze. Lern noch ein paar Lektionen weiter (bisher ${learned.size} passende Wörter gelernt), dann tauchen sie automatisch auf.`,
+  };
+}
