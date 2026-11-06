@@ -224,17 +224,19 @@ export function clozeStatus(c: Course): { ready: boolean; reason: string; missin
   const open = sentences().filter((s) => inCourse.has(s.blank));
   const missingOf = (s: Sentence) => new Set(s.keys.slice(1).filter((k) => !learned.has(k))).size;
   if (open.some((s) => missingOf(s) === 0)) return { ready: true, reason: '', missing: 0 };
-  if (inCourse.size < 3 || open.length === 0) {
+  // Nur Sätze zählen, deren übrige Wörter auch im Kurs stehen (nur die kann man wirklich lernen)
+  const reach = open.filter((s) => s.keys.slice(1).every((k) => inCourse.has(k)));
+  if (inCourse.size < 3 || reach.length === 0) {
     return {
       ready: false,
       missing: null,
       reason: 'In deinem Kurs stehen kaum Wörter, die Memoro für Sätze nutzen kann. Trag Beispielsätze in der Vokabelliste ein oder füge Grundwortschatz hinzu.',
     };
   }
-  const missing = Math.min(...open.map(missingOf));
+  const missing = Math.min(...reach.map(missingOf));
   return {
     ready: false,
     missing,
-    reason: `Dir fehlen noch ${missing} ${missing === 1 ? 'Wort' : 'Wörter'} für den ersten Lückensatz (bisher ${learned.size} passende Wörter gelernt). Lern noch ein paar Lektionen weiter, dann tauchen Lückensätze automatisch auf.`,
+    reason: `Für den ersten Lückensatz ${missing === 1 ? 'fehlt dir noch 1 Wort' : `fehlen dir noch ${missing} Wörter`}. Lern noch ein paar Lektionen weiter, dann tauchen Lückensätze automatisch auf.`,
   };
 }
