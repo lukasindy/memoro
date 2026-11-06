@@ -164,12 +164,12 @@ function listen(c: Course, w: Word): Exercise {
 // Artikel abtrennen, damit nur das eigentliche Wort gepuzzelt wird
 const LEADING_ARTICLE = /^(der|die|das|the|a|an|to|el|la|los|las|le|les|il|lo|gli|i|un|une|una|uno)\s+|^(l'|l’)/i;
 
-function build(c: Course, w: Word): Exercise {
+function build(c: Course, w: Word, strict = false): Exercise | null {
   const m = w.a.match(LEADING_ARTICLE);
   const prefix = m ? m[0] : '';
   const core = w.a.slice(prefix.length).trim();
   const letters = [...core.replace(/\s+/g, ' ')];
-  if (letters.length < 3 || letters.length > 14) return choice(c, w, 'ba', false);
+  if (letters.length < 3 || letters.length > 14) return strict ? null : choice(c, w, 'ba', false);
   let tiles = shuffle(letters);
   for (let k = 0; k < 5 && tiles.join('') === core; k++) tiles = shuffle(letters);
   return { kind: 'build', word: w, prompt: w.b, prefix, answer: core, tiles };
@@ -187,9 +187,9 @@ export function oldWordsFor(c: Course, exclude: Word[], count: number): Word[] {
     .map((x) => x.w);
 }
 
-function spelling(c: Course, w: Word): Exercise {
-  const wrong = misspellings(w.a);
-  if (w.a.length < 4 || wrong.length < 3) return choice(c, w, 'ba', false);
+function spelling(c: Course, w: Word, strict = false): Exercise | null {
+  const wrong = w.a.length < 4 ? [] : misspellings(w.a);
+  if (w.a.length < 4 || wrong.length < 3) return strict ? null : choice(c, w, 'ba', false);
   return { kind: 'spelling', word: w, prompt: w.b, options: shuffle([w.a, ...wrong]), answer: w.a };
 }
 
@@ -221,12 +221,20 @@ export function buildMixed(c: Course, words: Word[], mix: Mix, opts: BuildOpts =
 
   const rest: Exercise[] = [];
   for (let k = 0; k < mix.ba; k++) rest.push(choice(c, next(), 'ba', false));
-  for (let k = 0; k < mix.spelling; k++) rest.push(spelling(c, next()));
+  // Schreibweise und Puzzle: ein dafür geeignetes Wort suchen, damit jede aktive Übung wirklich vorkommt
+  const suited = (make: (w: Word) => Exercise | null): Exercise => {
+    for (let t = 0; t < order.length; t++) {
+      const e = make(next());
+      if (e) return e;
+    }
+    return choice(c, next(), 'ba', false);
+  };
+  for (let k = 0; k < mix.spelling; k++) rest.push(suited((w) => spelling(c, w, true)));
   for (let k = 0; k < (mix.listen ?? 0); k++) {
     const w = next();
     rest.push(opts.canListen ? listen(c, w) : choice(c, w, 'ab', false));
   }
-  for (let k = 0; k < (mix.build ?? 0); k++) rest.push(build(c, next()));
+  for (let k = 0; k < (mix.build ?? 0); k++) rest.push(suited((w) => build(c, w, true)));
   // Lückensätze nur, wenn es passende Sätze mit bekannten Wörtern gibt
   for (let k = 0, tries = 0; k < (mix.cloze ?? 0) && opts.cloze && tries < words.length; tries++) {
     const w = next();

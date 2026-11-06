@@ -194,7 +194,7 @@ export const EXACT: Record<string, string> = {
  "Backup-Inhalt hier einfügen": "Paste backup content here",
  "Alle Daten löschen": "Delete all data",
  "Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.": "Delete all courses, words and progress? This cannot be undone.",
- "Memoro 3.6 – Testversion": "Memoro 3.6 – Test version",
+ "Memoro 3.7 – Testversion": "Memoro 3.7 – Test version",
  "Kamera": "Camera",
  "Vokabellisten aus Buch oder Heft einfach abfotografieren": "Just photograph vocabulary lists from a book or notebook",
  "Beliebig viele Kurse": "Any number of courses",
