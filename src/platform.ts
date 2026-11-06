@@ -141,8 +141,58 @@ function score(v: Voice) {
   return s;
 }
 
+// Selbst gewählte Stimme je Sprache (bleibt gespeichert)
+const prefKey = (language: string) => `memoro:voice:${language}`;
+export function savedVoice(language: string): string | null {
+  try {
+    return typeof localStorage !== 'undefined' ? localStorage.getItem(prefKey(language)) : null;
+  } catch {
+    return null;
+  }
+}
+export function chooseVoice(langName: string, id: string | null) {
+  const language = ttsLang(langName);
+  if (!language) return;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      if (id) localStorage.setItem(prefKey(language), id);
+      else localStorage.removeItem(prefKey(language));
+    }
+  } catch {
+    // ohne Speicher: Auswahl gilt nur bis zum Schließen
+  }
+  delete voiceCache[language];
+}
+
+export type VoiceOption = { id: string; name: string; tag: string; best: boolean };
+
+// Alle Stimmen für die Sprache, die beste zuerst
+export async function listVoices(langName: string): Promise<VoiceOption[]> {
+  const language = ttsLang(langName);
+  if (!language) return [];
+  try {
+    const all = ((await Speech.getAvailableVoicesAsync()) as Voice[]) ?? [];
+    const lang = language.toLowerCase().replace('_', '-');
+    const base = lang.split('-')[0];
+    const pool = all.filter((v) => v.language.toLowerCase().replace('_', '-').startsWith(base));
+    const sorted = [...pool].sort((x, y) => score(y) - score(x));
+    return sorted.map((v, i) => {
+      const n = v.name.toLowerCase();
+      const tag = /premium/.test(n) ? 'Premium' : /enhanced/.test(n) || v.quality === 'Enhanced' ? 'Verbessert' : /natural|neural|online/.test(n) ? 'Natürlich' : /compact/.test(n) ? 'Kompakt' : 'Standard';
+      return { id: v.identifier, name: v.name, tag, best: i === 0 };
+    });
+  } catch {
+    return [];
+  }
+}
+
 async function bestVoice(language: string): Promise<string | undefined> {
   if (language in voiceCache) return voiceCache[language] ?? undefined;
+  const pref = savedVoice(language);
+  if (pref) {
+    voiceCache[language] = pref;
+    return pref;
+  }
   try {
     const all = ((await Speech.getAvailableVoicesAsync()) as Voice[]) ?? [];
     const lang = language.toLowerCase().replace('_', '-');
