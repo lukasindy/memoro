@@ -134,6 +134,7 @@ const voiceCache: Record<string, string | null> = {};
 function score(v: Voice) {
   const n = v.name.toLowerCase();
   let s = 0;
+  if (/^alice/.test(n)) s += 200; // Standardstimme
   if (/natural|neural|online/.test(n)) s += 50;
   if (/premium|enhanced|siri/.test(n) || v.quality === 'Enhanced') s += 40;
   if (/google/.test(n)) s += 30;
@@ -175,7 +176,9 @@ export async function listVoices(langName: string): Promise<VoiceOption[]> {
     const lang = language.toLowerCase().replace('_', '-');
     const base = lang.split('-')[0];
     const pool = all.filter((v) => v.language.toLowerCase().replace('_', '-').startsWith(base));
-    const sorted = [...pool].sort((x, y) => score(y) - score(x));
+    // Nur brauchbare Stimmen anbieten (keine Kompakt-/Spaßstimmen), falls es welche gibt
+    const good = pool.filter((v) => score(v) > -60);
+    const sorted = [...(good.length > 0 ? good : pool)].sort((x, y) => score(y) - score(x));
     return sorted.map((v, i) => {
       const n = v.name.toLowerCase();
       const tag = /premium/.test(n) ? 'Premium' : /enhanced/.test(n) || v.quality === 'Enhanced' ? 'Verbessert' : /natural|neural|online/.test(n) ? 'Natürlich' : /compact/.test(n) ? 'Kompakt' : 'Standard';
