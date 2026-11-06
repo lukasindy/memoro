@@ -112,6 +112,9 @@ const TTS: Record<string, string> = {
   italienisch: 'it-IT', portugiesisch: 'pt-PT', niederländisch: 'nl-NL', schwedisch: 'sv-SE',
   norwegisch: 'nb-NO', dänisch: 'da-DK', polnisch: 'pl-PL', türkisch: 'tr-TR', russisch: 'ru-RU',
   griechisch: 'el-GR', kroatisch: 'hr-HR', tschechisch: 'cs-CZ',
+  english: 'en-US', german: 'de-DE', spanish: 'es-ES', french: 'fr-FR', italian: 'it-IT', portuguese: 'pt-PT', dutch: 'nl-NL',
+  swedish: 'sv-SE', norwegian: 'nb-NO', danish: 'da-DK', polish: 'pl-PL', turkish: 'tr-TR', russian: 'ru-RU', greek: 'el-GR',
+  croatian: 'hr-HR', czech: 'cs-CZ', latin: 'it-IT',
   latein: 'it-IT', // keine Latein-Stimme verfügbar: italienische Aussprache kommt am nächsten
 };
 
@@ -191,11 +194,6 @@ export async function listVoices(langName: string): Promise<VoiceOption[]> {
 
 async function bestVoice(language: string): Promise<string | undefined> {
   if (language in voiceCache) return voiceCache[language] ?? undefined;
-  const pref = savedVoice(language);
-  if (pref) {
-    voiceCache[language] = pref;
-    return pref;
-  }
   try {
     const all = ((await Speech.getAvailableVoicesAsync()) as Voice[]) ?? [];
     const lang = language.toLowerCase().replace('_', '-');

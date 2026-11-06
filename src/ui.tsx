@@ -1,5 +1,7 @@
 import React, { createContext, useContext } from 'react';
-import { Platform, Pressable, StyleSheet, Text, TextInput, TextInputProps, View, ViewStyle, Alert } from 'react-native';
+import { tr } from './i18n';
+import { Platform, Pressable, StyleSheet, TextInputProps, View, ViewStyle, Alert } from 'react-native';
+import { Text, TextInput } from './i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { BOXES, levelInfo } from './engine';
 
@@ -217,18 +219,18 @@ export function StatPills({ streak, xp, saved, boost, onInventory, hasItems }: {
 
 export function confirm(message: string, onYes: () => void) {
   if (Platform.OS === 'web') {
-    if (window.confirm(message)) onYes();
+    if (window.confirm(tr(message))) onYes();
     return;
   }
-  Alert.alert('Bestätigen', message, [
-    { text: 'Abbrechen', style: 'cancel' },
-    { text: 'Ja', style: 'destructive', onPress: onYes },
+  Alert.alert(tr('Bestätigen'), tr(message), [
+    { text: tr('Abbrechen'), style: 'cancel' },
+    { text: tr('Ja'), style: 'destructive', onPress: onYes },
   ]);
 }
 
 export function notify(message: string) {
-  if (Platform.OS === 'web') window.alert(message);
-  else Alert.alert('Memoro', message);
+  if (Platform.OS === 'web') window.alert(tr(message));
+  else Alert.alert('Memoro', tr(message));
 }
 
 const s = StyleSheet.create({

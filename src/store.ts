@@ -81,6 +81,7 @@ export type AppData = {
   shields: number; // Combo-Schutz: rettet eine Serie ab 5 bei einem Fehler
   goal: number; // Tagesziel in XP, 0 = automatisch
   daily: { day: string; xp: number; done: boolean }; // Fortschritt zum Tagesziel
+  ui?: 'de' | 'en'; // Sprache der App (leer = noch nicht gewählt)
   streakClaimed: number; // höchster schon abgeholter Serien-Meilenstein (Tage)
 };
 
