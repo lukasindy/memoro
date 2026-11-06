@@ -56,7 +56,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingTop: 10, paddingBottom: (Platform.OS === 'web' ? 'max(8px, env(safe-area-inset-bottom))' : Math.max(6, insets.bottom - 8)) as any }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'env(safe-area-inset-bottom, 0px)' : insets.bottom) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
@@ -66,10 +66,10 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
               accessibilityState={{ selected: on }}
               accessibilityLabel={x.label}
               onPress={() => setTab(x.key)}
-              style={{ flex: 1, alignItems: 'center', gap: 3, paddingVertical: 4 }}
+              style={{ flex: 1, alignItems: 'center', gap: 2, paddingTop: 9, paddingBottom: 7 }}
             >
-              <Ionicons name={on ? x.active : x.icon} size={25} color={on ? t.primary : t.muted} />
-              <Text style={{ color: on ? t.primary : t.muted, fontSize: 12, fontWeight: on ? '800' : '600' }}>{x.label}</Text>
+              <Ionicons name={on ? x.active : x.icon} size={24} color={on ? t.primary : t.muted} />
+              <Text style={{ color: on ? t.primary : t.muted, fontSize: 11, fontWeight: on ? '700' : '500' }}>{x.label}</Text>
             </Pressable>
           );
         })}
