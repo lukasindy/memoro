@@ -96,7 +96,7 @@ export default function App() {
       case 'premium': screen = <Premium {...p} reason={route.reason} />; break;
       case 'course': screen = <Course {...p} id={route.id} tab={route.tab} sec={route.sec} />; break;
       case 'add': screen = <AddWords key={route.id} {...p} id={route.id} />; break;
-      case 'lesson': screen = <Lesson key={stack.length} {...p} id={route.id} node={route.node} />; break;
+      case 'lesson': screen = <Lesson key={stack.length} {...p} id={route.id} node={route.node} practice={route.practice} />; break;
       case 'result': screen = <Result {...p} {...route} />; break;
     }
   }
