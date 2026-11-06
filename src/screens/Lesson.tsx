@@ -5,6 +5,7 @@ import { Btn, H1, P, Panel, Progress, TopBar, confirm, useTheme } from '../ui';
 import { Exercise, PASS, SKIP_PASS, applyResults, gainXp, levelInfo, buildExam, buildMixed, buildPath, buildReview, buildTest, markProgress, nextStreak, oldWordsFor, scaledMix, similarity, todayKey, wordsByIds } from '../engine';
 import { canSpeak, speak } from '../platform';
 import { clozeFor } from '../data/generate';
+import { ClozeCard } from './ClozeCard';
 import type { Word } from '../store';
 import { LessonKind, LessonRef } from '../nav';
 import { Ionicons } from '@expo/vector-icons';
@@ -177,15 +178,8 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
             {ex.kind === 'listen' ? (
               <ListenCard key={pos} text={ex.prompt} lang={c.langA} reveal={!!picked} />
             ) : ex.kind === 'cloze' ? (
-              <View style={{ backgroundColor: t.card, borderRadius: 6, paddingVertical: 26, paddingHorizontal: 20, gap: 10, transform: [{ rotate: '-1deg' }] }}>
-                <Text style={{ color: t.onCard, fontSize: 24, fontWeight: '800', textAlign: 'center', lineHeight: 34 }}>
-                  {ex.before}
-                  <Text style={{ textDecorationLine: picked ? 'none' : 'underline' }}>{picked ? ex.answer : ' _______ '}</Text>
-                  {ex.after}
-                </Text>
-                <Text style={{ color: t.onCard, opacity: 0.75, fontSize: 15, textAlign: 'center' }}>{ex.translation}</Text>
-              </View>
-            ) : (
+<ClozeCard ex={ex} picked={!!picked} t={t} />
+) : (
               /* Die Karteikarte */
               <View style={{ backgroundColor: t.card, borderRadius: 6, paddingVertical: 34, paddingHorizontal: 20, alignItems: 'center', transform: [{ rotate: '-1deg' }] }}>
                 <Text style={{ color: t.onCard, fontSize: 30, fontWeight: '800', textAlign: 'center', letterSpacing: -0.5 }}>{ex.prompt}</Text>

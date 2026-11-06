@@ -649,16 +649,29 @@ function StatsTab({ c }: { c: CourseT }) {
 // ---------- Einstellungen ----------
 
 // Hinweis, wenn gerade keine Lückensätze möglich sind
-function ClozeInfo({ c }: { c: CourseT }) {
+function ClozeInfo({ c, setCourse }: { c: CourseT; setCourse: SetCourse }) {
   const t = useTheme();
   const st = clozeStatus(c);
   if (st.ready) return null;
+  const any = !!c.clozeAny;
   return (
-    <View style={{ flexDirection: 'row', gap: 10, backgroundColor: t.bg, borderRadius: 12, borderWidth: 1, borderColor: t.card, padding: 12, alignItems: 'flex-start' }}>
-      <Ionicons name="information-circle" size={20} color="#D99A00" />
-      <Text style={{ flex: 1, color: t.ink, fontSize: 14, lineHeight: 20 }}>
-        {st.reason} Bis dahin wird die Übung in Lektionen übersprungen.
-      </Text>
+    <View style={{ gap: 10, backgroundColor: t.bg, borderRadius: 12, borderWidth: 1, borderColor: t.card, padding: 12 }}>
+      <View style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
+        <Ionicons name="information-circle" size={20} color="#D99A00" />
+        <Text style={{ flex: 1, color: t.ink, fontSize: 14, lineHeight: 20 }}>
+          {st.reason}
+          {any
+            ? ' Sätze mit noch unbekannten Wörtern sind eingeschaltet: Tippe im Satz auf ein unterstrichenes Wort, dann siehst du die Bedeutung.'
+            : ' Bis dahin wird die Übung in Lektionen übersprungen.'}
+        </Text>
+      </View>
+      {st.missing !== null && (
+        <Btn
+          kind="secondary"
+          label={any ? 'Nur Sätze mit bekannten Wörtern' : 'Sätze trotzdem erstellen'}
+          onPress={() => setCourse((x) => ({ ...x, clozeAny: !x.clozeAny }))}
+        />
+      )}
     </View>
   );
 }
@@ -752,7 +765,7 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
         <Stepper label="Hörübung" hint={canSpeak(c.langA) ? 'Wort hören, Bedeutung wählen' : `Für ${c.langA} gibt es keine Sprachausgabe`} value={m.listen} min={0} max={10} onChange={(v) => setMix('listen', v)} />
         <Stepper label="Buchstaben-Puzzle" hint="Wort aus Buchstaben zusammensetzen" value={m.build} min={0} max={10} onChange={(v) => setMix('build', v)} />
         <Stepper label="Lückensatz" hint={codeOf(c.langA) || c.gen ? 'Satz mit bekannten Wörtern vervollständigen' : 'Mit eigenen Beispielsätzen in der Vokabelliste'} value={m.cloze} min={0} max={10} onChange={(v) => setMix('cloze', v)} />
-        {m.cloze > 0 && <ClozeInfo c={c} />}
+        {m.cloze > 0 && <ClozeInfo c={c} setCourse={setCourse} />}
         <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.' : `Gilt für ${MIX_BASE_WORDS} Wörter. Bei ${c.wordsPerLesson} Wörtern pro Lektion rechnet Memoro automatisch auf ${scaledTotal(m, c.wordsPerLesson)} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
       </Panel>
 

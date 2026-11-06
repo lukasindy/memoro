@@ -11,6 +11,10 @@ import { exportBackup, pickBackupFile } from '../platform';
 import { BUILD_ID } from '../update';
 import { Platform } from 'react-native';
 
+// Schnellwahl bei der Kurserstellung. Bewusst nur diese vier Stufen und auch dann so lassen, wenn der
+// Wortschatz weiter wächst (aktuell rund 3000 Wörter). Größere oder genaue Mengen gibt man von Hand ein.
+const QUICK_PICKS = [150, 300, 600, 1000];
+
 // Begrüßungsfeld in beiden Farbmodi gleich: Tafelgrün mit weißer Schrift
 const HERO_BG = '#1F5E4E';
 const HERO_INK = '#FFFFFF';
@@ -336,7 +340,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
             </View>
             {data.premium ? (
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                {[150, 300, 600, 1000, 1500, 2000].filter((v) => v <= max).map((v) => (
+                {QUICK_PICKS.filter((v) => v <= max).map((v) => (
                   <Pressable
                     key={v}
                     accessibilityRole="button"
@@ -448,7 +452,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 1.9 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 2.0 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }
