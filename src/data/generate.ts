@@ -1,6 +1,7 @@
 // Automatisch erstellte Kurse aus dem mitgelieferten Grundwortschatz
 import { Course, Word, uid } from '../store';
 import { VOCAB } from './vocab';
+import { VOCAB2 } from './vocab2';
 import { SENTENCES } from './sentences';
 
 export const GEN_LANGS = [
@@ -19,7 +20,7 @@ type Row = Record<LangCode, string>;
 let rows: Row[] | null = null;
 function vocab(): Row[] {
   if (!rows) {
-    rows = VOCAB.trim()
+    rows = (VOCAB.trim() + '\n' + VOCAB2.trim())
       .split('\n')
       .map((l) => l.split('|').map((x) => x.trim()))
       .filter((p) => p.length === COLS.length && p.every(Boolean))
