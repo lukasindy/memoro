@@ -53,7 +53,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
           {tab === 'learn' && <LearnGoal c={c} setCourse={setCourse} openSettings={() => setTab('settings')} />}
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
           {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} data={data} update={update} />}
-          {tab === 'stats' && <StatsTab c={c} />}
+          {tab === 'stats' && <StatsTab c={c} go={go} />}
           {tab === 'settings' && (
             <SettingsTab
               c={c}
@@ -69,7 +69,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'env(safe-area-inset-bottom, 0px)' : insets.bottom) as any }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'max(0px, calc(env(safe-area-inset-bottom, 0px) - 8px))' : insets.bottom) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
@@ -141,7 +141,6 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
   const todayLeft = Math.max(0, dayGoal - (learnedNow - base));
   const doneToday = Math.min(dayGoal, Math.max(0, learnedNow - base));
   const lessonsToday = Math.max(1, Math.ceil(dayGoal / Math.max(1, c.wordsPerLesson)));
-  const todayLine = done ? null : todayLeft > 0 ? `Heute noch ${todayLeft} ${todayLeft === 1 ? 'Wort' : 'Wörter'} lernen, um im Plan zu bleiben.` : 'Tagesziel erreicht! Für heute bist du im Plan.';
   const sub = done ? null : late ? 'Passe das Datum in den Einstellungen an.' : plan.behind > 0 ? `Du liegst etwa ${plan.behind} Wörter hinter dem Plan.` : 'Du liegst im Plan.';
   return (
     <Pressable
@@ -158,7 +157,6 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
           <Text style={{ color: t.ink, fontSize: 16, fontWeight: '900' }}>
             Lernziel <Text style={{ color: t.muted, fontWeight: '700' }}>bis {fmtDate(c.target!.date)}</Text>
           </Text>
-          <Progress value={plan.total ? plan.learned / plan.total : 0} color={ok ? t.right : t.card} />
         </View>
         <Ionicons name="chevron-forward" size={18} color={t.muted} />
       </View>
@@ -172,7 +170,15 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
           <Text style={{ color: t.muted, fontSize: 12 }}>{`Das sind etwa ${lessonsToday} ${lessonsToday === 1 ? 'Lektion' : 'Lektionen'} (je ${c.wordsPerLesson} Wörter).`}</Text>
         </View>
       )}
-      {todayLine && <Text style={{ color: t.ink, fontSize: 15, fontWeight: '900' }}>{todayLine}</Text>}
+      <View style={{ gap: 4 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ color: t.muted, fontSize: 12, fontWeight: '700' }}>Wörter gelernt</Text>
+          <Text style={{ color: t.muted, fontSize: 12, fontWeight: '700' }}>{plan.learned} / {plan.total}</Text>
+        </View>
+        <View style={{ height: 4, borderRadius: 2, backgroundColor: t.line, overflow: 'hidden' }}>
+          <View style={{ height: '100%', width: `${Math.round((plan.total ? plan.learned / plan.total : 0) * 100)}%`, backgroundColor: ok ? t.right : t.card }} />
+        </View>
+      </View>
       <Text style={{ color: t.ink, fontSize: 14, fontWeight: '700' }}>{line}</Text>
       {sub && <Text style={{ color: t.muted, fontSize: 13 }}>{sub}</Text>}
     </Pressable>
@@ -757,7 +763,7 @@ function PendingPanel({ c, data, update, go, setCourse }: { c: CourseT; data: Ap
 
 // ---------- Statistik ----------
 
-function StatsTab({ c }: { c: CourseT }) {
+function StatsTab({ c, go }: { c: CourseT; go: (r: Route) => void }) {
   const t = useTheme();
   const right = c.words.reduce((s, w) => s + w.right, 0);
   const wrong = c.words.reduce((s, w) => s + w.wrong, 0);
@@ -809,6 +815,12 @@ function StatsTab({ c }: { c: CourseT }) {
               <P muted>{w.wrong}× falsch</P>
             </View>
           ))
+        )}
+        {hardest.length > 0 && (
+          <>
+            <P muted style={{ fontSize: 13 }}>Richtig beantwortete Wörter verlieren einen Fehlerpunkt und verschwinden irgendwann aus dieser Liste.</P>
+            <Btn label="Schwierigste Wörter üben" onPress={() => go({ name: 'lesson', id: c.id, practice: hardest.map((w) => w.id) })} />
+          </>
         )}
       </Panel>
     </View>

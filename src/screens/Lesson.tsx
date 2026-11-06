@@ -16,7 +16,11 @@ import type { Extra, LevelUp } from '../engine';
 
 type Item = Exercise & { retry?: boolean };
 
-function build(c: NonNullable<ScreenProps['data']['courses'][number]>, node?: LessonRef): Exercise[] {
+function build(c: NonNullable<ScreenProps['data']['courses'][number]>, node?: LessonRef, practice?: string[]): Exercise[] {
+  if (practice) {
+    const ws = wordsByIds(c, practice);
+    return buildMixed(c, ws, scaledMix({ ...c.mix, ab: Math.min(c.mix.ab, 2) }, ws.length), { canListen: canSpeak(c.langA), cloze: (w) => clozeFor(c, w), old: [] });
+  }
   if (!node) return buildReview(c);
   const words = wordsByIds(c, node.wordIds);
   if (node.kind === 'lesson') {
@@ -32,15 +36,15 @@ function build(c: NonNullable<ScreenProps['data']['courses'][number]>, node?: Le
   return buildExam(c, words, size);
 }
 
-export function Lesson({ data, update, back, replace, id, node }: ScreenProps & { id: string; node?: LessonRef }) {
+export function Lesson({ data, update, back, replace, id, node, practice }: ScreenProps & { id: string; node?: LessonRef; practice?: string[] }) {
   const t = useTheme();
   const c = data.courses.find((x) => x.id === id)!;
   const kind: LessonKind = node ? node.kind : 'review';
   const isTest = kind === 'unitTest' || kind === 'exam' || kind === 'skip';
   // einmal pro Lektion erzeugen
-  const nodeKey = node?.key ?? 'review';
+  const nodeKey = practice ? 'practice' : node?.key ?? 'review';
   const resume = c?.paused && c.paused.key === nodeKey ? c.paused : null;
-  const initial = useMemo<Item[]>(() => (c ? (resume ? resume.queue : build(c, node)) : []), []);
+  const initial = useMemo<Item[]>(() => (c ? (resume ? resume.queue : build(c, node, practice)) : []), []);
   const [queue, setQueue] = useState<Item[]>(initial);
   const [pos, setPos] = useState(resume ? Math.min(resume.pos, Math.max(0, initial.length - 1)) : 0);
   const [quitOpen, setQuitOpen] = useState(false);
@@ -139,7 +143,7 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
         shields: Math.max(0, s1.patch.shields - shieldsUsed.current),
         courses: d.courses.map((x) => {
           if (x.id !== id) return x;
-          const updated = applyResults({ ...x, paused: undefined }, results.current);
+          const updated = applyResults({ ...x, paused: undefined }, results.current, undefined, !!practice);
           return node ? markProgress(updated, node.kind, node.wordIds, pct, node.kind === 'skip' ? undefined : node.key) : updated;
         }),
       };
