@@ -44,6 +44,7 @@
         left: 0;
         right: 0;
         bottom: 0;
+        height: var(--app-h, auto);
         overflow: hidden;
       }
     </style>
@@ -59,6 +60,8 @@
             var full = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
             var diff = full - window.innerHeight;
             root.style.setProperty('--gap', standalone && diff > 0 && diff <= 100 ? diff + 'px' : '0px');
+            // Im Home-Bildschirm immer die volle Bildschirmhöhe nutzen, egal welche Höhe iOS gerade meldet
+            root.style.setProperty('--app-h', standalone && diff > 0 && diff <= 100 ? full + 'px' : 'auto');
           } catch (e) {}
         }
         set();
