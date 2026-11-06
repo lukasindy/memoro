@@ -459,13 +459,13 @@ export function releasePending(d: AppData, courseId?: string): AppData {
 
 // ---------- Auswertung ----------
 
-export function applyResults(c: Course, results: Map<string, boolean>, now = Date.now()): Course {
+export function applyResults(c: Course, results: Map<string, boolean>, now = Date.now(), heal = false): Course {
   const words = c.words.map((w) => {
     if (!results.has(w.id)) return w;
     const ok = results.get(w.id)!;
     if (ok) {
       const box = Math.min(BOXES, w.box + 1);
-      return { ...w, box, due: now + INTERVALS[box] * DAY, right: w.right + 1 };
+      return { ...w, box, due: now + INTERVALS[box] * DAY, right: w.right + 1, wrong: heal ? Math.max(0, w.wrong - 1) : w.wrong };
     }
     return { ...w, box: 1, due: now, wrong: w.wrong + 1 };
   });

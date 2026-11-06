@@ -10,7 +10,7 @@ export type Route =
   | { name: 'newCourse' }
   | { name: 'course'; id: string; tab?: CourseTab; sec?: number }
   | { name: 'add'; id: string }
-  | { name: 'lesson'; id: string; node?: LessonRef } // ohne node = Wiederholung
+  | { name: 'lesson'; id: string; node?: LessonRef; practice?: string[] } // ohne node = Wiederholung
   | { name: 'result'; id: string; total: number; errors: number; xp: number; kind: LessonKind; passed: boolean; boosted?: boolean; up?: LevelUp | null; extra?: Extra }
   | { name: 'settings' }
   | { name: 'inventory' }
