@@ -59,6 +59,7 @@ export type Course = {
   clozeAny?: boolean; // Lückensätze auch mit noch unbekannten Wörtern erstellen
   paused?: Paused; // gespeicherte, später fortsetzbare Lektion
   target?: { date: string; start: string; startLearned: number }; // Lernziel: bis wann alle Wörter gelernt sein sollen
+  goalToday?: { day: string; base: number }; // Stand der gelernten Wörter am Tagesanfang (für das Tagesziel)
   targetAsked?: boolean; // Erinnerung an das Lernziel wurde weggeklickt
   lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
