@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
 import { MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
@@ -23,6 +24,7 @@ const skipRoute = (id: string, s: Section): Route => ({ name: 'lesson', id, node
 
 export function Course({ data, update, go, back, replace, id, tab = 'learn', sec }: ScreenProps & { id: string; tab?: CourseTab; sec?: number }) {
   const t = useTheme();
+  const insets = useSafeAreaInsets();
   const c = data.courses.find((x) => x.id === id);
   if (!c) return <TopBar onBack={back} />;
   const setCourse: SetCourse = (fn) => update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? fn(x) : x)) }));
@@ -52,7 +54,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingTop: 8, paddingBottom: 6 }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingTop: 8, paddingBottom: Math.max(6, insets.bottom - 8) }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
