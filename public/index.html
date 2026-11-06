@@ -29,17 +29,49 @@
           background-color: #111917;
         }
       }
+      /* Wichtig: KEIN overflow:hidden auf html/body, sonst schneidet iOS bei der (zu kleinen) Fensterhöhe ab.
+         --app-h = echte Bildschirmhöhe, wird unten per Skript gesetzt. */
       body {
-        overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: var(--app-h, 100%);
         -webkit-tap-highlight-color: transparent;
         overscroll-behavior: none;
       }
       #root {
         display: flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
         height: 100%;
+        overflow: hidden;
         flex: 1;
       }
     </style>
+    <script>
+      // iOS meldet in der Home-Bildschirm-App eine um die Statusleiste zu kleine Fensterhöhe (innerHeight).
+      // Darum die echte Bildschirmhöhe verwenden, solange sie nur wenig größer ist.
+      (function () {
+        var root = document.documentElement;
+        function set() {
+          try {
+            var standalone = window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+            var portrait = window.innerHeight >= window.innerWidth;
+            var full = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
+            var diff = full - window.innerHeight;
+            if (standalone && diff > 0 && diff <= 100) root.style.setProperty('--app-h', full + 'px');
+            else root.style.removeProperty('--app-h');
+          } catch (e) {}
+        }
+        set();
+        window.addEventListener('resize', set);
+        window.addEventListener('orientationchange', function () { setTimeout(set, 250); });
+      })();
+    </script>
   </head>
 
   <body>
