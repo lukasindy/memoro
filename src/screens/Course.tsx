@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
-import { addDays, addMonths, fmtDate, parseDate, targetPlan, MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
+import { fmtDate, parseDate, targetPlan, MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { canSpeak } from '../platform';
 import { Stars, starsFor } from './Stars';
 import { clozeStatus, codeOf } from '../data/generate';
@@ -155,13 +155,6 @@ function TargetSettings({ c, setCourse }: { c: CourseT; setCourse: SetCourse }) 
     setBad(false);
   };
   const today = todayKey();
-  const quick: [string, string][] = [
-    ['2 Wochen', addDays(today, 14)],
-    ['1 Monat', addMonths(today, 1)],
-    ['2 Monate', addMonths(today, 2)],
-    ['3 Monate', addMonths(today, 3)],
-    ['6 Monate', addMonths(today, 6)],
-  ];
   const apply = () => {
     const d = parseDate(text);
     if (!d || d <= today) {
@@ -173,7 +166,7 @@ function TargetSettings({ c, setCourse }: { c: CourseT; setCourse: SetCourse }) 
   return (
     <Panel>
       <H2>Lernziel</H2>
-      <P muted>Bis wann willst du alle Wörter dieses Kurses gelernt haben? Memoro zeigt dir auf der Lernen-Seite, wie viele Wörter du pro Tag schaffen musst.</P>
+      <P muted>Bis wann willst du alle Wörter dieses Kurses gelernt haben? Auf der Lernen-Seite siehst du, wie viele Wörter du pro Tag schaffen musst.</P>
       {c.target ? (
         <View style={{ backgroundColor: t.rightBg, borderRadius: 14, padding: 12, gap: 4 }}>
           <Text style={{ color: t.ink, fontSize: 16, fontWeight: '900' }}>Aktuell: bis {fmtDate(c.target.date)}</Text>
@@ -182,22 +175,7 @@ function TargetSettings({ c, setCourse }: { c: CourseT; setCourse: SetCourse }) 
       ) : (
         <Text style={{ color: t.muted, fontSize: 14 }}>Noch kein Lernziel gesetzt.</Text>
       )}
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {quick.map(([label, date]) => {
-          const on = c.target?.date === date;
-          return (
-            <Pressable
-              key={label}
-              accessibilityRole="button"
-              onPress={() => setTarget(date)}
-              style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, borderWidth: 2, borderColor: on ? t.primary : t.line, backgroundColor: on ? t.primary : 'transparent' }}
-            >
-              <Text style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 14 }}>in {label}</Text>
-            </Pressable>
-          );
-        })}
-      </View>
-      <Field label="Oder eigenes Datum (TT.MM.JJJJ)" value={text} onChangeText={(v) => { setText(v); setBad(false); }} placeholder="z. B. 24.12.2026" keyboardType="numbers-and-punctuation" />
+      <Field label="Bis wann willst du alle Wörter können? (TT.MM.JJJJ)" value={text} onChangeText={(v) => { setText(v); setBad(false); }} placeholder="z. B. 24.12.2026" keyboardType="numbers-and-punctuation" />
       {bad && <Text style={{ color: t.wrong, fontSize: 13 }}>Bitte ein Datum in der Zukunft eingeben, z. B. 24.12.2026.</Text>}
       <Btn kind="secondary" label="Datum übernehmen" onPress={apply} disabled={!text.trim()} />
       {c.target && <Btn kind="secondary" label="Lernziel entfernen" onPress={() => setCourse((x) => ({ ...x, target: undefined }))} />}
