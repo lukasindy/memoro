@@ -82,15 +82,6 @@ export function Inventory({ data, update, back }: ScreenProps) {
         <View style={{ height: 10, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.12)', overflow: 'hidden' }}>
           <View style={{ height: '100%', width: `${Math.round(lv.progress * 100)}%`, backgroundColor: t.onCard }} />
         </View>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Belohnungen ansehen"
-          onPress={() => setView('rewards')}
-          style={({ pressed }) => ({ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: t.onCard, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 9, opacity: pressed ? 0.85 : 1 })}
-        >
-          <Text style={{ fontSize: 16 }}>🎁</Text>
-          <Text style={{ color: t.card, fontSize: 15, fontWeight: '900' }}>Belohnungen ansehen</Text>
-        </Pressable>
       </View>
 
       {/* Auswahl per Emoji */}

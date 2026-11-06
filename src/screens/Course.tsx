@@ -69,7 +69,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'max(0px, calc(env(safe-area-inset-bottom, 0px) - var(--gap, 0px)))' : insets.bottom) as any }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'env(safe-area-inset-bottom, 0px)' : insets.bottom) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
@@ -96,6 +96,11 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
 function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetCourse; openSettings: () => void }) {
   const t = useTheme();
   const plan = targetPlan(c);
+  const dayNow = todayKey();
+  const learnedNow = c.words.filter((w) => w.lp).length;
+  useEffect(() => {
+    if (c.target && c.goalToday?.day !== dayNow) setCourse((x) => ({ ...x, goalToday: { day: dayNow, base: x.words.filter((w) => w.lp).length } }));
+  }, [c.target, c.goalToday?.day, dayNow]);
   if (!plan) {
     if (c.targetAsked || c.words.length < MIN_WORDS) return null;
     return (
@@ -131,6 +136,10 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
       : plan.daysLeft === 0
         ? `Heute ist es so weit, noch ${plan.remaining} Wörter.`
         : `Noch ${plan.remaining} Wörter in ${plan.daysLeft} ${plan.daysLeft === 1 ? 'Tag' : 'Tagen'}, etwa ${plan.perDay} pro Tag.`;
+  const base = c.goalToday?.day === dayNow ? c.goalToday.base : learnedNow;
+  const dayGoal = late || plan.daysLeft === 0 ? plan.remaining + (learnedNow - base) : Math.ceil((plan.total - base) / plan.daysLeft);
+  const todayLeft = Math.max(0, dayGoal - (learnedNow - base));
+  const todayLine = done ? null : todayLeft > 0 ? `Heute noch ${todayLeft} ${todayLeft === 1 ? 'Wort' : 'Wörter'} lernen, um im Plan zu bleiben.` : 'Tagesziel erreicht! Für heute bist du im Plan.';
   const sub = done ? null : late ? 'Passe das Datum in den Einstellungen an.' : plan.behind > 0 ? `Du liegst etwa ${plan.behind} Wörter hinter dem Plan.` : 'Du liegst im Plan.';
   return (
     <Pressable
@@ -151,6 +160,7 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
         </View>
         <Ionicons name="chevron-forward" size={18} color={t.muted} />
       </View>
+      {todayLine && <Text style={{ color: t.ink, fontSize: 15, fontWeight: '900' }}>{todayLine}</Text>}
       <Text style={{ color: t.ink, fontSize: 14, fontWeight: '700' }}>{line}</Text>
       {sub && <Text style={{ color: t.muted, fontSize: 13 }}>{sub}</Text>}
     </Pressable>
