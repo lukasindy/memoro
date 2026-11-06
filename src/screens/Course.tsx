@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Route, ScreenProps } from '../nav';
 import { Btn, Field, H1, H2, P, Panel, Progress, StatPills, TopBar, confirm, notify, useTheme } from '../ui';
-import { GOAL_BONUS, goalTarget, MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
+import { addDays, addMonths, fmtDate, parseDate, targetPlan, MIX_BASE_WORDS, scaledMix, todayKey, MIN_WORDS, PASS, PathNode, SKIP_PASS, Section, buildPath, effective, estimateDifficulty, freeSlots, releasePending } from '../engine';
 import { canSpeak } from '../platform';
 import { Stars, starsFor } from './Stars';
 import { clozeStatus, codeOf } from '../data/generate';
@@ -37,7 +37,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
       <ScrollView key={tab} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} keyboardShouldPersistTaps="handled">
         <View style={{ width: '100%', maxWidth: 620, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 40, gap: 20 }}>
           <TopBar onBack={back} right={<StatPills streak={data.streak.count} xp={data.xp} saved={data.streakSaved === todayKey()} boost={data.boost} onInventory={() => go({ name: 'inventory' })} hasItems={data.boosters > 0 || data.screenMinutes > 0} />} />
-          {tab === 'learn' && <GoalCard data={data} update={update} />}
+          {tab === 'learn' && <LearnGoal c={c} setCourse={setCourse} openSettings={() => setTab('settings')} />}
           {tab === 'learn' && <LearnTab c={c} go={go} sec={sec} setSec={setSec} openVocab={() => setTab('vocab')} />}
           {tab === 'vocab' && <VocabTab c={c} go={go} setCourse={setCourse} data={data} update={update} />}
           {tab === 'stats' && <StatsTab c={c} />}
@@ -78,53 +78,130 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
   );
 }
 
-// ---------- Tagesziel ----------
+// ---------- Lernziel ----------
 
-const GOALS = [30, 50, 100, 150];
-
-function GoalCard({ data, update }: { data: AppData; update: ScreenProps['update'] }) {
+function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetCourse; openSettings: () => void }) {
   const t = useTheme();
-  const [open, setOpen] = useState(false);
-  const target = goalTarget(data);
-  const today = data.daily?.day === todayKey() ? data.daily : { day: '', xp: 0, done: false };
-  const done = today.done || today.xp >= target;
-  const set = (g: number) => update((d) => ({ ...d, goal: g }));
+  const plan = targetPlan(c);
+  if (!plan) {
+    if (c.targetAsked || c.words.length < MIN_WORDS) return null;
+    return (
+      <View style={{ backgroundColor: t.surface, borderWidth: 1.5, borderColor: t.line, borderRadius: 20, padding: 14, gap: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: t.card, alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name="flag" size={22} color={t.onCard} />
+          </View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={{ color: t.ink, fontSize: 16, fontWeight: '900' }}>Setz dir ein Lernziel</Text>
+            <Text style={{ color: t.muted, fontSize: 14 }}>Bis wann willst du alle Wörter können? Memoro rechnet dir aus, wie viel du pro Tag schaffen musst.</Text>
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            <Btn label="Lernziel setzen" onPress={openSettings} />
+          </View>
+          <Pressable accessibilityRole="button" onPress={() => setCourse((x) => ({ ...x, targetAsked: true }))} hitSlop={8} style={{ paddingHorizontal: 10, paddingVertical: 8 }}>
+            <Text style={{ color: t.muted, fontSize: 15, fontWeight: '700' }}>Nicht jetzt</Text>
+          </Pressable>
+        </View>
+        <Text style={{ color: t.muted, fontSize: 12 }}>Du kannst das Lernziel jederzeit in den Einstellungen eintragen.</Text>
+      </View>
+    );
+  }
+  const done = plan.remaining === 0;
+  const late = plan.overdue;
+  const ok = done || (!late && plan.behind === 0);
+  const line = done
+    ? 'Geschafft, alle Wörter sind gelernt!'
+    : late
+      ? `Das Ziel-Datum ist vorbei, noch ${plan.remaining} Wörter offen.`
+      : plan.daysLeft === 0
+        ? `Heute ist es so weit, noch ${plan.remaining} Wörter.`
+        : `Noch ${plan.remaining} Wörter in ${plan.daysLeft} ${plan.daysLeft === 1 ? 'Tag' : 'Tagen'}, etwa ${plan.perDay} pro Tag.`;
+  const sub = done ? null : late ? 'Passe das Datum in den Einstellungen an.' : plan.behind > 0 ? `Du liegst etwa ${plan.behind} Wörter hinter dem Plan.` : 'Du liegst im Plan.';
   return (
-    <View style={{ backgroundColor: done ? t.rightBg : t.surface, borderWidth: 1.5, borderColor: done ? t.right : t.line, borderRadius: 20, padding: 14, gap: 10 }}>
-      <Pressable accessibilityRole="button" accessibilityLabel="Tagesziel ändern" onPress={() => setOpen(!open)} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: done ? t.right : t.card, alignItems: 'center', justifyContent: 'center' }}>
-          <Ionicons name={done ? 'checkmark' : 'flag'} size={24} color={done ? '#FFFFFF' : t.onCard} />
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Lernziel ändern"
+      onPress={openSettings}
+      style={{ backgroundColor: ok ? t.rightBg : t.surface, borderWidth: 1.5, borderColor: ok ? t.right : t.line, borderRadius: 20, padding: 14, gap: 8 }}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: ok ? t.right : t.card, alignItems: 'center', justifyContent: 'center' }}>
+          <Ionicons name={done ? 'checkmark' : 'flag'} size={24} color={ok ? '#FFFFFF' : t.onCard} />
         </View>
         <View style={{ flex: 1, gap: 6 }}>
           <Text style={{ color: t.ink, fontSize: 16, fontWeight: '900' }}>
-            {done ? 'Tagesziel geschafft!' : 'Tagesziel'} <Text style={{ color: t.muted, fontWeight: '700' }}>{Math.min(today.xp, 9999)} / {target} XP</Text>
+            Lernziel <Text style={{ color: t.muted, fontWeight: '700' }}>bis {fmtDate(c.target!.date)}</Text>
           </Text>
-          <Progress value={today.xp / target} color={done ? t.right : t.card} />
+          <Progress value={plan.total ? plan.learned / plan.total : 0} color={ok ? t.right : t.card} />
         </View>
-        <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={t.muted} />
-      </Pressable>
-      {!done && !open && <Text style={{ color: t.muted, fontSize: 13 }}>Erreichst du es, gibt es +{GOAL_BONUS} Bonus-XP.</Text>}
-      {open && (
-        <View style={{ gap: 8 }}>
-          <Text style={{ color: t.muted, fontSize: 14 }}>Wie viele XP willst du heute schaffen? „Auto“ passt sich deinem Level an.</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-            {[0, ...GOALS].map((g) => {
-              const on = data.goal === g;
-              return (
-                <Pressable
-                  key={g}
-                  accessibilityRole="button"
-                  onPress={() => set(g)}
-                  style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, borderWidth: 2, borderColor: on ? t.primary : t.line, backgroundColor: on ? t.primary : 'transparent' }}
-                >
-                  <Text style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 14 }}>{g === 0 ? `Auto (${goalTarget({ ...data, goal: 0 })})` : `${g} XP`}</Text>
-                </Pressable>
-              );
-            })}
-          </View>
+        <Ionicons name="chevron-forward" size={18} color={t.muted} />
+      </View>
+      <Text style={{ color: t.ink, fontSize: 14, fontWeight: '700' }}>{line}</Text>
+      {sub && <Text style={{ color: t.muted, fontSize: 13 }}>{sub}</Text>}
+    </Pressable>
+  );
+}
+
+function TargetSettings({ c, setCourse }: { c: CourseT; setCourse: SetCourse }) {
+  const t = useTheme();
+  const [text, setText] = useState('');
+  const [bad, setBad] = useState(false);
+  const plan = targetPlan(c);
+  const setTarget = (date: string) => {
+    setCourse((x) => ({ ...x, target: { date, start: todayKey(), startLearned: x.words.filter((w) => w.lp).length }, targetAsked: true }));
+    setText('');
+    setBad(false);
+  };
+  const today = todayKey();
+  const quick: [string, string][] = [
+    ['2 Wochen', addDays(today, 14)],
+    ['1 Monat', addMonths(today, 1)],
+    ['2 Monate', addMonths(today, 2)],
+    ['3 Monate', addMonths(today, 3)],
+    ['6 Monate', addMonths(today, 6)],
+  ];
+  const apply = () => {
+    const d = parseDate(text);
+    if (!d || d <= today) {
+      setBad(true);
+      return;
+    }
+    setTarget(d);
+  };
+  return (
+    <Panel>
+      <H2>Lernziel</H2>
+      <P muted>Bis wann willst du alle Wörter dieses Kurses gelernt haben? Memoro zeigt dir auf der Lernen-Seite, wie viele Wörter du pro Tag schaffen musst.</P>
+      {c.target ? (
+        <View style={{ backgroundColor: t.rightBg, borderRadius: 14, padding: 12, gap: 4 }}>
+          <Text style={{ color: t.ink, fontSize: 16, fontWeight: '900' }}>Aktuell: bis {fmtDate(c.target.date)}</Text>
+          {plan && <Text style={{ color: t.muted, fontSize: 14 }}>{plan.remaining === 0 ? 'Alle Wörter sind gelernt.' : `Noch ${plan.remaining} Wörter, etwa ${plan.perDay} pro Tag.`}</Text>}
         </View>
+      ) : (
+        <Text style={{ color: t.muted, fontSize: 14 }}>Noch kein Lernziel gesetzt.</Text>
       )}
-    </View>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        {quick.map(([label, date]) => {
+          const on = c.target?.date === date;
+          return (
+            <Pressable
+              key={label}
+              accessibilityRole="button"
+              onPress={() => setTarget(date)}
+              style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, borderWidth: 2, borderColor: on ? t.primary : t.line, backgroundColor: on ? t.primary : 'transparent' }}
+            >
+              <Text style={{ color: on ? t.onPrimary : t.ink, fontWeight: '800', fontSize: 14 }}>in {label}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      <Field label="Oder eigenes Datum (TT.MM.JJJJ)" value={text} onChangeText={(v) => { setText(v); setBad(false); }} placeholder="z. B. 24.12.2026" keyboardType="numbers-and-punctuation" />
+      {bad && <Text style={{ color: t.wrong, fontSize: 13 }}>Bitte ein Datum in der Zukunft eingeben, z. B. 24.12.2026.</Text>}
+      <Btn kind="secondary" label="Datum übernehmen" onPress={apply} disabled={!text.trim()} />
+      {c.target && <Btn kind="secondary" label="Lernziel entfernen" onPress={() => setCourse((x) => ({ ...x, target: undefined }))} />}
+    </Panel>
   );
 }
 
@@ -382,7 +459,7 @@ function PathStep(props: { node: PathNode; color: string; best?: number; paused?
         >
           {/* Karteikarte: Farbstreifen oben, rote Kopflinie, blaue Zeilen */}
           {lesson && (
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: radius, overflow: 'hidden', borderWidth: locked ? 2 : 0, borderStyle: 'dashed', borderColor: t.muted }}>
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: current ? radius - 3 : radius, overflow: 'hidden', borderWidth: locked ? 2 : 0, borderStyle: 'dashed', borderColor: t.muted }}>
               <View style={{ height: 10, backgroundColor: locked ? t.muted : color, opacity: locked ? 0.35 : 1 }} />
               <View style={{ height: 2, marginTop: 6, backgroundColor: '#E2605A', opacity: locked ? 0.2 : 0.65 }} />
               {[0, 1, 2].map((i) => (
@@ -814,6 +891,8 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
           </View>
         </View>
       </Panel>
+
+      <TargetSettings c={c} setCourse={setCourse} />
 
       <H2>Lektionen</H2>
       <View style={{ flexDirection: 'row', gap: 8 }}>
