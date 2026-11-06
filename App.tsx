@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, BackHandler, Platform, Pressable, ScrollView, Text, View, useColorScheme } from 'react-native';
+import { ActivityIndicator, BackHandler, Platform, Pressable, ScrollView, View, useColorScheme } from 'react-native';
+import { Text } from './src/i18n';
 import type { ScrollViewInstance } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +12,7 @@ import { Course } from './src/screens/Course';
 import { AddWords } from './src/screens/AddWords';
 import { Lesson, Result } from './src/screens/Lesson';
 import { Inventory } from './src/screens/Inventory';
+import { RawText, setUi } from './src/i18n';
 import { alreadyTried, applyUpdate, checkForUpdate, onAppVisible } from './src/update';
 
 export default function App() {
@@ -37,6 +39,7 @@ export default function App() {
   const back = useCallback(() => setStack((s) => (s.length > 1 ? s.slice(0, -1) : s)), []);
 
   const route = stack[stack.length - 1];
+  if (data) setUi(data.ui ?? 'de');
 
   // Auto-Update für die Web-App (z. B. vom iPhone-Homebildschirm)
   const [newVersion, setNewVersion] = useState<string | null>(null);
@@ -71,7 +74,19 @@ export default function App() {
   }, [stack.length, back]);
 
   let screen: React.ReactNode = <ActivityIndicator color={theme.primary} style={{ marginTop: 80 }} />;
-  if (data) {
+  if (data && !data.ui) {
+    screen = (
+      <View style={{ flex: 1, justifyContent: 'center', gap: 14, paddingVertical: 60 }}>
+        <RawText style={{ color: theme.ink, fontSize: 34, fontWeight: '800', textAlign: 'center' }}>Memoro</RawText>
+        <RawText style={{ color: theme.muted, fontSize: 16, textAlign: 'center', marginBottom: 12 }}>Sprache wählen · Choose your language</RawText>
+        {(['de', 'en'] as const).map((l) => (
+          <Pressable key={l} accessibilityRole="button" onPress={() => update((d) => ({ ...d, ui: l }))} style={{ backgroundColor: theme.primary, borderRadius: 14, minHeight: 56, alignItems: 'center', justifyContent: 'center' }}>
+            <RawText style={{ color: theme.onPrimary, fontSize: 18, fontWeight: '800' }}>{l === 'de' ? 'Deutsch' : 'English'}</RawText>
+          </Pressable>
+        ))}
+      </View>
+    );
+  } else if (data) {
     const p: ScreenProps = { data, update, go, replace, back };
     switch (route.name) {
       case 'home': screen = <Home {...p} />; break;
@@ -101,11 +116,11 @@ export default function App() {
               <Text style={{ color: theme.onCard, fontWeight: '900', fontSize: 14, textDecorationLine: 'underline' }}>Aktualisieren</Text>
             </Pressable>
           )}
-          {route.name === 'course' && data ? (
+          {route.name === 'course' && data?.ui ? (
             // Kursseite hat eigene Scrollfläche und untere Navigationsleiste
             screen
           ) : (
-            <ScrollView ref={scroll} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} keyboardShouldPersistTaps="handled">
+            <ScrollView key={data?.ui} ref={scroll} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} keyboardShouldPersistTaps="handled">
               <View style={{ width: '100%', maxWidth: 620, paddingHorizontal: 20, paddingTop: 12, paddingBottom: 40, flexGrow: 1 }}>
                 {screen}
               </View>
