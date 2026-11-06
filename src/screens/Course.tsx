@@ -129,19 +129,11 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
   const done = plan.remaining === 0;
   const late = plan.overdue;
   const ok = done || (!late && plan.behind === 0);
-  const line = done
-    ? 'Geschafft, alle Wörter sind gelernt!'
-    : late
-      ? `Das Ziel-Datum ist vorbei, noch ${plan.remaining} Wörter offen.`
-      : plan.daysLeft === 0
-        ? `Heute ist es so weit, noch ${plan.remaining} Wörter.`
-        : `Noch ${plan.remaining} Wörter in ${plan.daysLeft} ${plan.daysLeft === 1 ? 'Tag' : 'Tagen'}, etwa ${plan.perDay} pro Tag.`;
   const base = c.goalToday?.day === dayNow ? c.goalToday.base : learnedNow;
   const dayGoal = late || plan.daysLeft === 0 ? plan.remaining + (learnedNow - base) : Math.ceil((plan.total - base) / plan.daysLeft);
   const todayLeft = Math.max(0, dayGoal - (learnedNow - base));
   const doneToday = Math.min(dayGoal, Math.max(0, learnedNow - base));
   const lessonsToday = Math.max(1, Math.ceil(dayGoal / Math.max(1, c.wordsPerLesson)));
-  const sub = done ? null : late ? 'Passe das Datum in den Einstellungen an.' : plan.behind > 0 ? `Du liegst etwa ${plan.behind} Wörter hinter dem Plan.` : 'Du liegst im Plan.';
   return (
     <Pressable
       accessibilityRole="button"
@@ -173,14 +165,12 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
       <View style={{ gap: 4 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ color: t.muted, fontSize: 12, fontWeight: '700' }}>Wörter gelernt</Text>
-          <Text style={{ color: t.muted, fontSize: 12, fontWeight: '700' }}>{plan.learned} / {plan.total}</Text>
+          <Text style={{ color: t.muted, fontSize: 12, fontWeight: '700' }}>{plan.learned} / {plan.total} ({ok ? 'im Plan' : 'nicht im Plan'})</Text>
         </View>
         <View style={{ height: 4, borderRadius: 2, backgroundColor: t.line, overflow: 'hidden' }}>
           <View style={{ height: '100%', width: `${Math.round((plan.total ? plan.learned / plan.total : 0) * 100)}%`, backgroundColor: ok ? t.right : t.card }} />
         </View>
       </View>
-      <Text style={{ color: t.ink, fontSize: 14, fontWeight: '700' }}>{line}</Text>
-      {sub && <Text style={{ color: t.muted, fontSize: 13 }}>{sub}</Text>}
     </Pressable>
   );
 }
