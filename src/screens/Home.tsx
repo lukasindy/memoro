@@ -26,7 +26,7 @@ function viewportInfo() {
     const top = cs.paddingTop;
     const bottom = cs.paddingBottom;
     document.body.removeChild(el);
-    return `Fenster ${w.innerWidth}×${w.innerHeight} · Bildschirm ${w.screen.width}×${w.screen.height} · Rand oben ${top} unten ${bottom} · ${w.navigator.standalone ? 'App' : 'Browser'} · App-Höhe ${document.documentElement.style.getPropertyValue('--app-h') || '–'}`;
+    return `Fenster ${w.innerWidth}×${w.innerHeight} · Bildschirm ${w.screen.width}×${w.screen.height} · Rand oben ${top} unten ${bottom} · ${w.navigator.standalone ? 'App' : 'Browser'} · Lücke ${document.documentElement.style.getPropertyValue('--gap') || '–'} · Dok ${document.documentElement.scrollHeight}`;
   } catch {
     return '';
   }
@@ -473,7 +473,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 3.0 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 3.1 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
       {Platform.OS === 'web' && <P muted style={{ textAlign: 'center', fontSize: 11 }}>{viewportInfo()}</P>}
     </View>
   );

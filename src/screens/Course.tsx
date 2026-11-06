@@ -26,6 +26,18 @@ const skipRoute = (id: string, s: Section): Route => ({ name: 'lesson', id, node
 export function Course({ data, update, go, back, replace, id, tab = 'learn', sec }: ScreenProps & { id: string; tab?: CourseTab; sec?: number }) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
+  // Web (iPhone-App): Streifen unter dem Fenster in der Farbe der Tab-Leiste, damit sie bis ganz unten zu reichen scheint
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    const el = document.documentElement;
+    const prev = [el.style.backgroundColor, document.body.style.backgroundColor];
+    el.style.backgroundColor = t.surface;
+    document.body.style.backgroundColor = t.surface;
+    return () => {
+      el.style.backgroundColor = prev[0];
+      document.body.style.backgroundColor = prev[1];
+    };
+  }, [t.surface]);
   const c = data.courses.find((x) => x.id === id);
   if (!c) return <TopBar onBack={back} />;
   const setCourse: SetCourse = (fn) => update((d) => ({ ...d, courses: d.courses.map((x) => (x.id === id ? fn(x) : x)) }));
@@ -56,7 +68,7 @@ export function Course({ data, update, go, back, replace, id, tab = 'learn', sec
         </View>
       </ScrollView>
 
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'env(safe-area-inset-bottom, 0px)' : insets.bottom) as any }}>
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderColor: t.line, backgroundColor: t.surface, paddingBottom: (Platform.OS === 'web' ? 'max(0px, calc(env(safe-area-inset-bottom, 0px) - var(--gap, 0px)))' : insets.bottom) as any }}>
         {TABS.map((x) => {
           const on = x.key === tab;
           return (
@@ -446,8 +458,8 @@ function PathStep(props: { node: PathNode; color: string; best?: number; paused?
             </View>
           )}
           {lesson && done && best != null ? (
-            <View style={{ marginTop: 14, backgroundColor: '#FBF7EA', paddingHorizontal: 6, borderRadius: 8 }}>
-              <Stars n={starsFor(best)} size={20} gap={1} />
+            <View style={{ marginTop: 14 }}>
+              <Stars n={starsFor(best)} size={20} gap={3} />
             </View>
           ) : lesson ? (
             <View style={{ marginTop: 12, backgroundColor: locked ? 'transparent' : '#FBF7EA', borderRadius: 14, paddingHorizontal: 6 }}>

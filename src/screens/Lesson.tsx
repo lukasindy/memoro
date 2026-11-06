@@ -228,9 +228,12 @@ export function Lesson({ data, update, back, replace, id, node }: ScreenProps & 
         <ComboBadge n={combo} shield={shieldsLeft > 0 && combo >= COMBO_STEP} />
       </View>
       {flash && (
-        <View style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: t.surface, borderWidth: 2, borderColor: flash.color, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 8 }}>
-          <Ionicons name={flash.icon} size={20} color={flash.color} />
-          <Text style={{ color: t.ink, fontSize: 15, fontWeight: '900' }}>{flash.text}</Text>
+        // Schwebt über der Übung, damit nichts verrutscht
+        <View pointerEvents="none" style={{ position: 'absolute', top: 46, left: 0, right: 0, alignItems: 'center', zIndex: 20 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: t.surface, borderWidth: 2, borderColor: flash.color, borderRadius: 999, paddingHorizontal: 16, paddingVertical: 8, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 6 }}>
+            <Ionicons name={flash.icon} size={20} color={flash.color} />
+            <Text style={{ color: t.ink, fontSize: 15, fontWeight: '900' }}>{flash.text}</Text>
+          </View>
         </View>
       )}
 
@@ -696,18 +699,29 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, ext
   const note = passed ? notes[kind][0] : notes[kind][1];
   return (
     <View style={{ gap: 24, paddingTop: 30 }}>
-      <H1>{title}</H1>
-      {passed && <StarsBurst n={starsFor(pct)} />}
-      <View style={{ flexDirection: 'row', gap: 12 }}>
-        {[
-          [`${pct} %`, 'richtig'],
-          [String(errors), 'Fehler'],
-          [`+${xp}`, 'XP'],
-        ].map(([v, l]) => (
-          <Panel key={l} style={{ flex: 1, gap: 2, padding: 14, alignItems: 'center' }}>
-            <Text style={{ color: t.ink, fontSize: 26, fontWeight: '800' }}>{v}</Text>
+      <View style={{ backgroundColor: passed ? t.card : t.surface, borderWidth: passed ? 0 : 1.5, borderColor: t.line, borderRadius: 30, paddingVertical: 28, paddingHorizontal: 20, alignItems: 'center', gap: 16, overflow: 'hidden' }}>
+        <View style={{ position: 'absolute', right: -50, top: -50, width: 180, height: 180, borderRadius: 90, backgroundColor: 'rgba(255,255,255,0.07)' }} />
+        <View style={{ position: 'absolute', left: -40, bottom: -60, width: 150, height: 150, borderRadius: 75, backgroundColor: 'rgba(255,255,255,0.05)' }} />
+        <View style={{ width: 76, height: 76, borderRadius: 38, backgroundColor: passed ? t.onCard : t.line, alignItems: 'center', justifyContent: 'center' }}>
+          <Ionicons name={passed ? (pct === 100 ? 'trophy' : 'ribbon') : 'refresh'} size={38} color={passed ? t.card : t.muted} />
+        </View>
+        <Text style={{ color: passed ? t.onCard : t.ink, fontSize: 32, fontWeight: '900', letterSpacing: -0.8, textAlign: 'center' }}>{title}</Text>
+        {passed && <StarsBurst n={starsFor(pct)} />}
+        <Text style={{ color: passed ? t.onCard : t.muted, fontSize: 15, lineHeight: 22, textAlign: 'center', opacity: passed ? 0.9 : 1 }}>{note}</Text>
+      </View>
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        {(
+          [
+            ['checkmark-circle', `${pct} %`, 'richtig', t.right],
+            ['close-circle', String(errors), 'Fehler', errors > 0 ? t.wrong : t.muted],
+            ['flash', `+${xp}`, 'XP', '#D99A00'],
+          ] as [keyof typeof Ionicons.glyphMap, string, string, string][]
+        ).map(([icon, v, l, col]) => (
+          <View key={l} style={{ flex: 1, backgroundColor: t.surface, borderWidth: 1.5, borderColor: t.line, borderRadius: 20, paddingVertical: 14, alignItems: 'center', gap: 2 }}>
+            <Ionicons name={icon} size={22} color={col} />
+            <Text style={{ color: t.ink, fontSize: 24, fontWeight: '900' }}>{v}</Text>
             <P muted>{l}</P>
-          </Panel>
+          </View>
         ))}
       </View>
       {extra && extra.combo >= 2 && (
@@ -742,43 +756,6 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, ext
           <P>XP-Booster aktiv: doppelte XP für diese Lektion.</P>
         </View>
       )}
-      {up && (
-        <View style={{ backgroundColor: t.card, borderRadius: 22, padding: 18, gap: 10, alignItems: 'center' }}>
-          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: t.onCard, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ color: t.card, fontSize: 26, fontWeight: '900' }}>{up.to}</Text>
-          </View>
-          <Text style={{ color: t.onCard, fontSize: 22, fontWeight: '900' }}>Level {up.to} erreicht!</Text>
-          <Text style={{ color: t.onCard, fontSize: 15, fontWeight: '700' }}>Dein Bonus:</Text>
-          {up.freezes > 0 && (
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Ionicons name="snow" size={18} color={t.onCard} />
-              <Text style={{ color: t.onCard, fontSize: 15 }}>
-                +{up.freezes} Streak-Schutz (rettet einen verpassten Tag)
-              </Text>
-            </View>
-          )}
-          {up.boost && (
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Ionicons name="rocket" size={18} color={t.onCard} />
-              <Text style={{ color: t.onCard, fontSize: 15 }}>+1 XP-Booster im Inventar (doppelte XP für 3 Lektionen)</Text>
-            </View>
-          )}
-          {up.minutes > 0 && (
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Ionicons name="phone-portrait" size={18} color={t.onCard} />
-              <Text style={{ color: t.onCard, fontSize: 15, fontWeight: '800' }}>+{up.minutes} Minuten Social-Media-Zeit</Text>
-            </View>
-          )}
-          {up.shields > 0 && (
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Ionicons name="shield-checkmark" size={18} color={t.onCard} />
-              <Text style={{ color: t.onCard, fontSize: 15 }}>+{up.shields} Combo-Schutz (rettet deine Serie bei einem Fehler)</Text>
-            </View>
-          )}
-          {up.title && <Text style={{ color: t.onCard, fontSize: 16, fontWeight: '900' }}>Neuer Titel: {up.title}</Text>}
-          {up.freezes === 0 && <Text style={{ color: t.onCard, fontSize: 13, opacity: 0.8 }}>Streak-Schutz ist schon voll (max. 3).</Text>}
-        </View>
-      )}
       <View style={{ gap: 6 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ color: t.ink, fontWeight: '800', fontSize: 15 }}>Level {lv.level} · {levelTitle(lv.level)}</Text>
@@ -786,7 +763,6 @@ export function Result({ total, errors, xp, back, kind, passed, boosted, up, ext
         </View>
         <Progress value={lv.progress} color={t.card} />
       </View>
-      <P muted>{note}</P>
       <Btn label="Weiter" onPress={back} />
     </View>
   );
