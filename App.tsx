@@ -89,7 +89,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <ThemeCtx.Provider value={theme}>
-        <SafeAreaView edges={route.name === 'course' ? ['top', 'left', 'right'] : undefined} style={{ flex: 1, backgroundColor: theme.bg }}>
+        <Root route={route} bg={theme.bg}>
           <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
           {newVersion && (
             <Pressable
@@ -111,8 +111,28 @@ export default function App() {
               </View>
             </ScrollView>
           )}
-        </SafeAreaView>
+        </Root>
       </ThemeCtx.Provider>
     </SafeAreaProvider>
+  );
+}
+
+// Kursseite im Web: Ränder direkt per CSS env(), die Tab-Leiste soll bis ganz unten reichen.
+// Alle anderen Bildschirme nutzen den normalen SafeAreaView.
+function Root({ route, bg, children }: { route: Route; bg: string; children: React.ReactNode }) {
+  if (route.name === 'course' && Platform.OS === 'web') {
+    const style: any = {
+      flex: 1,
+      backgroundColor: bg,
+      paddingTop: 'env(safe-area-inset-top)',
+      paddingLeft: 'env(safe-area-inset-left)',
+      paddingRight: 'env(safe-area-inset-right)',
+    };
+    return <View style={style}>{children}</View>;
+  }
+  return (
+    <SafeAreaView edges={route.name === 'course' ? ['top', 'left', 'right'] : undefined} style={{ flex: 1, backgroundColor: bg }}>
+      {children}
+    </SafeAreaView>
   );
 }
