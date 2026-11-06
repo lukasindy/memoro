@@ -15,6 +15,23 @@ import { Platform } from 'react-native';
 // Wortschatz weiter wächst (aktuell rund 3000 Wörter). Größere oder genaue Mengen gibt man von Hand ein.
 const QUICK_PICKS = [150, 300, 600, 1000];
 
+// Nur Web: Fenstergröße und Ränder anzeigen (Fehlersuche für die iPhone-Ansicht)
+function viewportInfo() {
+  try {
+    const w: any = window;
+    const el = document.createElement('div');
+    el.style.cssText = 'position:fixed;visibility:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0';
+    document.body.appendChild(el);
+    const cs = getComputedStyle(el);
+    const top = cs.paddingTop;
+    const bottom = cs.paddingBottom;
+    document.body.removeChild(el);
+    return `Fenster ${w.innerWidth}×${w.innerHeight} · Bildschirm ${w.screen.width}×${w.screen.height} · Rand oben ${top} unten ${bottom} · ${w.navigator.standalone ? 'App' : 'Browser'}`;
+  } catch {
+    return '';
+  }
+}
+
 // Begrüßungsfeld in beiden Farbmodi gleich: Tafelgrün mit weißer Schrift
 const HERO_BG = '#1F5E4E';
 const HERO_INK = '#FFFFFF';
@@ -230,7 +247,8 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
   const [count, setCount] = useState(Math.min(FREE_WORD_LIMIT, max));
   const [countText, setCountText] = useState('');
   const limitReached = !data.premium && data.courses.length >= FREE_COURSE_LIMIT;
-  const amount = data.premium ? count : Math.min(FREE_WORD_LIMIT, max);
+  const cap = data.premium ? max : Math.min(FREE_WORD_LIMIT, max); // Gratis: bis 1000 Wörter
+  const amount = Math.min(count, cap);
   const thirds = [0, 1, 2].map((i) => Math.round((amount * (i + 1)) / 3) - Math.round((amount * i) / 3));
 
   const blocked = () => {
@@ -338,9 +356,9 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
               <H2>{amount} Wörter</H2>
               {!data.premium && <Text style={{ color: t.muted, fontSize: 13, fontWeight: '700' }}>Gratis-Version</Text>}
             </View>
-            {data.premium ? (
+            {true ? (
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-                {QUICK_PICKS.filter((v) => v <= max).map((v) => (
+                {QUICK_PICKS.filter((v) => v <= cap).map((v) => (
                   <Pressable
                     key={v}
                     accessibilityRole="button"
@@ -362,7 +380,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
                       const digits = v.replace(/[^0-9]/g, '');
                       setCountText(digits);
                       const n = parseInt(digits, 10);
-                      if (n >= 1) setCount(Math.min(n, max));
+                      if (n >= 1) setCount(Math.min(n, cap));
                     }}
                     keyboardType="number-pad"
                     placeholder="z. B. 750"
@@ -371,14 +389,17 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
                     style={{ flex: 1, color: t.ink, backgroundColor: t.surface, borderWidth: 1.5, borderColor: t.line, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 9, fontSize: 16 }}
                   />
                 </View>
-                {parseInt(countText, 10) > max && (
-                  <P muted style={{ fontSize: 13 }}>Derzeit sind {max} Wörter im Grundwortschatz verfügbar, Memoro nimmt alle davon.</P>
+                {parseInt(countText, 10) > cap && (
+                  <P muted style={{ fontSize: 13 }}>
+                    {!data.premium && cap < max
+                      ? `In der Gratis-Version sind bis zu ${FREE_WORD_LIMIT} Wörter möglich, Memoro nimmt ${cap}. Mit Premium wählst du mehr.`
+                      : `Derzeit sind ${max} Wörter im Grundwortschatz verfügbar, Memoro nimmt alle davon.`}
+                  </P>
                 )}
                 {amount < MIN_WORDS && <P muted style={{ fontSize: 13 }}>Für Lektionen brauchst du mindestens {MIN_WORDS} Wörter.</P>}
               </View>
-            ) : (
-              <P muted>In der Gratis-Version bekommst du die {amount} wichtigsten Wörter. Mit Premium wählst du die Anzahl selbst.</P>
-            )}
+            ) : null}
+            {!data.premium && max > FREE_WORD_LIMIT && <P muted style={{ fontSize: 13 }}>Gratis-Version: bis zu {FREE_WORD_LIMIT} Wörter. Mit Premium wählst du bis zu {max}.</P>}
             <View style={{ flexDirection: 'row', gap: 8 }}>
               {['Leicht', 'Mittel', 'Schwer'].map((n, i) => (
                 <View key={n} style={{ flex: 1, backgroundColor: t.lvl[i], borderRadius: 12, paddingVertical: 8, alignItems: 'center' }}>
@@ -452,7 +473,8 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update(() => emptyData()))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 2.8 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 2.9 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      {Platform.OS === 'web' && <P muted style={{ textAlign: 'center', fontSize: 11 }}>{viewportInfo()}</P>}
     </View>
   );
 }
