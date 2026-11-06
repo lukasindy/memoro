@@ -121,8 +121,13 @@ export default function App() {
 // Alle anderen Bildschirme nutzen den normalen SafeAreaView.
 function Root({ route, bg, children }: { route: Route; bg: string; children: React.ReactNode }) {
   if (route.name === 'course' && Platform.OS === 'web') {
+    // fixed + alle Ränder 0: füllt auf dem iPhone immer den ganzen Bildschirm, egal wie hoch #root ist
     const style: any = {
-      flex: 1,
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
       backgroundColor: bg,
       paddingTop: 'env(safe-area-inset-top)',
       paddingLeft: 'env(safe-area-inset-left)',
