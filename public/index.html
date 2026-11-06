@@ -24,25 +24,20 @@
         height: 100%;
         background-color: #eef1ec;
       }
-      /* iPhone-App: Seite füllt immer den ganzen Bildschirm (wie in der Latein-App) */
-      html {
-        min-height: -webkit-fill-available;
-      }
-      body {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-      }
       @media (prefers-color-scheme: dark) {
         html,
         body {
           background-color: #111917;
         }
       }
+      /* iPhone-App: Seite füllt immer den ganzen Bildschirm (--app-h wird unten per Skript gesetzt) */
       body {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: var(--app-h, 100%);
         overflow: hidden;
         -webkit-tap-highlight-color: transparent;
         overscroll-behavior: none;
@@ -53,10 +48,30 @@
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
+        height: 100%;
         flex: 1;
       }
     </style>
+    <script>
+      // iOS meldet in der Home-Bildschirm-App oft eine zu kleine Höhe (unten bleibt ein leerer Streifen).
+      // Darum die echte Bildschirmhöhe verwenden, solange sie nur etwas größer ist als die gemeldete.
+      (function () {
+        var root = document.documentElement;
+        function set() {
+          try {
+            var standalone = window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+            var portrait = window.innerHeight >= window.innerWidth;
+            var full = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
+            var diff = full - window.innerHeight;
+            if (standalone && diff > 0 && diff <= 100) root.style.setProperty('--app-h', full + 'px');
+            else root.style.removeProperty('--app-h');
+          } catch (e) {}
+        }
+        set();
+        window.addEventListener('resize', set);
+        window.addEventListener('orientationchange', function () { setTimeout(set, 250); });
+      })();
+    </script>
   </head>
 
   <body>
