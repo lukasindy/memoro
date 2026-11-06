@@ -89,7 +89,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <ThemeCtx.Provider value={theme}>
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.bg }}>
+        <SafeAreaView edges={route.name === 'course' ? ['top', 'left', 'right'] : undefined} style={{ flex: 1, backgroundColor: theme.bg }}>
           <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
           {newVersion && (
             <Pressable
