@@ -33,6 +33,17 @@ export const DEFAULT_WORDS_PER_LESSON = 5;
 
 export const DEFAULT_LESSONS_PER_UNIT = 4;
 
+// Zwischenstand einer abgebrochenen Lektion ("Speichern und später fortsetzen")
+export type Paused = {
+  key: string; // Lernpfad-Knoten (oder "review")
+  queue: any[]; // Aufgabenliste inkl. schon angehängter Wiederholungen
+  pos: number; // nächste Aufgabe
+  total: number; // Aufgaben ohne Wiederholungen (für die Prozentrechnung)
+  results: [string, boolean][]; // Wort-Ergebnisse bisher
+  firstTry: number; // beim ersten Versuch richtig
+  savedAt: number;
+};
+
 export type Course = {
   id: string;
   name: string;
@@ -46,6 +57,7 @@ export type Course = {
   pending: { a: string; b: string }[]; // wegen Gratis-Limit geparkte Wörter
   gen?: { a: string; b: string }; // Sprachcodes, wenn automatisch erstellt (für Lückensätze)
   clozeAny?: boolean; // Lückensätze auch mit noch unbekannten Wörtern erstellen
+  paused?: Paused; // gespeicherte, später fortsetzbare Lektion
   lessons: number; // Anzahl absolvierter Lektionen
   createdAt: number;
 };
