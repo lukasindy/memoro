@@ -8,7 +8,7 @@ to afford|sich leisten|permitirse|se permettre|permettersi
 to alter|abändern|modificar|modifier|modificare
 to amuse|unterhalten|divertir|amuser|divertire
 to analyse|analysieren|analizar|analyser|analizzare
-to appeal|ansprechen|atraer|plaire|attrarre
+to appeal|ansprechen|resultar atractivo|plaire|piacere
 to appear|erscheinen|aparecer|apparaître|apparire
 to appreciate|wertschätzen|apreciar|apprécier|apprezzare
 to approach|sich nähern|acercarse|s'approcher|avvicinarsi
@@ -204,7 +204,7 @@ to stroll|schlendern|pasear|flâner|passeggiare
 to wander|umherirren|vagar|errer|vagare
 to rush|hetzen|precipitarse|se précipiter|precipitarsi
 to grumble|murren|refunfuñar|grogner|brontolare
-to giggle|kichern|reírse tontamente|glousser|ridacchiare
+to giggle|kichern|soltar risitas|glousser|ridacchiare
 to sigh|seufzen|suspirar|soupirer|sospirare
 to gasp|nach Luft schnappen|jadear|haleter|boccheggiare
 to sob|schluchzen|sollozar|sangloter|singhiozzare
@@ -214,7 +214,7 @@ to stutter|stottern|tartamudear|bégayer|balbettare
 to chatter|schwatzen|parlotear|jacasser|cianciare
 to rehearse|proben|ensayar|répéter|provare
 to perform on stage|auftreten|actuar en escena|monter sur scène|esibirsi in scena
-to applaud|Beifall spenden|aplaudir con entusiasmo|ovationner|acclamare
+to applaud|Beifall spenden|ovacionar|ovationner|acclamare
 to praise|loben|alabar|louer|lodare
 to scold|schimpfen|regañar|gronder|rimproverare
 to tease|necken|burlarse|taquiner|prendere in giro
@@ -322,8 +322,8 @@ factor|der Faktor|el factor|le facteur|il fattore
 failure|das Scheitern|el fracaso|l'échec|il fallimento
 faith|der Glaube|la fe|la foi|la fede
 fashion|die Mode|la moda|la mode|la moda
-feature|das Merkmal (Funktion)|la función|la fonctionnalité|la funzionalità
-feedback|die Rückmeldung|la opinión|le retour|il riscontro
+feature|das Merkmal (Funktion)|la prestación|la fonctionnalité|la funzionalità
+feedback|die Rückmeldung|la retroalimentación|le retour|il riscontro
 figure|die Zahl (Ziffer)|la cifra|le chiffre|la cifra
 finance|die Finanzen|las finanzas|les finances|la finanza
 flexibility|die Flexibilität|la flexibilidad|la flexibilité|la flessibilità
@@ -559,7 +559,6 @@ truth|die Wahrheit|la verdad|la vérité|la verità
 unity|die Einheit|la unidad|l'unité|l'unità
 urgency|die Dringlichkeit|la urgencia|l'urgence (caractère)|l'urgenza
 usage|die Verwendung|el uso|l'usage|l'uso
-utility|der Nutzen (Versorgung)|el servicio público|le service public|il servizio pubblico
 validity|die Gültigkeit|la validez|la validité|la validità
 value|der Wert|el valor|la valeur|il valore
 variable|die Variable|la variable|la variable|la variabile
@@ -637,7 +636,6 @@ elegant|elegant|elegante|élégant|elegante
 emotional|emotional|emocional|émotionnel|emotivo
 enormous|gewaltig|enorme|énorme|enorme
 essential|wesentlich|esencial|essentiel|essenziale
-eventual|schließlich|eventual|éventuel|eventuale
 evident|augenscheinlich|evidente|évident|evidente
 exact|exakt|exacto|exact|esatto
 excellent|ausgezeichnet|excelente|excellent|eccellente
@@ -745,7 +743,6 @@ chimney|der Schornstein|la chimenea (tubo)|la cheminée (conduit)|il camino (can
 cigarette|die Zigarette|el cigarrillo|la cigarette|la sigaretta
 clipboard|das Klemmbrett|el portapapeles|le porte-bloc|il portablocco
 cloth|der Lappen|el trapo|le chiffon|lo straccio
-coin purse|das Münzfach|el monedero|le porte-monnaie|il portamonete
 collar|der Kragen|el cuello (prenda)|le col|il colletto
 compass|der Kompass|la brújula|la boussole|la bussola
 cord|die Schnur|el cordel|la ficelle|lo spago
@@ -876,7 +873,7 @@ lettuce|der Salat (Kopf)|la lechuga|la laitue|la lattuga
 mango|die Mango|el mango|la mangue|il mango
 mint|die Minze|la menta|la menthe|la menta
 noodle|die Nudel|el fideo|la nouille|la tagliatella
-nut|die Nuss|la nuez|la noix|la noce
+nut|die Nuss|la nuez (fruto seco)|la noix (fruit sec)|il frutto secco
 oat|der Hafer|la avena|l'avoine|l'avena
 onion|die Zwiebel|la cebolla|l'oignon|la cipolla
 parsley|die Petersilie|el perejil|le persil|il prezzemolo
@@ -887,7 +884,7 @@ raisin|die Rosine|la pasa|le raisin sec|l'uvetta
 rice|der Reis|el arroz|le riz|il riso
 strawberry|die Erdbeere|la fresa|la fraise|la fragola
 vanilla|die Vanille|la vainilla|la vanille|la vaniglia
-walnut|die Walnuss|la nuez|la noix|la noce
+walnut|die Walnuss|la nuez de nogal|la noix (noyer)|la noce
 watermelon|die Wassermelone|la sandía|la pastèque|l'anguria
 yeast|die Hefe|la levadura|la levure|il lievito
 zucchini|die Zucchini|el calabacín|la courgette|la zucchina

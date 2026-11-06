@@ -36,7 +36,7 @@ to wave|winken|saludar con la mano|faire signe|salutare con la mano
 to clap|klatschen|aplaudir|applaudir|applaudire
 to whistle|pfeifen|silbar|siffler|fischiare
 to hum|summen|tararear|fredonner|canticchiare
-to mumble|murmeln|murmurar|marmonner|borbottare
+to mumble|nuscheln|murmurar|marmonner|borbottare
 to argue|streiten|pelearse|se disputer|litigare
 to apologize|sich entschuldigen|disculparse|s'excuser|scusarsi
 to forgive|verzeihen|perdonar|pardonner|perdonare
@@ -183,9 +183,9 @@ to surf|surfen|hacer surf|surfer|fare surf
 to fence|fechten|practicar esgrima|faire de l'escrime|schermire
 to wrestle|ringen|luchar cuerpo a cuerpo|lutter|lottare
 to aim|zielen|apuntar|viser|mirare
-to shoot|schießen|disparar|tirer un coup|sparare
+to shoot|schießen|disparar|tirer|sparare
 to hunt down|aufspüren|rastrear|traquer|stanare
-to rob|ausrauben|atracar|cambrioler|rapinare
+to rob|ausrauben|atracar|dévaliser|rapinare
 to judge|urteilen|juzgar|juger|giudicare
 to sentence|verurteilen|condenar|condamner|condannare
 to investigate|ermitteln|investigar|enquêter|indagare
@@ -434,7 +434,7 @@ ruler|das Lineal|la regla (instrumento)|la règle|il righello
 backpack|der Rucksack|la mochila|le sac à dos|lo zaino
 break|die Pause|el descanso|la pause|la pausa
 timetable|der Stundenplan|el horario|l'emploi du temps|l'orario
-lecture|die Vorlesung|la conferencia|le cours magistral|la lezione universitaria
+lecture|die Vorlesung|la clase magistral|le cours magistral|la lezione universitaria
 research|die Forschung|la investigación|la recherche|la ricerca
 experiment|das Experiment|el experimento|l'expérience (scientifique)|l'esperimento
 theory|die Theorie|la teoría|la théorie|la teoria
@@ -479,8 +479,8 @@ illness|die Krankheit|la enfermedad|la maladie|la malattia
 cough|der Husten|la tos|la toux|la tosse
 headache|die Kopfschmerzen|el dolor de cabeza|le mal de tête|il mal di testa
 toothache|die Zahnschmerzen|el dolor de muelas|le mal de dents|il mal di denti
-injury|die Verletzung|la lesión|la blessure|la ferita (lesione)
-wound|die Wunde|la herida|la plaie|la piaga
+injury|die Verletzung|la lesión|la blessure|la lesione
+wound|die Wunde|la herida|la plaie|la ferita
 bandage|der Verband|la venda|le pansement|la benda
 plaster|das Pflaster|la tirita|le sparadrap|il cerotto
 injection|die Spritze|la inyección|la piqûre|l'iniezione
@@ -576,7 +576,7 @@ pearl|die Perle|la perla|la perle|la perla
 whale|der Wal|la ballena|la baleine|la balena
 dolphin|der Delfin|el delfín|le dauphin|il delfino
 shark|der Hai|el tiburón|le requin|lo squalo
-octopus|der Tintenfisch|el pulpo|la pieuvre|il polpo
+octopus|der Oktopus|el pulpo|la pieuvre|il polpo
 crab|die Krabbe|el cangrejo|le crabe|il granchio
 turtle|die Schildkröte|la tortuga|la tortue|la tartaruga
 frog|der Frosch|la rana|la grenouille|la rana
@@ -596,7 +596,7 @@ rooster|der Hahn|el gallo|le coq|il gallo
 hen|die Henne|la gallina|la poule|la gallina
 goat|die Ziege|la cabra|la chèvre|la capra
 donkey|der Esel|el burro|l'âne|l'asino
-deer|das Reh|el ciervo|le cerf|il cervo
+deer|der Hirsch|el ciervo|le cerf|il cervo
 squirrel|das Eichhörnchen|la ardilla|l'écureuil|lo scoiattolo
 hedgehog|der Igel|el erizo|le hérisson|il riccio
 tiger|der Tiger|el tigre|le tigre|la tigre
@@ -605,7 +605,7 @@ zebra|das Zebra|la cebra|le zèbre|la zebra
 camel|das Kamel|el camello|le chameau|il cammello
 kangaroo|das Känguru|el canguro|le kangourou|il canguro
 crocodile|das Krokodil|el cocodrilo|le crocodile|il coccodrillo
-penguin|der Pinguin|el pingüino|le pingouin|il pinguino
+penguin|der Pinguin|el pingüino|le manchot|il pinguino
 dinosaur|der Dinosaurier|el dinosaurio|le dinosaure|il dinosauro
 hostel|die Jugendherberge|el albergue|l'auberge de jeunesse|l'ostello
 campsite|der Campingplatz|el camping|le camping|il campeggio
@@ -679,7 +679,7 @@ jealous|eifersüchtig|celoso|jaloux|geloso
 greedy|gierig|codicioso|avide|avido
 cheerful|fröhlich|alegre|joyeux|allegro
 serious|ernst|serio|sérieux|serio
-silly|albern|tonto (gracioso)|idiot|sciocco
+silly|albern|tonto (gracioso)|bête|sciocco
 wise|weise|sabio|sage|saggio
 creative|kreativ|creativo|créatif|creativo
 ambitious|ehrgeizig|ambicioso|ambitieux|ambizioso
