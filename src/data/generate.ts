@@ -1,6 +1,7 @@
 // Automatisch erstellte Kurse aus dem mitgelieferten Grundwortschatz
 import { Course, Word, uid } from '../store';
 import { VOCAB5 } from './vocab5';
+import { ORDER_DE, ORDER_EN, ORDER_ES, ORDER_FR, ORDER_IT } from './order';
 import { SENTENCES } from './sentences';
 
 export const GEN_LANGS = [
@@ -36,7 +37,21 @@ function vocab(): Row[] {
   return rows;
 }
 
-export const GEN_MAX = () => vocab().length;
+// Jede Sprache hat ihre eigene Reihenfolge (und eigene Anzahl, weil doppelte Wörter der Sprache entfallen)
+const ORDERS: Record<LangCode, string> = { en: ORDER_EN, de: ORDER_DE, es: ORDER_ES, fr: ORDER_FR, it: ORDER_IT };
+const lists: Partial<Record<LangCode, Row[]>> = {};
+function listFor(code: LangCode): Row[] {
+  if (!lists[code]) {
+    lists[code] = ORDERS[code]
+      .trim()
+      .split('\n')
+      .map((k) => rowOf(k.trim()))
+      .filter((r): r is Row => !!r);
+  }
+  return lists[code]!;
+}
+
+export const GEN_MAX = (code: LangCode = 'en') => listFor(code).length;
 
 export function langName(code: string) {
   return GEN_LANGS.find((l) => l.code === code)?.name ?? code;
@@ -44,7 +59,7 @@ export function langName(code: string) {
 
 // Wörter nach Häufigkeit: Rang bestimmt die Schwierigkeit, damit sauber gedrittelt wird
 export function generateWords(a: LangCode, b: LangCode, count: number): Word[] {
-  const list = vocab().slice(0, count);
+  const list = listFor(a).slice(0, count);
   return list.map((r, i) => ({
     id: uid(),
     a: r[a],
