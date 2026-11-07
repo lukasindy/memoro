@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Memoro",
+    "name": "Vokabula",
     "slug": "memoro",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +22,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "name": "Memoro",
+      "name": "Vokabula",
       "themeColor": "#1F5E4E",
       "backgroundColor": "#EEF1EC",
       "lang": "de"
@@ -34,8 +34,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Memoro nutzt deine Fotos, um Vokabellisten daraus zu lesen.",
-          "cameraPermission": "Memoro nutzt die Kamera, um Vokabellisten abzufotografieren."
+          "photosPermission": "Vokabula nutzt deine Fotos, um Vokabellisten daraus zu lesen.",
+          "cameraPermission": "Vokabula nutzt die Kamera, um Vokabellisten abzufotografieren."
         }
       ]
     ],

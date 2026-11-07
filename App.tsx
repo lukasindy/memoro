@@ -77,7 +77,7 @@ export default function App() {
   if (data && !data.ui) {
     screen = (
       <View style={{ flex: 1, justifyContent: 'center', gap: 14, paddingVertical: 60 }}>
-        <RawText style={{ color: theme.ink, fontSize: 34, fontWeight: '800', textAlign: 'center' }}>Memoro</RawText>
+        <RawText style={{ color: theme.ink, fontSize: 34, fontWeight: '800', textAlign: 'center' }}>Vokabula</RawText>
         <RawText style={{ color: theme.muted, fontSize: 16, textAlign: 'center', marginBottom: 12 }}>Sprache wählen · Choose your language</RawText>
         {(['de', 'en'] as const).map((l) => (
           <Pressable key={l} accessibilityRole="button" onPress={() => update((d) => ({ ...d, ui: l }))} style={{ backgroundColor: theme.primary, borderRadius: 14, minHeight: 56, alignItems: 'center', justifyContent: 'center' }}>

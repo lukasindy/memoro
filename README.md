@@ -1,6 +1,6 @@
-# Memoro
+# Vokabula
 
-Vokabeltrainer mit eigenen Wortlisten. Listen in beliebigem Format einfügen oder abfotografieren, Memoro baut daraus Lektionen von leicht bis schwer und wiederholt nach dem Leitner-System.
+Vokabeltrainer mit eigenen Wortlisten. Listen in beliebigem Format einfügen oder abfotografieren, Vokabula baut daraus Lektionen von leicht bis schwer und wiederholt nach dem Leitner-System.
 
 ## Stand (MVP 0.1)
 
