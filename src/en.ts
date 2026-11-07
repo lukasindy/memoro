@@ -500,8 +500,8 @@ export const RULES: [string, string][] = [
   "Add $1 of them now"
  ],
  [
-  "/memoro/version.json?t=${}",
-  "/memoro/version.json?t=$1"
+  "/vokabula/version.json?t=${}",
+  "/vokabula/version.json?t=$1"
  ],
  [
   "fehlen dir noch ${} Wörter",
@@ -528,8 +528,8 @@ export const RULES: [string, string][] = [
   "What does that mean in $T1?"
  ],
  [
-  "memoro-backup-${}.json",
-  "memoro-backup-$1.json"
+  "vokabula-backup-${}.json",
+  "vokabula-backup-$1.json"
  ],
  [
   "${} Wörter speichern",
@@ -628,8 +628,8 @@ export const RULES: [string, string][] = [
   "$1 XP, level $2"
  ],
  [
-  "/memoro/?v=${}",
-  "/memoro/?v=$1"
+  "/vokabula/?v=${}",
+  "/vokabula/?v=$1"
  ],
  [
   "${}, erledigt${}",

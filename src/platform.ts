@@ -69,7 +69,7 @@ export async function recognizeText(uri: string, langs: string, onProgress: (p: 
 // ---------- Backup ----------
 
 export async function exportBackup(json: string) {
-  const name = `memoro-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  const name = `vokabula-backup-${new Date().toISOString().slice(0, 10)}.json`;
   if (Platform.OS === 'web') {
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);

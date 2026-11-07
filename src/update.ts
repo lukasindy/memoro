@@ -7,7 +7,7 @@ export const BUILD_ID = process.env.EXPO_PUBLIC_BUILD_ID ?? '';
 export async function checkForUpdate(): Promise<string | null> {
   if (Platform.OS !== 'web' || !BUILD_ID) return null;
   try {
-    const res = await fetch(`/memoro/version.json?t=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(`/vokabula/version.json?t=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) return null;
     const { v } = await res.json();
     return v && v !== BUILD_ID ? v : null;
@@ -34,7 +34,7 @@ export function applyUpdate(v: string) {
   try {
     sessionStorage.setItem(TRIED_KEY, v);
   } catch {}
-  window.location.replace(`/memoro/?v=${encodeURIComponent(v.slice(0, 12))}`);
+  window.location.replace(`/vokabula/?v=${encodeURIComponent(v.slice(0, 12))}`);
 }
 
 // Beim Zurückkehren in die App (Homebildschirm) erneut prüfen
