@@ -1065,6 +1065,245 @@ headquarters|die Zentrale|la sede|le siège|la sede centrale
 report|der Bericht|el informe|le rapport|il rapporto
 pool|das Schwimmbecken|la piscina|la piscine|la piscina
 tennis|das Tennis|el tenis|le tennis|il tennis
+accommodation|die Unterkunft|el alojamiento|l'hébergement|l'alloggio
+acre|der Morgen|el acre|l'acre|l'acro
+across|über|a través de|à travers|attraverso
+action|die Handlung|la acción|l'action|l'azione
+activity|die Aktivität|la actividad|l'activité|l'attività
+addiction|die Sucht|la adicción|la dépendance|la dipendenza
+additionally|zusätzlich|además|en outre|inoltre
+admission|der Eintritt|la admisión|l'admission|l'ammissione
+adolescent|der Jugendliche|el adolescente|l'adolescent|l'adolescente
+advice|der Rat|el consejo|le conseil|il consiglio
+aftermath|die Folgen|las secuelas|les suites|le conseguenze
+afternoon|der Nachmittag|la tarde|l'après-midi|il pomeriggio
+ago|vor|hace|il y a|fa
+aircraft|das Flugzeug|la aeronave|l'aéronef|l'aeromobile
+alien|fremd|ajeno|étranger|estraneo
+alongside|neben|junto a|à côté de|accanto a
+amazing|erstaunlich|asombroso|étonnant|stupefacente
+among|unter|entre|parmi|tra
+any|irgendein|algún|quelque|qualche
+anyone|jemand|cualquiera|n'importe qui|chiunque
+anything|irgendetwas|cualquier cosa|n'importe quoi|qualsiasi cosa
+apology|die Entschuldigung|la disculpa|l'excuse|la scusa
+appearance|das Aussehen|el aspecto|l'apparence|l'aspetto
+appetite|der Appetit|el apetito|l'appétit|l'appetito
+area|das Gebiet|la zona|la zone|la zona
+array|die Auswahl|la variedad|la gamme|la gamma
+as|als|como|comme|come
+association|der Verein|la asociación|l'association|l'associazione
+at|bei|en|à|a
+audit|die Prüfung|la auditoría|l'audit|la revisione contabile
+auto|das Auto|el automóvil|l'auto|l'auto
+automatically|automatisch|automáticamente|automatiquement|automaticamente
+badly|schlecht|mal|mal|male
+band|die Band|el grupo musical|le groupe de musique|il gruppo musicale
+bedroom|das Schlafzimmer|el dormitorio|la chambre|la camera da letto
+beneath|unter|bajo|sous|sotto
+besides|außerdem|además|d'ailleurs|inoltre
+best|der Beste|el mejor|le meilleur|il migliore
+better|besser|mejor|meilleur|migliore
+billion|die Milliarde|el millardo|le milliard|il miliardo
+blog|der Blog|el blog|le blog|il blog
+boot|der Stiefel|la bota|la botte|lo stivale
+boring|langweilig|aburrido|ennuyeux|noioso
+born|geboren|nacido|né|nato
+briefly|kurz|brevemente|brièvement|brevemente
+broad|breit|amplio|large|ampio
+broken|kaputt|roto|cassé|rotto
+bug|der Fehler|el error informático|le bogue|il bug
+business|das Geschäft|el negocio|l'affaire|l'affare
+by|von|por|par|da
+can|die Dose|la lata|la boîte de conserve|la lattina
+caution|die Vorsicht|la precaución|la prudence|la cautela
+to cease|aufhören|cesar|cesser|cessare
+celebration|die Feier|la celebración|la célébration|la celebrazione
+cent|der Cent|el céntimo|le centime|il centesimo
+centre|das Zentrum|el centro|le centre|il centro
+chart|das Diagramm|el gráfico|le graphique|il grafico
+clearly|klar|claramente|clairement|chiaramente
+club|der Verein|el club|le club|il club
+collaboration|die Zusammenarbeit|la colaboración|la collaboration|la collaborazione
+college|die Hochschule|la universidad|l'université|il college
+to commence|beginnen|comenzar|commencer|cominciare
+communication|die Kommunikation|la comunicación|la communication|la comunicazione
+to complement|ergänzen|complementar|compléter|integrare
+composition|die Zusammensetzung|la composición|la composition|la composizione
+to conceive|sich vorstellen|concebir|concevoir|concepire
+to congratulate|gratulieren|felicitar|féliciter|congratularsi
+cooker|der Herd|la cocina|la cuisinière|il fornello
+cooking|das Kochen|la cocina|la cuisine|la cucina
+correctly|richtig|correctamente|correctement|correttamente
+could|könnte|podría|pourrait|potrebbe
+credit|der Kredit|el crédito|le crédit|il credito
+cultural|kulturell|cultural|culturel|culturale
+dad|der Papa|el papá|le papa|il papà
+dancing|das Tanzen|el baile|la danse|il ballo
+dear|lieb|querido|cher|caro
+assignment|der Auftrag|la misión|la mission|l'incarico
+cannot|kann nicht|no puede|ne peut pas|non può
+to depart|abfahren|partir|partir|partire
+differently|anders|de otra manera|différemment|diversamente
+domain|der Bereich|el dominio|le domaine|il dominio
+to drift|treiben|derivar|dériver|andare alla deriva
+easily|leicht|fácilmente|facilement|facilmente
+edition|die Ausgabe|la edición|l'édition|l'edizione
+education|die Bildung|la educación|l'éducation|l'istruzione
+else|sonst|más|autre|altro
+ending|das Ende|el final|la fin|il finale
+to ensue|folgen|resultar|s'ensuivre|seguire
+entertainment|die Unterhaltung|el entretenimiento|le divertissement|l'intrattenimento
+entire|ganz|entero|entier|intero
+establishment|die Einrichtung|el establecimiento|l'établissement|l'istituzione
+event|das Ereignis|el evento|l'événement|l'evento
+ever|jemals|alguna vez|jamais|mai
+everybody|jedermann|todo el mundo|tout le monde|tutti
+everyone|alle|todos|tous|tutti quanti
+evil|böse|malvado|mauvais|malvagio
+facility|die Einrichtung|la instalación|l'installation|la struttura
+favour|der Gefallen|el favor|le service|il favore
+favourable|günstig|favorable|favorable|favorevole
+fellow|der Kollege|el compañero|le camarade|il compagno
+finding|das Ergebnis|el hallazgo|la conclusion|il risultato
+fix|die Lösung|el arreglo|la solution|la soluzione
+fixture|der Termin|el partido programado|la rencontre prévue|l'incontro in programma
+flaw|der Fehler|el defecto|le défaut|il difetto
+flesh|das Fleisch|la carne|la chair|la carne
+formation|die Bildung|la formación|la formation|la formazione
+formerly|früher|anteriormente|autrefois|in precedenza
+fortunate|glücklich|afortunado|chanceux|fortunato
+freely|frei|libremente|librement|liberamente
+frequently|oft|con frecuencia|fréquemment|frequentemente
+further|weiter|adicional|supplémentaire|ulteriore
+gaze|der Blick|la mirada|le regard|lo sguardo
+goods|die Waren|los bienes|les marchandises|i beni
+grade|die Stufe|el curso|la classe|la classe
+grandparent|der Großelternteil|el abuelo|le grand-parent|il nonno
+greatly|sehr|enormemente|grandement|notevolmente
+hall|die Halle|el salón|la salle|la sala
+happiness|das Glück|la felicidad|le bonheur|la felicità
+homeland|die Heimat|la patria|la patrie|la patria
+household|der Haushalt|el hogar|le ménage|la famiglia
+housing|das Wohnen|la vivienda|le logement|l'alloggio
+inch|der Zoll|la pulgada|le pouce|il pollice
+incorrect|falsch|incorrecto|incorrect|errato
+to infer|schließen|inferir|déduire|dedurre
+instantly|sofort|al instante|instantanément|all'istante
+institute|das Institut|el instituto|l'institut|l'istituto
+instructor|der Lehrer|el instructor|le moniteur|l'istruttore
+to invoke|anrufen|invocar|invoquer|invocare
+kid|das Kind|el chaval|le gamin|il ragazzino
+kilometre|der Kilometer|el kilómetro|le kilomètre|il chilometro
+lady|die Dame|la señora|la dame|la signora
+large|weitläufig|extenso|vaste|esteso
+learning|das Lernen|el aprendizaje|l'apprentissage|l'apprendimento
+leisure|die Freizeit|el ocio|les loisirs|il tempo libero
+list|die Liste|la lista|la liste|l'elenco
+lord|der Herr|el señor|le seigneur|il signore
+mail|die Post|el correo|le courrier|la posta
+make|die Marke|la marca|la marque|la marca
+to manifest|zeigen|manifestar|manifester|manifestare
+marriage|die Ehe|el matrimonio|le mariage|il matrimonio
+meaning|die Bedeutung|el significado|le sens|il significato
+means|das Mittel|el medio|le moyen|il mezzo
+member|das Mitglied|el miembro|le membre|il membro
+midst|die Mitte|el medio|le milieu|il mezzo
+mile|die Meile|la milla|le mile|il miglio
+most|am meisten|lo más|le plus|il più
+movie|der Spielfilm|la película|le long métrage|il lungometraggio
+mum|die Mama|la mamá|la maman|la mamma
+newly|neu|recién|nouvellement|di recente
+noisy|laut|ruidoso|bruyant|rumoroso
+no one|niemand|nadie|personne|nessuno
+nor|noch|ni|ni|né
+not|nicht|no|ne pas|non
+note|die Notiz|la nota|la note|la nota
+nursery|der Kindergarten|la guardería|la crèche|l'asilo nido
+object|der Gegenstand|el objeto|l'objet|l'oggetto
+occupation|der Beruf|la ocupación|la profession|l'occupazione
+o'clock|Uhr|en punto|heures|in punto
+off|aus|apagado|éteint|spento
+offering|das Angebot|la ofrenda|l'offrande|l'offerta
+officer|der Beamte|el oficial|l'officier|l'ufficiale
+oh|oh|oh|oh|oh
+OK|okay|vale|d'accord|va bene
+online|online|en línea|en ligne|online
+onto|auf|sobre|sur|su
+opposed|gegen|opuesto a|opposé à|contrario a
+ought|sollte|debería|devrait|dovrebbe
+outing|der Ausflug|la salida|la sortie|la gita
+over|vorbei|terminado|terminé|finito
+parent|der Elternteil|el progenitor|le parent|il genitore
+pass|der Pass|el puerto de montaña|le col|il passo
+pause|die Pause|la pausa|la pause|la pausa
+perhaps|vielleicht|quizás|peut-être|forse
+plain|einfach|llano|simple|semplice
+plea|die Bitte|el ruego|le plaidoyer|la supplica
+plus|plus|más|plus|più
+pound|das Pfund|la libra|la livre|la sterlina
+prize|der Preis|el premio|le prix|il premio
+profession|der Beruf|la profesión|la profession|la professione
+proper|richtig|adecuado|convenable|adatto
+rapidly|schnell|rápidamente|rapidement|rapidamente
+reader|der Leser|el lector|le lecteur|il lettore
+reading|das Lesen|la lectura|la lecture|la lettura
+realm|der Bereich|el reino|le domaine|il regno
+rear|hinten|trasero|arrière|posteriore
+receiver|der Empfänger|el receptor|le récepteur|il ricevitore
+recipient|der Empfänger|el destinatario|le destinataire|il destinatario
+regard|die Achtung|la consideración|l'estime|la stima
+registration|die Anmeldung|la inscripción|l'inscription|la registrazione
+relevant|relevant|relevante|pertinent|rilevante
+to render|machen|hacer|rendre|rendere
+to respond|antworten|responder|répondre|rispondere
+sadly|leider|lamentablemente|malheureusement|purtroppo
+scheme|der Plan|el plan|le plan|il piano
+scrutiny|die Prüfung|el escrutinio|l'examen minutieux|il controllo scrupoloso
+section|der Abschnitt|la sección|la section|la sezione
+selection|die Auswahl|la selección|la sélection|la selezione
+several|mehrere|varios|plusieurs|diversi
+severely|schwer|gravemente|gravement|gravemente
+sex|das Geschlecht|el sexo|le sexe|il sesso
+shall|werden|deber|devoir|dovere
+shopping|das Einkaufen|las compras|les achats|lo shopping
+shut|geschlossen|cerrado|fermé|chiuso
+sibling|das Geschwister|el hermano|le frère ou la sœur|il fratello o la sorella
+side|die Seite|el lado|le côté|il lato
+simply|einfach|simplemente|simplement|semplicemente
+slightly|leicht|ligeramente|légèrement|leggermente
+smoking|das Rauchen|el fumar|le tabagisme|il fumo
+soccer|der Fußball|el fútbol|le football|il calcio
+somebody|jemand|alguien|quelqu'un|qualcuno
+somewhat|etwas|algo|quelque peu|alquanto
+space|der Raum|el espacio|l'espace|lo spazio
+stair|die Stufe|el escalón|la marche|il gradino
+start|der Anfang|el comienzo|le début|l'inizio
+straight|gerade|recto|droit|dritto
+talk|der Vortrag|la charla|la conférence|la conversazione
+till|bis|hasta|jusqu'à|fino a
+town|die Stadt|el pueblo|la ville|la città
+tuition|der Unterricht|la matrícula|les frais de scolarité|la retta
+TV|der Fernseher|la tele|la télé|la tv
+understanding|das Verständnis|la comprensión|la compréhension|la comprensione
+unemployed|arbeitslos|desempleado|au chômage|disoccupato
+vacation|der Urlaub|las vacaciones|les vacances|la vacanza
+vegetable|das Gemüse|la verdura|le légume|la verdura
+vendor|der Verkäufer|el vendedor|le vendeur|il venditore
+versus|gegen|contra|contre|contro
+visitor|der Besucher|el visitante|le visiteur|il visitatore
+to wake|aufwachen|despertar|se réveiller|svegliarsi
+weight|das Gewicht|el peso|le poids|il peso
+whom|wen|a quien|qui|chi
+widely|weit|ampliamente|largement|ampiamente
+width|die Breite|el ancho|la largeur|la larghezza
+worker|der Arbeiter|el trabajador|le travailleur|il lavoratore
+would|würde|haría|ferait|farebbe
+writing|das Schreiben|la escritura|l'écriture|la scrittura
+yeah|ja|sí|ouais|sì
+yet|noch|todavía|encore|ancora
+youngster|der Jugendliche|el joven|le jeune|il giovane
+yourself|dich selbst|tú mismo|toi-même|te stesso
 good morning|guten Morgen|buenos días|bonjour|buongiorno
 good night|gute Nacht|buenas noches|bonne nuit|buona notte
 to enter|hineingehen|entrar|entrer|entrare
@@ -1822,6 +2061,228 @@ golf|das Golf|el golf|le golf|il golf
 hockey|das Hockey|el hockey|le hockey|l'hockey
 score|der Spielstand|el marcador|le score|il punteggio
 volleyball|der Volleyball|el voleibol|le volley-ball|la pallavolo
+to accomplish|erreichen|lograr|accomplir|compiere
+accurately|genau|con exactitud|avec précision|con precisione
+acquisition|der Erwerb|la adquisición|l'acquisition|l'acquisizione
+actually|eigentlich|en realidad|en fait|in realtà
+advertising|die Werbung|la publicidad|la publicité|la pubblicità
+ah|ach|ah|ah|ah
+allowance|das Taschengeld|la asignación|l'allocation|l'indennità
+all right|in Ordnung|de acuerdo|d'accord|va bene
+along|entlang|a lo largo de|le long de|lungo
+to amend|ändern|enmendar|amender|emendare
+to annoy|ärgern|molestar|agacer|infastidire
+anxiety|die Angst|la ansiedad|l'anxiété|l'ansia
+anybody|irgendjemand|alguien|quelqu'un|qualcuno
+any more|nicht mehr|ya no|plus|più
+anywhere|irgendwo|en cualquier parte|n'importe où|ovunque
+architecture|die Architektur|la arquitectura|l'architecture|l'architettura
+arrangement|die Vereinbarung|el arreglo|l'arrangement|l'accordo
+assistant|der Assistent|el asistente|l'assistant|l'assistente
+audio|das Audio|el audio|l'audio|l'audio
+award|die Auszeichnung|el premio|la récompense|il riconoscimento
+to award|verleihen|conceder|décerner|assegnare
+based|basierend|basado|basé|basato
+beloved|geliebt|querido|bien-aimé|amato
+bin|der Abfalleimer|el cubo|la poubelle|il cestino
+bottom|der Boden|el fondo|le fond|il fondo
+buck|der Dollar|el dólar|le dollar|il dollaro
+businessman|der Geschäftsmann|el empresario|l'homme d'affaires|l'uomo d'affari
+camping|das Campen|el camping|le camping|il campeggio
+carriage|der Wagen|el carruaje|la voiture|la carrozza
+case|der Fall|el caso|le cas|il caso
+to cast|werfen|lanzar|jeter|gettare
+celebrity|der Prominente|la celebridad|la célébrité|la celebrità
+charity|die Wohltätigkeit|la caridad|la charité|la beneficenza
+chef|der Küchenchef|el jefe de cocina|le chef de cuisine|il capocuoco
+closely|genau|de cerca|de près|da vicino
+clue|der Hinweis|la pista|l'indice|l'indizio
+colourful|bunt|colorido|coloré|variopinto
+column|die Säule|la columna|la colonne|la colonna
+comic|komisch|cómico|comique|comico
+comment|der Kommentar|el comentario|le commentaire|il commento
+to comment|kommentieren|comentar|commenter|commentare
+connected|verbunden|conectado|connecté|connesso
+to consist|bestehen|consistir|consister|consistere
+consultation|die Beratung|la consulta|la consultation|la consultazione
+contest|der Wettbewerb|el concurso|le concours|il concorso
+cop|der Polizist|el poli|le flic|il poliziotto
+corridor|der Gang|el corredor|le corridor|il corridoio
+counselling|die Beratung|el asesoramiento|le conseil|la consulenza
+criminal|kriminell|criminal|criminel|criminale
+crowded|überfüllt|abarrotado|bondé|affollato
+curly|lockig|rizado|bouclé|riccio
+damaging|schädlich|perjudicial|nuisible|dannoso
+deeply|tief|profundamente|profondément|profondamente
+classical|klassisch|clásico|classique|classico
+diary|das Tagebuch|el diario|le journal intime|il diario
+directly|direkt|directamente|directement|direttamente
+disaster|die Katastrophe|el desastre|le désastre|il disastro
+to discard|wegwerfen|desechar|jeter|scartare
+to disrupt|stören|interrumpir|perturber|interrompere
+distinct|deutlich|distinto|distinct|distinto
+distinction|der Unterschied|la distinción|la distinction|la distinzione
+divorced|geschieden|divorciado|divorcé|divorziato
+drama|das Drama|el drama|le drame|il dramma
+dressed|angezogen|vestido|habillé|vestito
+drug|die Droge|la droga|la drogue|la droga
+either|entweder|tampoco|non plus|neanche
+to elect|wählen|elegir|élire|eleggere
+electrical|elektrisch|eléctrico|électrique|elettrico
+electronic|elektronisch|electrónico|électronique|elettronico
+empire|das Reich|el imperio|l'empire|l'impero
+to enhance|verbessern|mejorar|améliorer|migliorare
+enterprise|das Unternehmen|la empresa|l'entreprise|l'impresa
+entry|der Eintrag|la entrada|l'entrée|la voce
+everyday|alltäglich|cotidiano|quotidien|quotidiano
+expected|erwartet|esperado|attendu|atteso
+expression|der Ausdruck|la expresión|l'expression|l'espressione
+fiction|die Fiktion|la ficción|la fiction|la narrativa
+firmly|fest|firmemente|fermement|fermamente
+firstly|erstens|en primer lugar|premièrement|in primo luogo
+fishing|das Angeln|la pesca|la pêche|la pesca
+fitness|die Fitness|la forma física|la forme physique|la forma fisica
+flying|fliegend|volador|volant|volante
+following|folgend|siguiente|suivant|seguente
+gap|die Lücke|la brecha|l'écart|il divario
+genuinely|wirklich|genuinamente|véritablement|sinceramente
+grave|ernst|grave|grave|grave
+ground|der Grund|el terreno|le terrain|il terreno
+gun|die Pistole|la pistola|le pistolet|la pistola
+guy|der Typ|el tío|le type|il tipo
+handy|praktisch|práctico|pratique|pratico
+heaven|der Himmel|el cielo|le paradis|il paradiso
+heavily|stark|mucho|fortement|fortemente
+height|die Höhe|la altura|la hauteur|l'altezza
+hence|daher|de ahí|d'où|quindi
+hopefully|hoffentlich|ojalá|j'espère que|speriamo che
+human|menschlich|humano|humain|umano
+ill|erkrankt|enfermo|souffrant|ammalato
+included|inbegriffen|incluido|inclus|incluso
+including|einschließlich|incluyendo|y compris|compreso
+indication|der Hinweis|la indicación|l'indication|l'indicazione
+indoors|drinnen|dentro|à l'intérieur|dentro
+injured|verletzt|herido|blessé|ferito
+intake|die Aufnahme|la ingesta|l'apport|l'assunzione
+introduction|die Einführung|la introducción|l'introduction|l'introduzione
+invention|die Erfindung|el invento|l'invention|l'invenzione
+jazz|der Jazz|el jazz|le jazz|il jazz
+jewellery|der Schmuck|la joyería|la bijouterie|la gioielleria
+lab|das Labor|el laboratorio|le labo|il laboratorio
+laughter|das Gelächter|la risa|le rire|la risata
+leader|der Anführer|el líder|le chef|il capo
+least|am wenigsten|lo menos|le moins|il meno
+listener|der Zuhörer|el oyente|l'auditeur|l'ascoltatore
+litter|der Müll|la basura|les déchets|i rifiuti
+located|gelegen|ubicado|situé|situato
+lorry|der Lastwagen|el camión|le camion|il camion
+mall|das Einkaufszentrum|el centro comercial|le centre commercial|il centro commerciale
+maths|die Mathe|las mates|les maths|la matematica
+media|die Medien|los medios|les médias|i media
+memo|die Notiz|la nota interna|la note de service|il promemoria
+middle|mittlere|medio|du milieu|di mezzo
+mine|die Mine|la mina|la mine|la miniera
+mineral|das Mineral|el mineral|le minéral|il minerale
+missing|vermisst|desaparecido|disparu|scomparso
+mobile|mobil|móvil|mobile|mobile
+to modify|ändern|modificar|modifier|modificare
+motor|der Motor|el motor|le moteur|il motore
+motorcycle|das Motorrad|la motocicleta|la moto|la motocicletta
+musical|musikalisch|musical|musical|musicale
+naturally|natürlich|naturalmente|naturellement|naturalmente
+neither|keiner von beiden|ninguno de los dos|ni l'un ni l'autre|né l'uno né l'altro
+normally|normalerweise|normalmente|normalement|normalmente
+occurrence|das Vorkommen|la ocurrencia|la survenue|il verificarsi
+openly|offen|abiertamente|ouvertement|apertamente
+organization|die Organisation|la organización|l'organisation|l'organizzazione
+organized|organisiert|organizado|organisé|organizzato
+owner|der Eigentümer|el propietario|le propriétaire|il proprietario
+ownership|das Eigentum|la propiedad|la propriété|la proprietà
+package|das Paket|el paquete|le colis|il pacco
+palace|der Palast|el palacio|le palais|il palazzo
+panel|die Tafel|el panel|le panneau|il pannello
+pants|die Unterhose|los pantalones|le pantalon|i pantaloni
+particularly|besonders|particularmente|particulièrement|particolarmente
+passenger|der Fahrgast|el pasajero|le passager|il passeggero
+penny|der Penny|el penique|le penny|il penny
+per|pro|por|par|per
+pop|die Popmusik|el pop|la pop|il pop
+possession|der Besitz|la posesión|la possession|il possesso
+poster|das Plakat|el cartel|l'affiche|il manifesto
+precisely|genau|precisamente|précisément|precisamente
+to predict|vorhersagen|pronosticar|prévoir|pronosticare
+preparation|die Vorbereitung|la preparación|la préparation|la preparazione
+prepared|vorbereitet|preparado|préparé|preparato
+prestigious|angesehen|prestigioso|prestigieux|prestigioso
+principal|der Direktor|el director|le principal|il preside
+to prohibit|verbieten|prohibir|prohiber|proibire
+proposition|der Vorschlag|la propuesta|la proposition|la proposta
+pub|die Kneipe|el bar|le pub|il pub
+purely|rein|puramente|purement|puramente
+quest|die Suche|la búsqueda|la quête|la ricerca
+railway|die Eisenbahn|el ferrocarril|le chemin de fer|la ferrovia
+recording|die Aufnahme|la grabación|l'enregistrement|la registrazione
+to recycle|recyceln|reciclar|recycler|riciclare
+to refer|verweisen|remitir|renvoyer|rinviare
+relevance|die Relevanz|la relevancia|la pertinence|la rilevanza
+remainder|der Rest|el resto|le reste|il resto
+repeated|wiederholt|repetido|répété|ripetuto
+route|die Route|la ruta|l'itinéraire|il percorso
+rubbish|der Abfall|la basura|les ordures|la spazzatura
+runner|der Läufer|el corredor|le coureur|il corridore
+running|laufend|corriendo|en cours|in corso
+sailing|das Segeln|la navegación a vela|la navigation à voile|la navigazione a vela
+sauce|die Soße|la salsa|la sauce|la salsa
+scary|gruselig|aterrador|effrayant|pauroso
+scene|die Szene|la escena|la scène|la scena
+secondly|zweitens|en segundo lugar|deuxièmement|in secondo luogo
+self|das Selbst|el yo|le soi|il sé
+ship|das Schiff|el barco|le navire|la nave
+singing|das Singen|el canto|le chant|il canto
+site|der Standort|el sitio|le site|il sito
+situated|gelegen|situado|situé|situato
+skilled|geschickt|hábil|qualifié|abile
+spoken|gesprochen|hablado|parlé|parlato
+sporting|sportlich|deportivo|sportif|sportivo
+spouse|der Ehepartner|el cónyuge|le conjoint|il coniuge
+squad|das Team|la plantilla|l'équipe|la squadra
+stall|der Stand|el puesto|l'étal|la bancarella
+step|der Schritt|el paso|le pas|il passo
+strictly|streng|estrictamente|strictement|rigorosamente
+strongly|stark|fuertemente|fortement|fortemente
+studio|das Studio|el estudio|le studio|lo studio
+sudden|plötzlich|repentino|soudain|improvviso
+surprising|überraschend|sorprendente|surprenant|sorprendente
+to surrender|sich ergeben|rendirse|se rendre|arrendersi
+teaching|das Unterrichten|la enseñanza|l'enseignement|l'insegnamento
+teenage|jugendlich|adolescente|adolescent|adolescenziale
+to terminate|beenden|terminar|résilier|terminare
+terribly|schrecklich|terriblemente|terriblement|terribilmente
+thinking|das Denken|el pensamiento|la pensée|il pensiero
+thought|der Gedanke|el pensamiento|la pensée|il pensiero
+tidy|aufgeräumt|ordenado|rangé|ordinato
+top|oberste|superior|supérieur|superiore
+tourism|der Tourismus|el turismo|le tourisme|il turismo
+track|die Strecke|la pista|la piste|il binario
+trainer|der Trainer|el entrenador personal|l'entraîneur personnel|l'allenatore personale
+training|das Training|el entrenamiento|l'entraînement|l'allenamento
+trouble|der Ärger|el problema|l'ennui|il guaio
+unit|die Einheit|la unidad|l'unité|l'unità
+used|gebraucht|usado|d'occasion|usato
+used to|gewohnt|acostumbrado|habitué|abituato
+van|der Transporter|la furgoneta|la camionnette|il furgone
+to violate|verletzen|violar|violer|violare
+voting|das Wählen|la votación|le vote|il voto
+washing|die Wäsche|el lavado|le lavage|il lavaggio
+web|das Netz|la web|le web|il web
+whose|dessen|cuyo|dont|di cui
+wild|wild|salvaje|sauvage|selvatico
+wit|der Witz|el ingenio|l'esprit|l'arguzia
+working|arbeitend|que trabaja|qui travaille|funzionante
+worse|schlechter|peor|pire|peggiore
+worst|der Schlechteste|el peor|le pire|il peggiore
+wow|wow|guau|waouh|wow
+written|schriftlich|escrito|écrit|scritto
 salty|salzig|salado|salé|salato
 lonely|einsam|solitario|seul|solitario
 proud|stolz|orgulloso|fier|orgoglioso
@@ -2791,6 +3252,442 @@ champion|der Meister|el campeón|le champion|il campione
 net|das Netz|la red|le filet|la rete
 opponent|der Gegner|el rival|l'adversaire|l'avversario
 rugby|das Rugby|el rugby|le rugby|il rugby
+to abandon|verlassen|abandonar|abandonner|abbandonare
+absolute|absolut|absoluto|absolu|assoluto
+absolutely|absolut|absolutamente|absolument|assolutamente
+academic|akademisch|académico|académique|accademico
+academy|die Akademie|la academia|l'académie|l'accademia
+access|der Zugang|el acceso|l'accès|l'accesso
+to access|zugreifen|acceder|accéder|accedere
+accessible|zugänglich|accesible|accessible|accessibile
+to acknowledge|anerkennen|reconocer|reconnaître|riconoscere
+actual|tatsächlich|real|réel|reale
+addition|die Ergänzung|la adición|l'addition|l'aggiunta
+administration|die Verwaltung|la administración|l'administration|l'amministrazione
+advance|der Fortschritt|el avance|l'avancée|l'avanzamento
+aged|im Alter von|de edad|âgé de|di età
+agent|der Vertreter|el agente|l'agent|l'agente
+agriculture|die Landwirtschaft|la agricultura|l'agriculture|l'agricoltura
+ahead|voraus|adelante|devant|avanti
+AI|die KI|la IA|l'IA|l'IA
+alarm|der Alarm|la alarma|l'alarme|l'allarme
+to alarm|alarmieren|alarmar|alarmer|allarmare
+alcoholic|alkoholisch|alcohólico|alcoolisé|alcolico
+to align|ausrichten|alinear|aligner|allineare
+alike|ähnlich|parecido|semblable|simile
+to allege|behaupten|alegar|alléguer|sostenere
+altogether|insgesamt|en total|au total|in tutto
+amendment|die Änderung|la enmienda|l'amendement|l'emendamento
+announcement|die Ankündigung|el anuncio|l'annonce|l'annuncio
+annoying|lästig|molesto|agaçant|fastidioso
+annually|jährlich|anualmente|annuellement|annualmente
+to anticipate|erwarten|anticipar|anticiper|anticipare
+approval|die Zustimmung|la aprobación|l'approbation|l'approvazione
+approximately|ungefähr|aproximadamente|approximativement|approssimativamente
+arguably|wohl|posiblemente|sans doute|probabilmente
+assembly|die Versammlung|la asamblea|l'assemblée|l'assemblea
+assistance|die Unterstützung|la asistencia|l'assistance|l'assistenza
+to associate|verbinden|asociar|associer|associare
+associated|verbunden|asociado|associé|associato
+asylum|das Asyl|el asilo|l'asile|l'asilo
+attempt|der Versuch|el intento|la tentative|il tentativo
+attraction|die Attraktion|la atracción|l'attraction|l'attrazione
+backing|die Unterstützung|el respaldo|le soutien|il sostegno
+backup|die Sicherung|la copia de seguridad|la sauvegarde|il backup
+ballot|die Wahl|la papeleta|le bulletin de vote|la scheda elettorale
+base|die Basis|la base|la base|la base
+to base|gründen auf|basar|baser|basare
+battle|die Schlacht|la batalla|la bataille|la battaglia
+beat|der Takt|el ritmo|le rythme|il ritmo
+to beat|schlagen|vencer|battre|battere
+beauty|die Schönheit|la belleza|la beauté|la bellezza
+to bid|bieten|pujar|enchérir|fare un'offerta
+to bleed|bluten|sangrar|saigner|sanguinare
+block|der Block|el bloque|le bloc|il blocco
+to block|blockieren|bloquear|bloquer|bloccare
+bomb|die Bombe|la bomba|la bombe|la bomba
+to bomb|bombardieren|bombardear|bombarder|bombardare
+boundary|die Grenze|el límite|la limite|il confine
+breath|der Atem|el aliento|le souffle|il respiro
+breathing|das Atmen|la respiración|la respiration|la respirazione
+bride|die Braut|la novia|la mariée|la sposa
+brief|knapp|breve|bref|breve
+broadcaster|der Sender|el locutor|le diffuseur|l'emittente
+bubble|die Blase|la burbuja|la bulle|la bolla
+bulk|die Masse|el grueso|la majeure partie|la maggior parte
+burden|die Last|la carga|le fardeau|il peso
+candidate|der Kandidat|el candidato|le candidat|il candidato
+captain|der Kapitän|el capitán|le capitaine|il capitano
+catalogue|der Katalog|el catálogo|le catalogue|il catalogo
+central|zentral|central|central|centrale
+chemical|chemisch|químico|chimique|chimico
+childhood|die Kindheit|la infancia|l'enfance|l'infanzia
+clause|die Klausel|la cláusula|la clause|la clausola
+client|der Mandant|el cliente|le client|il cliente
+clinic|die Klinik|la clínica|la clinique|la clinica
+coal|die Kohle|el carbón|le charbon|il carbone
+coincidence|der Zufall|la coincidencia|la coïncidence|la coincidenza
+coloured|farbig|coloreado|coloré|colorato
+combat|der Kampf|el combate|le combat|il combattimento
+commercial|kommerziell|comercial|commercial|commerciale
+commodity|die Ware|la mercancía|la marchandise|la merce
+comparison|der Vergleich|la comparación|la comparaison|il confronto
+competitive|wettbewerbsfähig|competitivo|compétitif|competitivo
+competitor|der Konkurrent|el competidor|le concurrent|il concorrente
+complicated|kompliziert|complicado|compliqué|complicato
+compound|die Verbindung|el compuesto|le composé|il composto
+compromise|der Kompromiss|el compromiso|le compromis|il compromesso
+to confine|beschränken|confinar|confiner|confinare
+confirmation|die Bestätigung|la confirmación|la confirmation|la conferma
+congregation|die Gemeinde|la congregación|l'assemblée|la congregazione
+conscience|das Gewissen|la conciencia|la conscience|la coscienza
+consent|die Zustimmung|el consentimiento|le consentement|il consenso
+constantly|ständig|constantemente|constamment|costantemente
+to constitute|darstellen|constituir|constituer|costituire
+consumer|der Verbraucher|el consumidor|le consommateur|il consumatore
+container|der Behälter|el recipiente|le récipient|il contenitore
+conviction|die Überzeugung|la convicción|la conviction|la convinzione
+convinced|überzeugt|convencido|convaincu|convinto
+costume|das Kostüm|el disfraz|le costume|il costume
+cottage|das Häuschen|la casita|la maisonnette|il cottage
+covered|bedeckt|cubierto|couvert|coperto
+critically|kritisch|críticamente|de manière critique|criticamente
+criticism|die Kritik|la crítica|la critique|la critica
+crop|die Ernte|el cultivo|la culture|il raccolto
+crude|roh|tosco|grossier|rozzo
+curve|die Kurve|la curva|la courbe|la curva
+deadly|tödlich|mortífero|meurtrier|letale
+declaration|die Erklärung|la declaración|la déclaration|la dichiarazione
+deed|die Tat|el acto|l'acte|l'atto
+deficiency|der Mangel|la deficiencia|la carence|la carenza
+to define|definieren|definir|définir|definire
+definite|eindeutig|definitivo|défini|definito
+casualty|der Verletzte|el herido|le blessé|il ferito
+constraint|der Zwang|la limitación|la limitation|la limitazione
+delight|die Freude|el deleite|le plaisir|il piacere
+democratic|demokratisch|democrático|démocratique|democratico
+to depict|darstellen|representar|dépeindre|raffigurare
+to deploy|einsetzen|desplegar|déployer|schierare
+desire|das Verlangen|el deseo|le désir|il desiderio
+to detain|festhalten|detener|retenir|trattenere
+diagram|das Diagramm|el diagrama|le schéma|lo schema
+diamond|der Diamant|el diamante|le diamant|il diamante
+to differentiate|unterscheiden|diferenciar|différencier|differenziare
+dignity|die Würde|la dignidad|la dignité|la dignità
+dirt|der Dreck|la suciedad|la saleté|lo sporco
+disappointing|enttäuschend|decepcionante|décevant|deludente
+disappointment|die Enttäuschung|la decepción|la déception|la delusione
+to discharge|entlassen|dar de alta|renvoyer|dimettere
+to dismiss|entlassen|despedir|licencier|licenziare
+dismissal|die Entlassung|el despido|le licenciement|il licenziamento
+disorder|die Störung|el trastorno|le trouble|il disturbo
+to dispose|entsorgen|deshacerse de|se défaire de|smaltire
+dispute|der Streit|la disputa|le litige|la controversia
+disruption|die Störung|la interrupción|la perturbation|l'interruzione
+to dissolve|auflösen|disolver|dissoudre|sciogliere
+distress|die Not|la angustia|la détresse|l'angoscia
+downtown|die Innenstadt|el centro de la ciudad|le centre-ville|il centro città
+downwards|abwärts|hacia abajo|vers le bas|verso il basso
+dual|doppelt|dual|double|duplice
+due|fällig|debido|dû|dovuto
+duration|die Dauer|la duración|la durée|la durata
+duty|die Pflicht|el deber|le devoir|il dovere
+eastern|östlich|oriental|oriental|orientale
+ecological|ökologisch|ecológico|écologique|ecologico
+to educate|ausbilden|educar|éduquer|educare
+educated|gebildet|culto|instruit|istruito
+educational|lehrreich|educativo|éducatif|educativo
+effective|wirksam|eficaz|efficace|efficace
+effectively|wirksam|eficazmente|efficacement|efficacemente
+to elevate|erhöhen|elevar|élever|elevare
+embarrassing|peinlich|embarazoso|embarrassant|imbarazzante
+to embrace|annehmen|acoger|adopter|accogliere
+to endorse|unterstützen|respaldar|approuver|approvare
+engaged|verlobt|prometido|fiancé|fidanzato
+engineering|das Ingenieurwesen|la ingeniería|l'ingénierie|l'ingegneria
+to enquire|sich erkundigen|informarse|se renseigner|informarsi
+enthusiastic|begeistert|entusiasta|enthousiaste|entusiasta
+entirely|völlig|enteramente|entièrement|interamente
+entrepreneur|der Unternehmer|el emprendedor|l'entrepreneur|l'imprenditore
+environmental|Umwelt-|medioambiental|environnemental|ambientale
+episode|die Folge|el episodio|l'épisode|l'episodio
+equally|gleichermaßen|igualmente|également|ugualmente
+eventually|schließlich|finalmente|finalement|alla fine
+to evolve|sich entwickeln|evolucionar|évoluer|evolversi
+examination|die Untersuchung|el examen|l'examen|l'esame
+excitement|die Aufregung|la emoción|l'excitation|l'eccitazione
+exclusively|ausschließlich|exclusivamente|exclusivement|esclusivamente
+expedition|die Expedition|la expedición|l'expédition|la spedizione
+expenditure|die Ausgaben|el gasto público|les dépenses|le spese
+to facilitate|erleichtern|facilitar|faciliter|facilitare
+fairly|ziemlich|bastante|assez|abbastanza
+fancy|schick|elegante|chic|elegante
+fantasy|die Fantasie|la fantasía|la fantaisie|la fantasia
+fault|die Schuld|la culpa|la faute|la colpa
+fighting|der Kampf|la lucha|le combat|lo scontro
+flash|der Blitz|el flash|le flash|il flash
+flavour|der Geschmack|el sabor|la saveur|il sapore
+fluid|die Flüssigkeit|el fluido|le fluide|il fluido
+folk|Volks-|popular|populaire|popolare
+forum|das Forum|el foro|le forum|il forum
+to foster|fördern|fomentar|encourager|favorire
+to found|gründen|fundar|fonder|fondare
+frightening|beängstigend|aterrador|effrayant|spaventoso
+fuel|der Kraftstoff|el combustible|le carburant|il carburante
+fully|völlig|completamente|pleinement|pienamente
+gain|der Gewinn|la ganancia|le gain|il guadagno
+gathering|die Versammlung|la reunión|le rassemblement|il raduno
+generally|im Allgemeinen|generalmente|généralement|generalmente
+generic|allgemein|genérico|générique|generico
+ghost|das Gespenst|el fantasma|le fantôme|il fantasma
+gig|der Auftritt|la actuación|le concert|l'esibizione
+gradually|allmählich|gradualmente|progressivement|gradualmente
+grain|das Korn|el grano|le grain|il grano
+graphics|die Grafik|los gráficos|les graphismes|la grafica
+grasp|der Griff|el agarre|la prise|la presa
+halt|der Halt|la parada|l'arrêt|l'arresto
+harm|der Schaden|el daño|le mal|il danno
+hazard|die Gefahr|el peligro|le danger|il pericolo
+helicopter|der Hubschrauber|el helicóptero|l'hélicoptère|l'elicottero
+highly|höchst|altamente|très|altamente
+historical|historisch|histórico|historique|storico
+horror|der Horror|el horror|l'horreur|l'orrore
+host|der Gastgeber|el anfitrión|l'hôte|l'ospitante
+humour|der Humor|el humor|l'humour|l'umorismo
+hurricane|der Hurrikan|el huracán|l'ouragan|l'uragano
+imagination|die Fantasie|la imaginación|l'imagination|l'immaginazione
+immigrant|der Einwanderer|el inmigrante|l'immigré|l'immigrato
+inclusive|inklusive|inclusivo|inclusif|inclusivo
+incredibly|unglaublich|increíblemente|incroyablement|incredibilmente
+indeed|tatsächlich|en efecto|en effet|infatti
+indoor|Innen-|de interior|d'intérieur|al chiuso
+inhabitant|der Einwohner|el habitante|l'habitant|l'abitante
+initially|anfangs|inicialmente|initialement|inizialmente
+inquiry|die Untersuchung|la investigación|l'enquête|l'indagine
+inspection|die Kontrolle|la inspección|l'inspection|l'ispezione
+to integrate|integrieren|integrar|intégrer|integrare
+integrated|integriert|integrado|intégré|integrato
+integration|die Integration|la integración|l'intégration|l'integrazione
+intelligence|die Intelligenz|la inteligencia|l'intelligence|l'intelligenza
+intensive|intensiv|intensivo|intensif|intensivo
+intent|die Absicht|la intención|l'intention|l'intento
+interim|vorläufig|provisional|provisoire|provvisorio
+interior|innen|interior|intérieur|interno
+involved|beteiligt|implicado|impliqué|coinvolto
+jail|das Gefängnis|la cárcel|la prison|la prigione
+journal|die Fachzeitschrift|la revista especializada|la revue|la rivista specializzata
+killing|der Mord|el asesinato|le meurtre|l'uccisione
+kit|das Set|el kit|le kit|il kit
+lane|die Spur|el carril|la voie|la corsia
+lately|neulich|últimamente|dernièrement|ultimamente
+latest|neueste|último|dernier|ultimo
+lawsuit|der Prozess|la demanda|le procès|la causa legale
+layer|die Schicht|la capa|la couche|lo strato
+leading|führend|principal|de premier plan|principale
+length|die Länge|la longitud|la longueur|la lunghezza
+lethal|tödlich|letal|létal|letale
+liberal|liberal|liberal|libéral|liberale
+likewise|ebenso|asimismo|de même|allo stesso modo
+limited|begrenzt|limitado|limité|limitato
+living|lebend|vivo|vivant|vivente
+location|der Standort|la ubicación|l'emplacement|la posizione
+luxury|der Luxus|el lujo|le luxe|il lusso
+mad|wütend|enojado|fâché|arrabbiato
+magic|die Magie|la magia|la magie|la magia
+mainly|hauptsächlich|principalmente|principalement|principalmente
+marketing|das Marketing|el marketing|le marketing|il marketing
+master|der Meister|el maestro|le maître|il maestro
+maximum|maximal|máximo|maximum|massimo
+meaningful|sinnvoll|significativo|significatif|significativo
+memorial|das Denkmal|el monumento conmemorativo|le mémorial|il monumento commemorativo
+mess|die Unordnung|el desorden|le désordre|il disordine
+migrant|der Migrant|el migrante|le migrant|il migrante
+migration|die Migration|la migración|la migration|la migrazione
+minimal|minimal|mínimo|minimal|minimo
+miracle|das Wunder|el milagro|le miracle|il miracolo
+mobility|die Mobilität|la movilidad|la mobilité|la mobilità
+modification|die Änderung|la modificación|la modification|la modifica
+motion|die Bewegung|el movimiento|le mouvement|il movimento
+motorist|der Autofahrer|el automovilista|l'automobiliste|l'automobilista
+municipal|städtisch|municipal|municipal|municipale
+namely|nämlich|a saber|à savoir|vale a dire
+narrative|die Erzählung|la narrativa|le récit|la narrazione
+native|einheimisch|nativo|natif|nativo
+necessarily|notwendigerweise|necesariamente|nécessairement|necessariamente
+nevertheless|trotzdem|sin embargo|néanmoins|tuttavia
+nominee|der Kandidat|el candidato nominado|le nominé|il candidato designato
+northern|nördlich|del norte|du nord|settentrionale
+nuclear|nuklear|nuclear|nucléaire|nucleare
+nutrition|die Ernährung|la nutrición|la nutrition|la nutrizione
+obviously|offensichtlich|obviamente|évidemment|ovviamente
+odds|die Chancen|las probabilidades|les chances|le probabilità
+offender|der Täter|el delincuente|le délinquant|il colpevole
+optimistic|optimistisch|optimista|optimiste|ottimista
+oral|mündlich|oral|oral|orale
+organizer|der Organisator|el organizador|l'organisateur|l'organizzatore
+originally|ursprünglich|originalmente|à l'origine|originariamente
+to owe|schulden|deber|devoir|dovere
+pace|das Tempo|el ritmo|l'allure|il passo
+packet|die Packung|el paquete|le paquet|il pacchetto
+painful|schmerzhaft|doloroso|douloureux|doloroso
+partial|teilweise|parcial|partiel|parziale
+partially|teilweise|parcialmente|partiellement|parzialmente
+participant|der Teilnehmer|el participante|le participant|il partecipante
+participation|die Teilnahme|la participación|la participation|la partecipazione
+perfectly|perfekt|perfectamente|parfaitement|perfettamente
+personally|persönlich|personalmente|personnellement|personalmente
+photography|die Fotografie|la fotografía|la photographie|la fotografia
+planning|die Planung|la planificación|la planification|la pianificazione
+pleasure|das Vergnügen|el placer|le plaisir|il piacere
+pledge|das Versprechen|el compromiso|l'engagement|l'impegno
+to plunge|stürzen|sumergirse|plonger|precipitare
+podcast|der Podcast|el pódcast|le podcast|il podcast
+poetry|die Dichtung|la poesía|la poésie|la poesia
+pointed|spitz|puntiagudo|pointu|appuntito
+poison|das Gift|el veneno|le poison|il veleno
+poisonous|giftig|venenoso|toxique|velenoso
+poll|die Umfrage|la encuesta|le sondage|il sondaggio
+port|der Hafen|el puerto|le port|il porto
+portrait|das Porträt|el retrato|le portrait|il ritratto
+to possess|besitzen|poseer|posséder|possedere
+possibly|möglicherweise|posiblemente|éventuellement|possibilmente
+powder|das Pulver|el polvo|la poudre|la polvere
+prayer|das Gebet|la oración|la prière|la preghiera
+prediction|die Vorhersage|la predicción|la prédiction|la previsione
+pregnancy|die Schwangerschaft|el embarazo|la grossesse|la gravidanza
+preliminary|vorläufig|preliminar|préliminaire|preliminare
+premise|die Voraussetzung|la premisa|la prémisse|la premessa
+to prescribe|verschreiben|recetar|prescrire|prescrivere
+presumably|vermutlich|presumiblemente|vraisemblablement|presumibilmente
+to presume|vermuten|suponer|présumer|presumere
+previously|zuvor|previamente|auparavant|in precedenza
+prince|der Prinz|el príncipe|le prince|il principe
+princess|die Prinzessin|la princesa|la princesse|la principessa
+printing|der Druck|la impresión|l'impression|la stampa
+producer|der Produzent|el productor|le producteur|il produttore
+production|die Produktion|la producción|la production|la produzione
+properly|ordnungsgemäß|correctamente|correctement|correttamente
+to propose|vorschlagen|proponer|proposer|proporre
+prospective|zukünftig|posible|potentiel|potenziale
+publicity|die Öffentlichkeit|la publicidad|la publicité|la pubblicità
+punishment|die Strafe|el castigo|la punition|la punizione
+purchase|der Kauf|la compra|l'achat|l'acquisto
+qualification|die Qualifikation|la titulación|la qualification|la qualifica
+qualified|qualifiziert|cualificado|qualifié|qualificato
+quotation|das Zitat|la cita|la citation|la citazione
+racing|der Rennsport|las carreras|la course|le corse
+random|zufällig|aleatorio|aléatoire|casuale
+realistic|realistisch|realista|réaliste|realistico
+reasonably|vernünftig|razonablemente|raisonnablement|ragionevolmente
+to reassure|beruhigen|tranquilizar|rassurer|rassicurare
+to recall|zurückrufen|retirar|rappeler|richiamare
+regardless|trotzdem|a pesar de todo|malgré tout|nonostante tutto
+regional|regional|regional|régional|regionale
+regularly|regelmäßig|regularmente|régulièrement|regolarmente
+to regulate|regeln|regular|réguler|regolare
+to reject|zurückweisen|rechazar|rejeter|respingere
+relatively|relativ|relativamente|relativement|relativamente
+relaxing|entspannend|relajante|relaxant|rilassante
+reminder|die Erinnerung|el recordatorio|le rappel|il promemoria
+removal|die Entfernung|la eliminación|le retrait|la rimozione
+renewable|erneuerbar|renovable|renouvelable|rinnovabile
+replacement|der Ersatz|el reemplazo|le remplacement|la sostituzione
+representation|die Vertretung|la representación|la représentation|la rappresentanza
+republic|die Republik|la república|la république|la repubblica
+residence|der Wohnsitz|la residencia|la résidence|la residenza
+to resolve|lösen|resolver|résoudre|risolvere
+respectively|beziehungsweise|respectivamente|respectivement|rispettivamente
+retired|pensioniert|jubilado|retraité|pensionato
+reverse|umgekehrt|inverso|inverse|inverso
+to revise|überarbeiten|repasar|réviser|ripassare
+robot|der Roboter|el robot|le robot|il robot
+ruling|die Entscheidung|el fallo|la décision|la sentenza
+safeguard|der Schutz|la salvaguardia|la sauvegarde|la salvaguardia
+scare|der Schreck|el susto|la frayeur|lo spavento
+script|das Drehbuch|el guion|le scénario|la sceneggiatura
+secondary|sekundär|secundario|secondaire|secondario
+seminar|das Seminar|el seminario|le séminaire|il seminario
+sensation|das Gefühl|la sensación|la sensation|la sensazione
+sentiment|die Stimmung|el sentimiento|le sentiment|il sentimento
+separation|die Trennung|la separación|la séparation|la separazione
+sequel|die Fortsetzung|la secuela|la suite|il seguito
+seriously|ernsthaft|en serio|sérieusement|seriamente
+servant|der Diener|el sirviente|le serviteur|il servitore
+set|das Set|el conjunto|l'ensemble|l'insieme
+sexual|sexuell|sexual|sexuel|sessuale
+shade|der Schatten|la sombra|l'ombre|l'ombra
+sight|der Anblick|la vista|la vue|la vista
+similarly|ähnlich|de manera similar|de manière similaire|similmente
+simultaneously|gleichzeitig|simultáneamente|simultanément|simultaneamente
+sincere|ehrlich|sincero|sincère|sincero
+slice|die Scheibe|la rebanada|la tranche|la fetta
+smart|clever|inteligente|astucieux|astuto
+so-called|sogenannt|llamado|soi-disant|cosiddetto
+sole|einzig|único|seul|unico
+solely|ausschließlich|únicamente|uniquement|unicamente
+solid|stabil|sólido|solide|solido
+sometime|irgendwann|en algún momento|un jour ou l'autre|prima o poi
+southern|südlich|del sur|du sud|meridionale
+specifically|speziell|específicamente|spécifiquement|specificamente
+spectator|der Zuschauer|el espectador|le spectateur|lo spettatore
+spending|die Ausgaben|el gasto|les dépenses|la spesa
+spite|der Trotz|el rencor|la rancune|il dispetto
+spot|der Fleck|la mancha|la tache|la macchia
+statistic|die Statistik|la estadística|la statistique|la statistica
+statistical|statistisch|estadístico|statistique|statistico
+stuff|das Zeug|las cosas|les trucs|la roba
+subscription|das Abonnement|la suscripción|l'abonnement|l'abbonamento
+substitute|der Ersatz|el sustituto|le remplaçant|il sostituto
+successfully|erfolgreich|con éxito|avec succès|con successo
+suffering|das Leiden|el sufrimiento|la souffrance|la sofferenza
+sufficient|ausreichend|suficiente|suffisant|sufficiente
+sum|die Summe|la suma|la somme|la somma
+superb|ausgezeichnet|magnífico|superbe|magnifico
+supporter|der Unterstützer|el seguidor|le supporter|il sostenitore
+surely|sicherlich|seguramente|sûrement|sicuramente
+suspicion|der Verdacht|la sospecha|le soupçon|il sospetto
+tale|das Märchen|el cuento|le conte|il racconto
+talented|talentiert|talentoso|talentueux|talentuoso
+tenant|der Mieter|el inquilino|le locataire|l'inquilino
+terms|die Bedingungen|los términos|les conditions|i termini
+terror|der Schrecken|el terror|la terreur|il terrore
+to testify|aussagen|testificar|témoigner|testimoniare
+testing|das Testen|las pruebas|les tests|il collaudo
+theoretical|theoretisch|teórico|théorique|teorico
+thereafter|danach|a partir de entonces|par la suite|da allora in poi
+thorough|gründlich|minucioso|minutieux|accurato
+thoroughly|gründlich|a fondo|à fond|a fondo
+though|obwohl|aunque|bien que|benché
+thrilled|begeistert|emocionado|ravi|entusiasta
+tight|straff|ajustado|tendu|teso
+timely|rechtzeitig|oportuno|opportun|tempestivo
+timing|der Zeitpunkt|el momento|le moment|la tempistica
+toxic|giftig|tóxico|toxique|tossico
+trace|die Spur|el rastro|la trace|la traccia
+trademark|die Marke|la marca registrada|la marque déposée|il marchio registrato
+trading|der Handel|el comercio|le négoce|la negoziazione
+to transmit|übertragen|transmitir|transmettre|trasmettere
+transportation|der Transport|el transporte|le transport|il trasporto
+typically|typischerweise|típicamente|typiquement|tipicamente
+unlike|im Gegensatz zu|a diferencia de|contrairement à|a differenza di
+upwards|aufwärts|hacia arriba|vers le haut|verso l'alto
+to utilize|nutzen|utilizar|utiliser|utilizzare
+to vaccinate|impfen|vacunar|vacciner|vaccinare
+vaccination|die Impfung|la vacunación|la vaccination|la vaccinazione
+to vanish|verschwinden|desvanecerse|disparaître|svanire
+verdict|das Urteil|el veredicto|le verdict|il verdetto
+vice|das Laster|el vicio|le vice|il vizio
+viewpoint|der Standpunkt|el punto de vista|le point de vue|il punto di vista
+virtual|virtuell|virtual|virtuel|virtuale
+ward|die Station|la sala|le service|il reparto
+western|westlich|occidental|occidental|occidentale
+whatever|was auch immer|lo que sea|quoi que|qualunque cosa
+whatsoever|überhaupt|en absoluto|du tout|affatto
+whereas|während|mientras que|alors que|mentre
+whilst|während|mientras|pendant que|mentre
+wholly|völlig|totalmente|entièrement|interamente
+worldwide|weltweit|mundial|mondial|mondiale
+yard|der Hof|el patio|la cour|il cortile
 to heal|heilen|curar|guérir|guarire
 to whisper|flüstern|susurrar|chuchoter|sussurrare
 silence|die Stille|el silencio|le silence|il silenzio
@@ -3346,6 +4243,482 @@ negotiation|die Verhandlung|la negociación|la négociation|la trattativa
 championship|die Meisterschaft|el campeonato|le championnat|il campionato
 defender|der Verteidiger|el defensa|le défenseur|il difensore
 league|die Liga|la liga|la ligue|la lega
+to absorb|aufsaugen|absorber|absorber|assorbire
+abstract|abstrakt|abstracto|abstrait|astratto
+accent|der Akzent|el acento|l'accent|l'accento
+acceptable|akzeptabel|aceptable|acceptable|accettabile
+accidentally|versehentlich|accidentalmente|accidentellement|accidentalmente
+accuracy|die Genauigkeit|la exactitud|l'exactitude|l'accuratezza
+acid|die Säure|el ácido|l'acide|l'acido
+to activate|aktivieren|activar|activer|attivare
+to advance|vorrücken|avanzar|avancer|avanzare
+affair|die Angelegenheit|el asunto|l'affaire|la faccenda
+affordable|erschwinglich|asequible|abordable|accessibile
+agency|die Agentur|la agencia|l'agence|l'agenzia
+agenda|die Tagesordnung|el orden del día|l'ordre du jour|l'ordine del giorno
+amusing|amüsant|divertido|amusant|divertente
+analyst|der Analyst|el analista|l'analyste|l'analista
+anger|der Zorn|la ira|la colère|la rabbia
+angle|der Winkel|el ángulo|l'angle|l'angolo
+animation|die Animation|la animación|l'animation|l'animazione
+apparently|anscheinend|aparentemente|apparemment|apparentemente
+applicant|der Bewerber|el solicitante|le candidat|il candidato
+armed|bewaffnet|armado|armé|armato
+arms|die Waffen|las armas|les armes|le armi
+arrow|der Pfeil|la flecha|la flèche|la freccia
+artistic|künstlerisch|artístico|artistique|artistico
+artwork|das Kunstwerk|la obra de arte|l'œuvre d'art|l'opera d'arte
+aspect|der Aspekt|el aspecto|l'aspect|l'aspetto
+assessment|die Beurteilung|la evaluación|l'évaluation|la valutazione
+asset|das Vermögen|el activo|l'actif|il bene
+assumption|die Annahme|la suposición|l'hypothèse|il presupposto
+attachment|der Anhang|el adjunto|la pièce jointe|l'allegato
+auction|die Versteigerung|la subasta|la vente aux enchères|l'asta
+awareness|das Bewusstsein|la conciencia|la sensibilisation|la consapevolezza
+bacteria|die Bakterien|las bacterias|les bactéries|i batteri
+badge|das Abzeichen|la insignia|l'insigne|il distintivo
+balanced|ausgewogen|equilibrado|équilibré|equilibrato
+balloon|der Ballon|el globo|le ballon|il palloncino
+basically|im Grunde|básicamente|en gros|fondamentalmente
+to beg|betteln|mendigar|mendier|mendicare
+being|das Wesen|el ser|l'être|l'essere
+beneficial|vorteilhaft|beneficioso|bénéfique|vantaggioso
+bent|gebogen|doblado|plié|piegato
+bias|die Voreingenommenheit|el sesgo|le biais|il pregiudizio
+billionaire|der Milliardär|el multimillonario|le milliardaire|il miliardario
+biological|biologisch|biológico|biologique|biologico
+bombing|das Bombardement|el bombardeo|le bombardement|il bombardamento
+bond|die Bindung|el vínculo|le lien|il legame
+booking|die Buchung|la reserva|la réservation|la prenotazione
+bound|gebunden|obligado|lié|vincolato
+broadly|im Großen und Ganzen|en términos generales|globalement|in generale
+bullet|die Kugel|la bala|la balle|il proiettile
+bunch|das Bündel|el manojo|le bouquet|il mazzo
+caption|die Bildunterschrift|el pie de foto|la légende|la didascalia
+carbon|der Kohlenstoff|el carbono|le carbone|il carbonio
+cast|die Besetzung|el reparto|la distribution|il cast
+cell|die Zelle|la célula|la cellule|la cellula
+certainty|die Gewissheit|la certeza|la certitude|la certezza
+challenging|anspruchsvoll|exigente|exigeant|impegnativo
+circuit|der Stromkreis|el circuito|le circuit|il circuito
+civilization|die Zivilisation|la civilización|la civilisation|la civiltà
+to classify|einordnen|clasificar|classifier|classificare
+clerk|der Sachbearbeiter|el oficinista|l'employé de bureau|l'impiegato d'ufficio
+clip|der Clip|el clip|le clip|la clip
+collector|der Sammler|el coleccionista|le collectionneur|il collezionista
+colony|die Kolonie|la colonia|la colonie|la colonia
+combination|die Kombination|la combinación|la combinaison|la combinazione
+comedian|der Komiker|el cómico|l'humoriste|il comico
+commander|der Befehlshaber|el comandante|le commandant|il comandante
+commission|die Provision|la comisión|la commission|la commissione
+committee|der Ausschuss|el comité|le comité|il comitato
+commonly|üblicherweise|comúnmente|couramment|comunemente
+comparative|vergleichend|comparativo|comparatif|comparativo
+completion|die Fertigstellung|la finalización|l'achèvement|il completamento
+component|die Komponente|el componente|le composant|il componente
+to compose|komponieren|componer|composer|comporre
+comprehensive|umfassend|completo|complet|completo
+to comprise|umfassen|comprender|comprendre|comprendere
+compulsory|obligatorisch|obligatorio|obligatoire|obbligatorio
+concentration|die Konzentration|la concentración|la concentration|la concentrazione
+confusing|verwirrend|confuso|déroutant|confuso
+confusion|die Verwirrung|la confusión|la confusion|la confusione
+consequently|folglich|por consiguiente|par conséquent|di conseguenza
+conservation|der Naturschutz|la conservación|la conservation|la conservazione
+considerably|erheblich|considerablemente|considérablement|considerevolmente
+consideration|die Überlegung|la consideración|la considération|la considerazione
+consistently|beständig|constantemente|systématiquement|costantemente
+console|die Konsole|la consola|la console|la console
+conspiracy|die Verschwörung|la conspiración|la conspiration|la cospirazione
+consumption|der Verbrauch|el consumo|la consommation|il consumo
+contemporary|zeitgenössisch|contemporáneo|contemporain|contemporaneo
+to contest|anfechten|impugnar|contester|contestare
+controversial|umstritten|polémico|controversé|controverso
+controversy|die Kontroverse|la controversia|la controverse|la controversia
+convenience|die Bequemlichkeit|la comodidad|la commodité|la comodità
+convention|die Konvention|la convención|la convention|la convenzione
+conventional|herkömmlich|convencional|conventionnel|convenzionale
+to convert|umwandeln|convertir|convertir|convertire
+to convey|vermitteln|transmitir|transmettre|trasmettere
+core|der Kern|el núcleo|le noyau|il nucleo
+corporate|unternehmerisch|empresarial|d'entreprise|aziendale
+corporation|der Konzern|la corporación|la société|la società per azioni
+counter|die Theke|el mostrador|le comptoir|il bancone
+county|der Landkreis|el condado|le comté|la contea
+coverage|die Berichterstattung|la cobertura|la couverture|la copertura
+craft|das Handwerk|la artesanía|l'artisanat|l'artigianato
+creation|die Schöpfung|la creación|la création|la creazione
+creativity|die Kreativität|la creatividad|la créativité|la creatività
+creature|das Geschöpf|la criatura|la créature|la creatura
+crew|die Besatzung|la tripulación|l'équipage|l'equipaggio
+critic|der Kritiker|el crítico|le critique|il critico
+cue|das Stichwort|la señal|la réplique|la battuta
+curriculum|der Lehrplan|el plan de estudios|le programme scolaire|il curricolo
+curved|gekrümmt|curvo|courbé|curvo
+dairy|die Milchprodukte|los lácteos|les produits laitiers|i latticini
+darkness|die Dunkelheit|la oscuridad|l'obscurité|l'oscurità
+deck|das Deck|la cubierta|le pont|il ponte
+decline|der Rückgang|el declive|le déclin|il calo
+decoration|die Dekoration|la decoración|la décoration|la decorazione
+defence|die Verteidigung|la defensa|la défense|la difesa
+to accommodate|unterbringen|alojar|héberger|ospitare
+to assign|zuteilen|asignar|affecter|assegnare
+to assure|zusichern|asegurar|assurer|garantire
+barely|gerade noch|a duras penas|tout juste|a malapena
+canal|die Wasserstraße|la vía fluvial|la voie navigable|la via d'acqua
+chief|hauptsächlich|principal|principal|principale
+concerned|betroffen|afectado|concerné|interessato
+deliberate|absichtlich|deliberado|délibéré|deliberato
+deliberately|absichtlich|a propósito|délibérément|deliberatamente
+delighted|erfreut|encantado|enchanté|lieto
+to demonstrate|demonstrieren|demostrar|démontrer|dimostrare
+demonstration|die Demonstration|la manifestación|la manifestation|la manifestazione
+depressed|deprimiert|deprimido|déprimé|depresso
+depressing|deprimierend|deprimente|déprimant|deprimente
+depression|die Depression|la depresión|la dépression|la depressione
+depth|die Tiefe|la profundidad|la profondeur|la profondità
+desperately|verzweifelt|desesperadamente|désespérément|disperatamente
+destruction|die Zerstörung|la destrucción|la destruction|la distruzione
+to detect|aufspüren|detectar|détecter|individuare
+determination|die Entschlossenheit|la determinación|la détermination|la determinazione
+to devote|widmen|dedicar|consacrer|dedicare
+disability|die Behinderung|la discapacidad|le handicap|la disabilità
+disagreement|die Meinungsverschiedenheit|el desacuerdo|le désaccord|il disaccordo
+dishonest|unehrlich|deshonesto|malhonnête|disonesto
+to distract|ablenken|distraer|distraire|distrarre
+distribution|die Verteilung|la distribución|la distribution|la distribuzione
+district|der Bezirk|el distrito|le quartier|il distretto
+diverse|vielfältig|diverso|divers|diverso
+division|die Teilung|la división|la division|la divisione
+dominant|dominant|dominante|dominant|dominante
+to dominate|dominieren|dominar|dominer|dominare
+donation|die Spende|la donación|le don|la donazione
+draft|der Entwurf|el borrador|le brouillon|la bozza
+dramatically|dramatisch|drásticamente|de façon spectaculaire|drasticamente
+to dump|abladen|vertir|décharger|scaricare
+dynamic|dynamisch|dinámico|dynamique|dinamico
+ecosystem|das Ökosystem|el ecosistema|l'écosystème|l'ecosistema
+editorial|redaktionell|editorial|éditorial|editoriale
+efficiently|effizient|eficientemente|efficacement|efficientemente
+electronics|die Elektronik|la electrónica|l'électronique|l'elettronica
+elementary|elementar|elemental|élémentaire|elementare
+elsewhere|anderswo|en otra parte|ailleurs|altrove
+emission|der Ausstoß|la emisión|l'émission|l'emissione
+emphasis|die Betonung|el énfasis|l'accent|l'enfasi
+to engage|einbinden|involucrar|impliquer|coinvolgere
+enquiry|die Anfrage|la consulta|la demande de renseignements|la richiesta di informazioni
+entertaining|unterhaltsam|entretenido|divertissant|divertente
+enthusiasm|die Begeisterung|el entusiasmo|l'enthousiasme|l'entusiasmo
+equivalent|gleichwertig|equivalente|équivalent|equivalente
+era|die Ära|la era|l'ère|l'era
+to erupt|ausbrechen|entrar en erupción|entrer en éruption|eruttare
+essentially|im Wesentlichen|esencialmente|essentiellement|essenzialmente
+estate|das Anwesen|la finca|le domaine|la tenuta
+ethic|die Ethik|la ética|l'éthique|l'etica
+ethical|ethisch|ético|éthique|etico
+ethnic|ethnisch|étnico|ethnique|etnico
+evaluation|die Bewertung|la evaluación|l'évaluation|la valutazione
+excuse|die Ausrede|la excusa|l'excuse|la scusa
+executive|der Geschäftsführer|el ejecutivo|le cadre dirigeant|il dirigente
+exhibit|das Ausstellungsstück|la pieza expuesta|la pièce exposée|il pezzo esposto
+expansion|die Erweiterung|la expansión|l'expansion|l'espansione
+expertise|das Fachwissen|la pericia|l'expertise|la competenza
+to exploit|ausnutzen|explotar|exploiter|sfruttare
+extension|die Verlängerung|la prórroga|la prolongation|la proroga
+extensive|umfangreich|extenso|étendu|esteso
+extraordinary|außergewöhnlich|extraordinario|extraordinaire|straordinario
+fake|gefälscht|falso|faux|falso
+fame|der Ruhm|la fama|la célébrité|la fama
+fare|der Fahrpreis|la tarifa|le tarif|la tariffa
+firework|das Feuerwerk|el fuego artificial|le feu d'artifice|i fuochi d'artificio
+flame|die Flamme|la llama|la flamme|la fiamma
+folding|Klapp-|plegable|pliant|pieghevole
+follower|der Anhänger|el seguidor|l'abonné|il seguace
+fond|zugetan|aficionado a|attaché|affezionato
+fool|der Narr|el tonto|le sot|lo sciocco
+footprint|der Fußabdruck|la huella|l'empreinte|l'impronta
+format|das Format|el formato|le format|il formato
+fortune|das Vermögen|la fortuna|la fortune|la fortuna
+fossil|das Fossil|el fósil|le fossile|il fossile
+founder|der Gründer|el fundador|le fondateur|il fondatore
+fraction|der Bruch|la fracción|la fraction|la frazione
+fragment|das Bruchstück|el fragmento|le fragment|il frammento
+fundamental|grundlegend|fundamental|fondamental|fondamentale
+funding|die Finanzierung|la financiación|le financement|il finanziamento
+furious|zornig|furioso|furieux|furioso
+gaming|das Gaming|los videojuegos|le jeu vidéo|il gaming
+gang|die Bande|la banda|la bande|la banda criminale
+gay|schwul|gay|gay|gay
+gene|das Gen|el gen|le gène|il gene
+to generate|erzeugen|generar|générer|generare
+genetic|genetisch|genético|génétique|genetico
+genius|das Genie|el genio|le génie|il genio
+genre|das Genre|el género|le genre|il genere
+gesture|die Geste|el gesto|le geste|il gesto
+globalization|die Globalisierung|la globalización|la mondialisation|la globalizzazione
+globe|die Weltkugel|el globo terráqueo|le globe|il globo
+goodness|die Güte|la bondad|la bonté|la bontà
+governor|der Gouverneur|el gobernador|le gouverneur|il governatore
+grand|großartig|grandioso|grandiose|grandioso
+graphic|grafisch|gráfico|graphique|grafico
+greenhouse|das Gewächshaus|el invernadero|la serre|la serra
+grocery|das Lebensmittelgeschäft|la tienda de comestibles|l'épicerie|il negozio di alimentari
+guideline|die Richtlinie|la directriz|la directive|la linea guida
+habitat|der Lebensraum|el hábitat|l'habitat|l'habitat
+healthcare|das Gesundheitswesen|la sanidad|la santé|la sanità
+hearing|die Anhörung|la audiencia|l'audition|l'udienza
+hell|die Hölle|el infierno|l'enfer|l'inferno
+highway|die Schnellstraße|la autopista|l'autoroute|la superstrada
+hilarious|urkomisch|hilarante|hilarant|esilarante
+hollow|hohl|hueco|creux|vuoto
+homeless|obdachlos|sin hogar|sans-abri|senzatetto
+humorous|humorvoll|humorístico|humoristique|umoristico
+hunting|die Jagd|la caza|la chasse|la caccia
+icon|das Idol|el icono|l'icône|l'icona
+illusion|die Illusion|la ilusión|l'illusion|l'illusione
+illustration|die Illustration|la ilustración|l'illustration|l'illustrazione
+immigration|die Einwanderung|la inmigración|l'immigration|l'immigrazione
+immune|immun|inmune|immunisé|immune
+to implement|umsetzen|implementar|mettre en œuvre|attuare
+implication|die Folgerung|la implicación|l'implication|l'implicazione
+to imply|andeuten|implicar|impliquer|implicare
+impressed|beeindruckt|impresionado|impressionné|colpito
+incentive|der Anreiz|el incentivo|l'incitation|l'incentivo
+incident|der Vorfall|el incidente|l'incident|l'incidente
+to incorporate|einbauen|incorporar|incorporer|incorporare
+increasingly|zunehmend|cada vez más|de plus en plus|sempre più
+index|das Verzeichnis|el índice|l'index|l'indice
+industrial|industriell|industrial|industriel|industriale
+inevitably|unweigerlich|inevitablemente|inévitablement|inevitabilmente
+info|die Info|la información|l'info|l'informazione
+infrastructure|die Infrastruktur|la infraestructura|l'infrastructure|l'infrastruttura
+ink|die Tinte|la tinta|l'encre|l'inchiostro
+innovative|innovativ|innovador|innovant|innovativo
+input|die Eingabe|la entrada de datos|la saisie|l'input
+installation|die Installation|la instalación|l'installation|l'installazione
+intellectual|intellektuell|intelectual|intellectuel|intellettuale
+intended|beabsichtigt|previsto|prévu|previsto
+to interact|interagieren|interactuar|interagir|interagire
+interpretation|die Deutung|la interpretación|l'interprétation|l'interpretazione
+interval|das Intervall|el intervalo|l'intervalle|l'intervallo
+invasion|die Invasion|la invasión|l'invasion|l'invasione
+investor|der Anleger|el inversor|l'investisseur|l'investitore
+jet|das Düsenflugzeug|el reactor|le jet|il jet
+journalism|der Journalismus|el periodismo|le journalisme|il giornalismo
+jury|die Jury|el jurado|le jury|la giuria
+largely|größtenteils|en gran parte|en grande partie|in gran parte
+licence|die Lizenz|la licencia|la licence|la licenza
+lifetime|die Lebenszeit|la vida|la vie|la vita
+lighting|die Beleuchtung|la iluminación|l'éclairage|l'illuminazione
+limitation|die Einschränkung|la limitación|la limitation|la limitazione
+literally|buchstäblich|literalmente|littéralement|letteralmente
+logo|das Logo|el logotipo|le logo|il logo
+long-term|langfristig|a largo plazo|à long terme|a lungo termine
+lottery|die Lotterie|la lotería|la loterie|la lotteria
+to lower|senken|bajar|baisser|abbassare
+lyric|der Liedtext|la letra|les paroles|il testo
+make-up|das Make-up|el maquillaje|le maquillage|il trucco
+making|die Herstellung|la fabricación|la fabrication|la realizzazione
+mass|massiv|masivo|massif|massiccio
+matching|passend|a juego|assorti|abbinato
+mate|der Kumpel|el compañero|le copain|il compagno
+measurement|die Messung|la medición|la mesure|la misurazione
+mechanical|mechanisch|mecánico|mécanique|meccanico
+medication|die Medikation|la medicación|le traitement médicamenteux|la medicazione
+memorable|unvergesslich|memorable|mémorable|memorabile
+metaphor|die Metapher|la metáfora|la métaphore|la metafora
+minimum|das Minimum|el mínimo|le minimum|il minimo
+mode|der Modus|el modo|le mode|la modalità
+monster|das Monster|el monstruo|le monstre|il mostro
+moreover|überdies|asimismo|de surcroît|per di più
+mortgage|die Hypothek|la hipoteca|l'hypothèque|il mutuo
+motivation|die Motivation|la motivación|la motivation|la motivazione
+to mount|montieren|montar|monter|montare
+moving|bewegend|conmovedor|émouvant|commovente
+multiple|mehrfach|múltiple|multiple|multiplo
+myth|der Mythos|el mito|le mythe|il mito
+to navigate|navigieren|navegar|naviguer|navigare
+navigation|die Navigation|la navegación|la navigation|la navigazione
+nightmare|der Albtraum|la pesadilla|le cauchemar|l'incubo
+novelist|der Romanautor|el novelista|le romancier|il romanziere
+nursing|die Krankenpflege|la enfermería|les soins infirmiers|l'assistenza infermieristica
+obesity|die Fettleibigkeit|la obesidad|l'obésité|l'obesità
+observer|der Beobachter|el observador|l'observateur|l'osservatore
+occasionally|ab und zu|de vez en cuando|de temps en temps|ogni tanto
+offence|das Vergehen|el delito|le délit|il reato
+to offend|kränken|ofender|offenser|offendere
+offensive|anstößig|ofensivo|offensant|offensivo
+ongoing|laufend|en curso|en cours|in corso
+opening|die Öffnung|la apertura|l'ouverture|l'apertura
+operator|der Betreiber|el operador|l'opérateur|l'operatore
+to oppose|bekämpfen|oponerse|s'opposer|opporsi
+organ|das Organ|el órgano|l'organe|l'organo
+outer|äußere|exterior|extérieur|esterno
+outfit|das Outfit|el conjunto|la tenue|l'abbinamento
+outline|der Umriss|el esquema|le contour|lo schema
+overnight|über Nacht|de la noche a la mañana|du jour au lendemain|dall'oggi al domani
+oxygen|der Sauerstoff|el oxígeno|l'oxygène|l'ossigeno
+pandemic|die Pandemie|la pandemia|la pandémie|la pandemia
+panic|die Panik|el pánico|la panique|il panico
+parade|die Parade|el desfile|le défilé|la parata
+partly|zum Teil|en parte|en partie|in parte
+partnership|die Partnerschaft|la asociación|le partenariat|la partnership
+part-time|Teilzeit-|a tiempo parcial|à temps partiel|a tempo parziale
+passionate|leidenschaftlich|apasionado|passionné|appassionato
+peer|der Gleichaltrige|el compañero|le pair|il coetaneo
+permanently|dauerhaft|permanentemente|de façon permanente|permanentemente
+permit|die Genehmigung|el permiso|le permis|il permesso
+phenomenon|das Phänomen|el fenómeno|le phénomène|il fenomeno
+pile|der Stapel|la pila|la pile|la pila
+pitch|das Spielfeld|el campo|le terrain|il campo
+pity|das Mitleid|la lástima|la pitié|la pietà
+placement|die Platzierung|la colocación|le placement|il collocamento
+popularity|die Beliebtheit|la popularidad|la popularité|la popolarità
+to pose|posieren|plantear|poser|porre
+potential|das Potenzial|el potencial|le potentiel|il potenziale
+potentially|potenziell|potencialmente|potentiellement|potenzialmente
+to precede|vorausgehen|preceder|précéder|precedere
+predictable|vorhersehbar|predecible|prévisible|prevedibile
+preview|die Vorschau|la vista previa|l'aperçu|l'anteprima
+primarily|vorwiegend|principalmente|essentiellement|principalmente
+prime|erstklassig|principal|premier|primo
+prior|vorherig|anterior|préalable|precedente
+programming|die Programmierung|la programación|la programmation|la programmazione
+progressive|fortschrittlich|progresista|progressiste|progressista
+promising|vielversprechend|prometedor|prometteur|promettente
+to prompt|veranlassen|incitar|inciter|spingere
+protein|das Eiweiß|la proteína|la protéine|la proteina
+protester|der Demonstrant|el manifestante|le manifestant|il manifestante
+psychological|psychologisch|psicológico|psychologique|psicologico
+publishing|das Verlagswesen|la edición|l'édition|l'editoria
+punk|der Punk|el punk|le punk|il punk
+pupil|die Pupille|la pupila|la pupille|la pupilla
+to pursue|verfolgen|perseguir|poursuivre|perseguire
+pursuit|das Streben|la búsqueda|la poursuite|la ricerca
+questionnaire|der Fragebogen|el cuestionario|le questionnaire|il questionario
+racial|rassisch|racial|racial|razziale
+racism|der Rassismus|el racismo|le racisme|il razzismo
+racist|rassistisch|racista|raciste|razzista
+radiation|die Strahlung|la radiación|le rayonnement|la radiazione
+rail|die Schiene|el riel|le rail|la rotaia
+rank|der Rang|el rango|le rang|il grado
+rapid|rasch|rápido|rapide|rapido
+rating|die Bewertung|la valoración|la note|la valutazione
+recession|die Rezession|la recesión|la récession|la recessione
+recruit|der Rekrut|el recluta|la recrue|la recluta
+recruitment|die Einstellung|el reclutamiento|le recrutement|il reclutamento
+reduction|die Verringerung|la reducción|la réduction|la riduzione
+refugee|der Flüchtling|el refugiado|le réfugié|il rifugiato
+register|das Register|el registro|le registre|il registro
+to reinforce|verstärken|reforzar|renforcer|rinforzare
+to relieve|lindern|aliviar|soulager|alleviare
+to rely|sich verlassen auf|confiar en|compter sur|fare affidamento su
+remark|die Bemerkung|la observación|la remarque|l'osservazione
+reporting|die Berichterstattung|el reporte|le reportage|la segnalazione
+representative|repräsentativ|representativo|représentatif|rappresentativo
+rescue|die Rettung|el rescate|le sauvetage|il salvataggio
+to resign|zurücktreten|dimitir|démissionner|dimettersi
+resort|der Urlaubsort|el centro turístico|la station touristique|la località turistica
+to restrict|einschränken|restringir|restreindre|limitare
+retail|der Einzelhandel|el comercio minorista|le commerce de détail|il commercio al dettaglio
+retirement|der Ruhestand|la jubilación|la retraite|il pensionamento
+revision|die Überarbeitung|la revisión|la révision|la revisione
+to rid|befreien|librar|débarrasser|liberare
+risky|riskant|arriesgado|risqué|rischioso
+rival|der Rivale|el rival|le rival|il rivale
+robbery|der Raub|el robo|le vol|la rapina
+rocket|die Rakete|el cohete|la fusée|il razzo
+romance|die Romanze|el romance|la romance|la storia d'amore
+roughly|grob|aproximadamente|grosso modo|all'incirca
+rubber|das Gummi|el caucho|le caoutchouc|la gomma
+satellite|der Satellit|el satélite|le satellite|il satellite
+saving|die Ersparnis|el ahorro|l'économie|il risparmio
+scholar|der Gelehrte|el erudito|l'érudit|lo studioso
+screening|die Vorführung|la proyección|la projection|la proiezione
+to seek|aufsuchen|buscar|chercher|cercare
+seeker|der Suchende|el buscador|le chercheur|il ricercatore
+sensor|der Sensor|el sensor|le capteur|il sensore
+settler|der Siedler|el colono|le colon|il colono
+sexy|sexy|sexy|sexy|sexy
+shaped|geformt|con forma de|en forme de|a forma di
+shock|der Schock|el choque|le choc|lo shock
+shocked|schockiert|conmocionado|choqué|scioccato
+shocking|schockierend|chocante|choquant|scioccante
+shooting|die Schießerei|el tiroteo|la fusillade|la sparatoria
+shortly|in Kürze|en breve|sous peu|a breve
+short-term|kurzfristig|a corto plazo|à court terme|a breve termine
+shot|der Schuss|el disparo|le coup de feu|lo sparo
+significant|bedeutend|significativo|significatif|significativo
+significantly|erheblich|significativamente|significativement|significativamente
+slave|der Sklave|el esclavo|l'esclave|lo schiavo
+slogan|der Slogan|el eslogan|le slogan|lo slogan
+slope|der Hang|la pendiente|la pente|il pendio
+solar|Solar-|solar|solaire|solare
+somehow|irgendwie|de algún modo|d'une manière ou d'une autre|in qualche modo
+sophisticated|raffiniert|sofisticado|sophistiqué|sofisticato
+to specialize|sich spezialisieren|especializarse|se spécialiser|specializzarsi
+spectacular|spektakulär|espectacular|spectaculaire|spettacolare
+spiritual|spirituell|espiritual|spirituel|spirituale
+spokesman|der Sprecher|el portavoz|le porte-parole|il portavoce
+spokesperson|der Pressesprecher|el portavoz|le porte-parole|il portavoce
+spokeswoman|die Sprecherin|la portavoz|la porte-parole|la portavoce
+sponsorship|das Sponsoring|el patrocinio|le sponsoring|la sponsorizzazione
+stance|die Haltung|la postura|la position|la posizione
+steadily|stetig|de forma constante|régulièrement|costantemente
+steam|der Dampf|el vapor|la vapeur|il vapore
+stroke|der Schlaganfall|el ictus|l'AVC|l'ictus
+stunning|atemberaubend|impresionante|époustouflant|mozzafiato
+subsequent|nachfolgend|posterior|ultérieur|successivo
+subsequently|anschließend|posteriormente|par la suite|successivamente
+surrounding|umliegend|circundante|environnant|circostante
+survival|das Überleben|la supervivencia|la survie|la sopravvivenza
+survivor|der Überlebende|el superviviente|le survivant|il sopravvissuto
+to suspend|aussetzen|suspender|suspendre|sospendere
+sustainable|nachhaltig|sostenible|durable|sostenibile
+sympathetic|mitfühlend|compasivo|compatissant|comprensivo
+tag|das Etikett|la etiqueta|l'étiquette|l'etichetta
+tattoo|die Tätowierung|el tatuaje|le tatouage|il tatuaggio
+technological|technologisch|tecnológico|technologique|tecnologico
+teens|die Teenager|los adolescentes|les adolescents|gli adolescenti
+temporarily|vorübergehend|temporalmente|temporairement|temporaneamente
+to terrify|zu Tode erschrecken|aterrorizar|terrifier|terrorizzare
+terrorism|der Terrorismus|el terrorismo|le terrorisme|il terrorismo
+terrorist|der Terrorist|el terrorista|le terroriste|il terrorista
+theft|der Diebstahl|el robo|le vol|il furto
+therapist|der Therapeut|el terapeuta|le thérapeute|il terapeuta
+thus|somit|por lo tanto|ainsi|dunque
+timeline|die Zeitleiste|la cronología|la chronologie|la cronologia
+tissue|das Gewebe|el tejido|le tissu|il tessuto
+ton|die Tonne|la tonelada|la tonne|la tonnellata
+tone|der Ton|el tono|le ton|il tono
+tonne|die Tonne|la tonelada métrica|la tonne métrique|la tonnellata metrica
+trait|die Eigenschaft|el rasgo|le trait|il tratto
+trigger|der Auslöser|el detonante|le déclencheur|il fattore scatenante
+trillion|die Billion|el billón|le billion|il bilione
+troop|die Truppe|la tropa|la troupe|la truppa
+truly|wahrhaftig|verdaderamente|vraiment|veramente
+tsunami|der Tsunami|el tsunami|le tsunami|lo tsunami
+tune|die Melodie|la melodía|la mélodie|la melodia
+ultimate|ultimativ|definitivo|ultime|definitivo
+ultimately|letztendlich|en última instancia|en fin de compte|in definitiva
+unacceptable|inakzeptabel|inaceptable|inacceptable|inaccettabile
+uncertainty|die Unsicherheit|la incertidumbre|l'incertitude|l'incertezza
+unconscious|bewusstlos|inconsciente|inconscient|incosciente
+unexpected|unerwartet|inesperado|inattendu|inatteso
+unfortunate|unglücklich|desafortunado|malheureux|sfortunato
+venue|der Veranstaltungsort|el lugar de celebración|le lieu|la sede
+vertical|vertikal|vertical|vertical|verticale
+villain|der Bösewicht|el villano|le méchant|il cattivo
+visual|visuell|visual|visuel|visivo
+warming|die Erwärmung|el calentamiento|le réchauffement|il riscaldamento
+weakness|die Schwäche|la debilidad|la faiblesse|la debolezza
+well-being|das Wohlbefinden|el bienestar|le bien-être|il benessere
+wheat|der Weizen|el trigo|le blé|il grano
+whoever|wer auch immer|quienquiera|quiconque|chiunque
+widespread|weit verbreitet|generalizado|répandu|diffuso
+willing|gewillt|dispuesto|volontaire|volenteroso
+workforce|die Belegschaft|la plantilla|la main-d'œuvre|la forza lavoro
+to wrap|einwickeln|envolver|emballer|avvolgere
 to wipe|wischen|limpiar con un paño|essuyer|asciugare
 to stir|rühren|remover|remuer|rimestare
 to squeeze|auspressen|exprimir|presser|spremere
@@ -4093,4 +5466,862 @@ striker|der Stürmer|el delantero|l'attaquant|l'attaccante
 table tennis|das Tischtennis|el tenis de mesa|le tennis de table|il ping-pong
 weightlifting|das Gewichtheben|la halterofilia|l'haltérophilie|il sollevamento pesi
 yoga|das Yoga|el yoga|le yoga|lo yoga
+to abolish|abschaffen|abolir|abolir|abolire
+abortion|der Schwangerschaftsabbruch|el aborto|l'avortement|l'aborto
+absence|die Abwesenheit|la ausencia|l'absence|l'assenza
+abundance|der Überfluss|la abundancia|l'abondance|l'abbondanza
+abuse|der Missbrauch|el abuso|l'abus|l'abuso
+to abuse|missbrauchen|abusar|abuser|abusare
+to accelerate|beschleunigen|acelerar|accélérer|accelerare
+acceptance|die Annahme|la aceptación|l'acceptation|l'accettazione
+accessory|das Zubehör|el accesorio|l'accessoire|l'accessorio
+accordance|die Übereinstimmung|la conformidad|la conformité|la conformità
+accordingly|dementsprechend|en consecuencia|en conséquence|di conseguenza
+accountability|die Rechenschaftspflicht|la responsabilidad|la responsabilité|la responsabilità
+accountable|rechenschaftspflichtig|responsable ante|responsable devant|responsabile di fronte a
+to accumulate|anhäufen|acumular|accumuler|accumulare
+accumulation|die Anhäufung|la acumulación|l'accumulation|l'accumulo
+accusation|die Beschuldigung|la acusación|l'accusation|l'accusa
+accused|der Angeklagte|el acusado|l'accusé|l'imputato
+activation|die Aktivierung|la activación|l'activation|l'attivazione
+activist|der Aktivist|el activista|l'activiste|l'attivista
+acute|akut|agudo|aigu|acuto
+adaptation|die Anpassung|la adaptación|l'adaptation|l'adattamento
+to adhere|haften|adherirse|adhérer|aderire
+adjustment|die Anpassung|el ajuste|l'ajustement|la regolazione
+to administer|verwalten|administrar|administrer|amministrare
+administrative|verwaltungstechnisch|administrativo|administratif|amministrativo
+administrator|der Verwalter|el administrador|l'administrateur|l'amministratore
+adoption|die Adoption|la adopción|l'adoption|l'adozione
+adverse|ungünstig|adverso|défavorable|avverso
+advocate|der Befürworter|el defensor|le défenseur|il sostenitore
+to advocate|befürworten|abogar por|préconiser|sostenere
+aesthetic|ästhetisch|estético|esthétique|estetico
+affection|die Zuneigung|el cariño|l'affection|l'affetto
+aggression|die Aggression|la agresión|l'agression|l'aggressione
+agricultural|landwirtschaftlich|agrícola|agricole|agricolo
+aide|der Berater|el asesor|le conseiller|il collaboratore
+albeit|wenngleich|aunque|bien que|sebbene
+algorithm|der Algorithmus|el algoritmo|l'algorithme|l'algoritmo
+alignment|die Ausrichtung|la alineación|l'alignement|l'allineamento
+allegation|die Behauptung|la acusación|l'allégation|l'accusa
+allegedly|angeblich|supuestamente|prétendument|presumibilmente
+alliance|das Bündnis|la alianza|l'alliance|l'alleanza
+to allocate|zuweisen|asignar|allouer|assegnare
+allocation|die Zuteilung|la asignación|l'allocation|l'assegnazione
+ally|der Verbündete|el aliado|l'allié|l'alleato
+aluminium|das Aluminium|el aluminio|l'aluminium|l'alluminio
+amid|inmitten|en medio de|au milieu de|in mezzo a
+analogy|die Analogie|la analogía|l'analogie|l'analogia
+angel|der Engel|el ángel|l'ange|l'angelo
+anonymous|anonym|anónimo|anonyme|anonimo
+appealing|ansprechend|atractivo|attrayant|attraente
+applicable|anwendbar|aplicable|applicable|applicabile
+to appoint|ernennen|nombrar|nommer|nominare
+appreciation|die Wertschätzung|el aprecio|l'appréciation|l'apprezzamento
+architectural|architektonisch|arquitectónico|architectural|architettonico
+archive|das Archiv|el archivo|les archives|l'archivio
+arena|die Arena|el estadio|l'arène|l'arena
+to articulate|formulieren|articular|articuler|articolare
+ash|die Asche|la ceniza|la cendre|la cenere
+aspiration|das Streben|la aspiración|l'aspiration|l'aspirazione
+to aspire|anstreben|aspirar|aspirer|aspirare
+assassination|das Attentat|el asesinato|l'assassinat|l'assassinio
+assault|der Angriff|la agresión|l'agression|l'aggressione
+to assault|angreifen|agredir|agresser|aggredire
+assertion|die Behauptung|la afirmación|l'affirmation|l'affermazione
+assurance|die Zusicherung|la garantía|l'assurance|la garanzia
+attendance|die Anwesenheit|la asistencia|la présence|la presenza
+attorney|der Rechtsanwalt|el abogado|l'avocat|l'avvocato
+attribute|die Eigenschaft|el atributo|l'attribut|l'attributo
+to attribute|zuschreiben|atribuir|attribuer|attribuire
+autonomy|die Autonomie|la autonomía|l'autonomie|l'autonomia
+availability|die Verfügbarkeit|la disponibilidad|la disponibilité|la disponibilità
+backdrop|der Hintergrund|el telón de fondo|la toile de fond|lo sfondo
+bail|die Kaution|la fianza|la caution|la cauzione
+bang|der Knall|el estallido|le bang|il botto
+to bang|knallen|golpear|cogner|sbattere
+banner|das Banner|la pancarta|la bannière|lo striscione
+bass|der Bass|el bajo|la basse|il basso
+battlefield|das Schlachtfeld|el campo de batalla|le champ de bataille|il campo di battaglia
+beast|das Ungeheuer|la bestia|la bête|la bestia
+behalf|im Namen von|en nombre de|au nom de|a nome di
+benchmark|der Maßstab|el punto de referencia|le repère|il parametro di riferimento
+beneficiary|der Begünstigte|el beneficiario|le bénéficiaire|il beneficiario
+biography|die Biografie|la biografía|la biographie|la biografia
+bishop|der Bischof|el obispo|l'évêque|il vescovo
+bizarre|bizarr|extravagante|bizarre|bizzarro
+blade|die Klinge|la hoja|la lame|la lama
+blast|die Explosion|la explosión|l'explosion|l'esplosione
+blaze|der Brand|el incendio|l'incendie|l'incendio
+blessing|der Segen|la bendición|la bénédiction|la benedizione
+to bolster|stärken|reforzar|renforcer|rafforzare
+boom|der Boom|el auge|l'essor|il boom
+boost|der Aufschwung|el impulso|le coup de pouce|la spinta
+to boost|ankurbeln|impulsar|stimuler|stimolare
+to bounce|abprallen|rebotar|rebondir|rimbalzare
+bout|der Anfall|el ataque|l'accès|l'attacco
+breach|der Verstoß|la infracción|la violation|la violazione
+breakdown|der Zusammenbruch|la avería|la panne|il guasto
+breakthrough|der Durchbruch|el avance decisivo|la percée|la svolta
+breed|die Rasse|la raza|la race|la razza
+to breed|züchten|criar|élever|allevare
+broadband|das Breitband|la banda ancha|le haut débit|la banda larga
+brutal|brutal|brutal|brutal|brutale
+buddy|der Kumpel|el colega|le copain|il compagno
+buffer|der Puffer|el búfer|la mémoire tampon|il buffer
+burial|die Beerdigung|el entierro|l'enterrement|la sepoltura
+to burst|platzen|reventar|éclater|scoppiare
+buzz|das Summen|el zumbido|le bourdonnement|il ronzio
+calculation|die Berechnung|el cálculo|le calcul|il calcolo
+cancellation|die Stornierung|la cancelación|l'annulation|la cancellazione
+capitalism|der Kapitalismus|el capitalismo|le capitalisme|il capitalismo
+capitalist|kapitalistisch|capitalista|capitaliste|capitalista
+cargo|die Fracht|la carga|la cargaison|il carico
+casino|das Casino|el casino|le casino|il casinò
+to cater|verköstigen|abastecer|approvisionner|rifornire
+cattle|das Vieh|el ganado|le bétail|il bestiame
+chamber|die Kammer|la cámara|la chambre|la camera
+chaos|das Chaos|el caos|le chaos|il caos
+to characterize|kennzeichnen|caracterizar|caractériser|caratterizzare
+charming|reizvoll|encantador|charmant|affascinante
+charter|die Charta|la carta|la charte|la carta
+chill|die Kühle|el frío|la fraîcheur|il brivido
+chronic|chronisch|crónico|chronique|cronico
+chunk|der Brocken|el trozo grande|le gros morceau|il pezzo grosso
+to circulate|zirkulieren|circular|circuler|circolare
+circulation|der Kreislauf|la circulación|la circulation|la circolazione
+citizenship|die Staatsbürgerschaft|la ciudadanía|la citoyenneté|la cittadinanza
+civic|bürgerlich|cívico|civique|civico
+civilian|der Zivilist|el civil|le civil|il civile
+clarity|die Klarheit|la claridad|la clarté|la chiarezza
+clash|der Zusammenstoß|el choque|l'affrontement|lo scontro
+classification|die Klassifizierung|la clasificación|la classification|la classificazione
+to cling|sich klammern|aferrarse|s'accrocher|aggrapparsi
+clinical|klinisch|clínico|clinique|clinico
+closure|die Schließung|el cierre|la fermeture|la chiusura
+coalition|die Koalition|la coalición|la coalition|la coalizione
+coastal|Küsten-|costero|côtier|costiero
+cognitive|kognitiv|cognitivo|cognitif|cognitivo
+to coincide|zusammenfallen|coincidir|coïncider|coincidere
+to collaborate|zusammenarbeiten|colaborar|collaborer|collaborare
+collective|kollektiv|colectivo|collectif|collettivo
+collision|die Kollision|la colisión|la collision|la collisione
+columnist|der Kolumnist|el columnista|le chroniqueur|l'editorialista
+comeback|das Comeback|el regreso|le retour|il ritorno
+commentator|der Kommentator|el comentarista|le commentateur|il commentatore
+commissioner|der Beauftragte|el comisario|le commissaire|il commissario
+communist|kommunistisch|comunista|communiste|comunista
+companion|der Begleiter|el compañero|le compagnon|il compagno
+comparable|vergleichbar|comparable|comparable|paragonabile
+compelling|überzeugend|convincente|convaincant|avvincente
+compensation|die Entschädigung|la compensación|l'indemnisation|il risarcimento
+competence|die Kompetenz|la competencia|la compétence|la competenza
+competent|kompetent|competente|compétent|competente
+to compile|zusammenstellen|compilar|compiler|compilare
+complexity|die Komplexität|la complejidad|la complexité|la complessità
+compliance|die Einhaltung|el cumplimiento|la conformité|la conformità
+complication|die Komplikation|la complicación|la complication|la complicazione
+to comply|einhalten|cumplir|se conformer|conformarsi
+to compromise|Kompromisse eingehen|transigir|faire des compromis|scendere a compromessi
+to conceal|verbergen|ocultar|dissimuler|nascondere
+to concede|zugeben|conceder|concéder|concedere
+concession|das Zugeständnis|la concesión|la concession|la concessione
+confession|das Geständnis|la confesión|l'aveu|la confessione
+configuration|die Konfiguration|la configuración|la configuration|la configurazione
+to confront|konfrontieren|enfrentar|confronter|confrontare
+confrontation|die Konfrontation|la confrontación|la confrontation|lo scontro
+congressional|Kongress-|del Congreso|du Congrès|del Congresso
+connectivity|die Konnektivität|la conectividad|la connectivité|la connettività
+consciousness|das Bewusstsein|la consciencia|la conscience|la coscienza
+consecutive|aufeinanderfolgend|consecutivo|consécutif|consecutivo
+consensus|der Konsens|el consenso|le consensus|il consenso
+to consent|einwilligen|consentir|consentir|acconsentire
+to conserve|bewahren|conservar|conserver|conservare
+consistency|die Beständigkeit|la consistencia|la cohérence|la coerenza
+to consolidate|festigen|consolidar|consolider|consolidare
+constituency|der Wahlkreis|la circunscripción|la circonscription|il collegio elettorale
+constitution|die Verfassung|la constitución|la constitution|la costituzione
+constitutional|verfassungsmäßig|constitucional|constitutionnel|costituzionale
+to contemplate|nachsinnen|contemplar|contempler|contemplare
+contempt|die Verachtung|el desprecio|le mépris|il disprezzo
+to contend|konkurrieren|contender|prétendre|competere
+contender|der Anwärter|el aspirante|le prétendant|il pretendente
+contention|die Streitfrage|la contención|la contention|la contesa
+continually|fortwährend|continuamente|continuellement|continuamente
+contractor|der Auftragnehmer|el contratista|l'entrepreneur|l'appaltatore
+contrary|entgegengesetzt|contrario|contraire|contrario
+contributor|der Beitragende|el colaborador|le contributeur|il collaboratore
+conversion|die Umwandlung|la conversión|la conversion|la conversione
+cooperation|die Kooperation|la cooperación|la coopération|la cooperazione
+cooperative|kooperativ|cooperativo|coopératif|cooperativo
+to coordinate|koordinieren|coordinar|coordonner|coordinare
+coordination|die Koordination|la coordinación|la coordination|il coordinamento
+coordinator|der Koordinator|el coordinador|le coordinateur|il coordinatore
+copper|das Kupfer|el cobre|le cuivre|il rame
+copyright|das Urheberrecht|los derechos de autor|le droit d'auteur|il diritto d'autore
+correction|die Korrektur|la corrección|la correction|la correzione
+correlation|die Korrelation|la correlación|la corrélation|la correlazione
+correspondent|der Korrespondent|el corresponsal|le correspondant|il corrispondente
+corresponding|entsprechend|correspondiente|correspondant|corrispondente
+corrupt|korrupt|corrupto|corrompu|corrotto
+corruption|die Korruption|la corrupción|la corruption|la corruzione
+councillor|der Stadtrat|el concejal|le conseiller municipal|il consigliere comunale
+counterpart|das Gegenstück|el homólogo|l'homologue|la controparte
+countless|zahllos|incontable|innombrable|innumerevole
+coup|der Putsch|el golpe de estado|le coup d'État|il colpo di stato
+courtesy|die Höflichkeit|la cortesía|la courtoisie|la cortesia
+creator|der Schöpfer|el creador|le créateur|il creatore
+credibility|die Glaubwürdigkeit|la credibilidad|la crédibilité|la credibilità
+credible|glaubwürdig|creíble|crédible|credibile
+to creep|schleichen|arrastrarse|ramper|strisciare
+crown|die Krone|la corona|la couronne|la corona
+to crush|zerdrücken|aplastar|écraser|schiacciare
+cryptocurrency|die Kryptowährung|la criptomoneda|la cryptomonnaie|la criptovaluta
+crystal|der Kristall|el cristal|le cristal|il cristallo
+cult|der Kult|el culto|le culte|il culto
+custody|das Sorgerecht|la custodia|la garde|l'affidamento
+dam|der Damm|la presa|le barrage|la diga
+debris|die Trümmer|los escombros|les débris|i detriti
+debut|das Debüt|el debut|les débuts|il debutto
+decision-making|die Entscheidungsfindung|la toma de decisiones|la prise de décision|il processo decisionale
+decisive|entscheidend|decisivo|décisif|decisivo
+dedicated|engagiert|dedicado|dévoué|dedito
+dedication|die Hingabe|la dedicación|le dévouement|la dedizione
+to deem|erachten|considerar|juger|ritenere
+default|die Voreinstellung|el valor predeterminado|la valeur par défaut|l'impostazione predefinita
+defect|der Defekt|el defecto|le défaut|il difetto
+defensive|defensiv|defensivo|défensif|difensivo
+deficit|das Defizit|el déficit|le déficit|il deficit
+ambassador|der Botschafter|el embajador|l'ambassadeur|l'ambasciatore
+analytics|die Analytik|la analítica|l'analytique|l'analitica
+to attain|erlangen|lograr|parvenir à|raggiungere
+to authorize|bevollmächtigen|autorizar|habiliter|autorizzare
+blend|das Gemisch|la combinación|l'association|l'insieme
+cluster|der Haufen|el racimo|la grappe|il grappolo
+commerce|der Handelsverkehr|el tráfico mercantil|les échanges commerciaux|gli scambi commerciali
+compel|nötigen|forzar|contraindre|obbligare
+convict|der Sträfling|el convicto|le condamné|il condannato
+to correlate|korrelieren|correlacionar|être en corrélation|essere correlato
+counsellor|der Berater|el consejero|le conseiller|il consulente
+to defy|trotzen|desafiar|défier|sfidare
+delegate|der Delegierte|el delegado|le délégué|il delegato
+delegation|die Delegation|la delegación|la délégation|la delegazione
+demon|der Dämon|el demonio|le démon|il demone
+denial|die Verleugnung|la negación|le déni|la negazione
+to denounce|anprangern|denunciar|dénoncer|denunciare
+density|die Dichte|la densidad|la densité|la densità
+dependence|die Abhängigkeit|la dependencia|la dépendance|la dipendenza
+deployment|der Einsatz|el despliegue|le déploiement|lo schieramento
+to deprive|berauben|privar|priver|privare
+deputy|der Stellvertreter|el adjunto|l'adjoint|il vice
+to descend|hinabsteigen|descender|descendre|discendere
+descent|der Abstieg|el descenso|la descente|la discesa
+to designate|bestimmen|designar|désigner|designare
+desirable|wünschenswert|deseable|souhaitable|desiderabile
+destructive|zerstörerisch|destructivo|destructeur|distruttivo
+detection|die Erkennung|la detección|la détection|il rilevamento
+detention|die Haft|la detención|la détention|la detenzione
+to deteriorate|sich verschlechtern|deteriorarse|se détériorer|deteriorarsi
+to devastate|verwüsten|devastar|dévaster|devastare
+devastating|verheerend|devastador|dévastateur|devastante
+devil|der Teufel|el diablo|le diable|il diavolo
+to devise|ersinnen|idear|concevoir|ideare
+to diagnose|diagnostizieren|diagnosticar|diagnostiquer|diagnosticare
+to dictate|diktieren|dictar|dicter|dettare
+dilemma|das Dilemma|el dilema|le dilemme|il dilemma
+to diminish|verringern|disminuir|diminuer|ridurre
+diplomat|der Diplomat|el diplomático|le diplomate|il diplomatico
+diplomatic|diplomatisch|diplomático|diplomatique|diplomatico
+disastrous|katastrophal|desastroso|désastreux|disastroso
+to disclose|offenlegen|revelar|divulguer|rivelare
+disclosure|die Offenlegung|la divulgación|la divulgation|la divulgazione
+discourse|der Diskurs|el discurso|le discours|il discorso
+discretion|die Diskretion|la discreción|la discrétion|la discrezione
+discrimination|die Diskriminierung|la discriminación|la discrimination|la discriminazione
+to displace|verdrängen|desplazar|déplacer|spostare
+disposal|die Entsorgung|la eliminación|l'élimination|lo smaltimento
+distinctive|unverwechselbar|distintivo|distinctif|distintivo
+disturbing|beunruhigend|inquietante|inquiétant|inquietante
+to divert|umleiten|desviar|détourner|deviare
+dividend|die Dividende|el dividendo|le dividende|il dividendo
+doctrine|die Doktrin|la doctrina|la doctrine|la dottrina
+documentation|die Dokumentation|la documentación|la documentation|la documentazione
+dominance|die Vorherrschaft|el dominio|la domination|il predominio
+donor|der Spender|el donante|le donateur|il donatore
+drone|die Drohne|el dron|le drone|il drone
+duo|das Duo|el dúo|le duo|il duo
+earnings|der Verdienst|las ganancias|les revenus|i guadagni
+ease|die Leichtigkeit|la facilidad|l'aisance|la facilità
+echo|das Echo|el eco|l'écho|l'eco
+e-commerce|der E-Commerce|el comercio electrónico|le commerce électronique|il commercio elettronico
+educator|der Pädagoge|el educador|l'éducateur|l'educatore
+effectiveness|die Wirksamkeit|la eficacia|l'efficacité|l'efficacia
+efficiency|die Effizienz|la eficiencia|l'efficacité|l'efficienza
+ego|das Ego|el ego|l'ego|l'ego
+elaborate|aufwendig|elaborado|élaboré|elaborato
+electoral|Wahl-|electoral|électoral|elettorale
+eligible|berechtigt|elegible|éligible|idoneo
+elite|die Elite|la élite|l'élite|l'élite
+to embark|einschiffen|embarcar|embarquer|imbarcarsi
+embarrassment|die Verlegenheit|la vergüenza|la gêne|l'imbarazzo
+to embed|einbetten|incrustar|intégrer|incorporare
+to embody|verkörpern|encarnar|incarner|incarnare
+emergence|das Aufkommen|el surgimiento|l'émergence|la comparsa
+to empower|befähigen|empoderar|donner les moyens|dare potere
+to enact|erlassen|promulgar|promulguer|emanare
+to encompass|umfassen|abarcar|englober|comprendere
+encouragement|die Ermutigung|el ánimo|l'encouragement|l'incoraggiamento
+encouraging|ermutigend|alentador|encourageant|incoraggiante
+endeavour|das Bestreben|el esfuerzo|l'effort|l'impegno
+endorsement|die Befürwortung|el respaldo|l'aval|l'appoggio
+enforcement|die Durchsetzung|la aplicación|l'application|l'applicazione
+engagement|die Verlobung|el compromiso|les fiançailles|il fidanzamento
+engaging|fesselnd|atractivo|captivant|coinvolgente
+to enrich|bereichern|enriquecer|enrichir|arricchire
+enthusiast|der Liebhaber|el aficionado|le passionné|l'appassionato
+to entitle|berechtigen|dar derecho|donner droit|dare diritto
+entity|das Wesen|la entidad|l'entité|l'entità
+epidemic|die Epidemie|la epidemia|l'épidémie|l'epidemia
+equality|die Gleichheit|la igualdad|l'égalité|l'uguaglianza
+equation|die Gleichung|la ecuación|l'équation|l'equazione
+equity|das Eigenkapital|el patrimonio|les capitaux propres|il patrimonio netto
+to erect|errichten|erigir|ériger|erigere
+to escalate|eskalieren|intensificarse|s'intensifier|intensificarsi
+to evacuate|evakuieren|evacuar|évacuer|evacuare
+to evoke|hervorrufen|evocar|évoquer|evocare
+evolutionary|evolutionär|evolutivo|évolutif|evolutivo
+excellence|die Exzellenz|la excelencia|l'excellence|l'eccellenza
+excess|der Überschuss|el exceso|l'excès|l'eccesso
+exclusion|der Ausschluss|la exclusión|l'exclusion|l'esclusione
+execution|die Ausführung|la ejecución|l'exécution|l'esecuzione
+exile|das Exil|el exilio|l'exil|l'esilio
+experimental|experimentell|experimental|expérimental|sperimentale
+to expire|ablaufen|caducar|expirer|scadere
+exploitation|die Ausbeutung|la explotación|l'exploitation|lo sfruttamento
+explosive|explosiv|explosivo|explosif|esplosivo
+extremist|der Extremist|el extremista|l'extrémiste|l'estremista
+faction|die Gruppierung|la facción|la faction|la fazione
+faculty|die Fakultät|la facultad|la faculté|la facoltà
+fairness|die Fairness|la justicia|l'équité|l'equità
+fate|das Schicksal|el destino|le destin|il destino
+feminist|feministisch|feminista|féministe|femminista
+festive|festlich|festivo|festif|festivo
+fibre|die Faser|la fibra|la fibre|la fibra
+film-maker|der Filmemacher|el cineasta|le cinéaste|il regista cinematografico
+firearm|die Schusswaffe|el arma de fuego|l'arme à feu|l'arma da fuoco
+flawed|fehlerhaft|defectuoso|défectueux|difettoso
+to flee|flüchten|huir|s'enfuir|scappare
+fleet|die Flotte|la flota|la flotte|la flotta
+to flourish|gedeihen|florecer|prospérer|prosperare
+follow-up|die Nachbereitung|el seguimiento|le suivi|il seguito
+footage|das Filmmaterial|las imágenes|les images|le riprese
+to forge|schmieden|forjar|forger|forgiare
+formula|die Formel|la fórmula|la formule|la formula
+to formulate|formulieren|formular|formuler|formulare
+forth|hervor|adelante|en avant|avanti
+forthcoming|bevorstehend|próximo|à venir|prossimo
+franchise|das Franchise|la franquicia|la franchise|il franchising
+frankly|ehrlich gesagt|francamente|franchement|francamente
+frustrated|frustriert|frustrado|frustré|frustrato
+frustrating|frustrierend|frustrante|frustrant|frustrante
+frustration|die Frustration|la frustración|la frustration|la frustrazione
+functional|funktional|funcional|fonctionnel|funzionale
+fundraising|die Spendensammlung|la recaudación de fondos|la collecte de fonds|la raccolta fondi
+funeral|die Beerdigung|el funeral|les obsèques|il funerale
+gallon|die Gallone|el galón|le gallon|il gallone
+gambling|das Glücksspiel|el juego de azar|le jeu d'argent|il gioco d'azzardo
+gear|die Ausrüstung|el equipo|l'équipement|l'attrezzatura
+genocide|der Völkermord|el genocidio|le génocide|il genocidio
+glimpse|der flüchtige Blick|el vistazo|l'aperçu|l'occhiata
+glorious|herrlich|glorioso|glorieux|glorioso
+glory|der Ruhm|la gloria|la gloire|la gloria
+governance|die Regierungsführung|la gobernanza|la gouvernance|la governance
+grace|die Anmut|la gracia|la grâce|la grazia
+gravity|die Schwerkraft|la gravedad|la gravité|la gravità
+grid|das Gitter|la cuadrícula|la grille|la griglia
+grief|die Trauer|el dolor|le chagrin|il lutto
+gut|der Darm|el intestino|l'intestin|l'intestino
+hack|hacken|hackear|pirater|hackerare
+handful|die Handvoll|el puñado|la poignée|il pugno
+handling|die Handhabung|el manejo|la manipulation|la gestione
+harassment|die Belästigung|el acoso|le harcèlement|la molestia
+hardware|die Hardware|el hardware|le matériel|l'hardware
+harmony|die Harmonie|la armonía|l'harmonie|l'armonia
+harsh|rau|severo|rude|aspro
+hatred|der Hass|el odio|la haine|l'odio
+to haunt|spuken|rondar|hanter|infestare
+to heighten|steigern|aumentar|accroître|accrescere
+high-profile|prominent|de alto perfil|très médiatisé|di alto profilo
+hospitality|die Gastfreundschaft|la hospitalidad|l'hospitalité|l'ospitalità
+hostage|die Geisel|el rehén|l'otage|l'ostaggio
+hub|der Knotenpunkt|el centro|la plaque tournante|il centro nevralgico
+humanitarian|humanitär|humanitario|humanitaire|umanitario
+humanity|die Menschheit|la humanidad|l'humanité|l'umanità
+hybrid|hybrid|híbrido|hybride|ibrido
+hydrogen|der Wasserstoff|el hidrógeno|l'hydrogène|l'idrogeno
+identification|die Identifizierung|la identificación|l'identification|l'identificazione
+ignorance|die Unwissenheit|la ignorancia|l'ignorance|l'ignoranza
+imagery|die Bildsprache|las imágenes|les images|le immagini
+imminent|bevorstehend|inminente|imminent|imminente
+immunity|die Immunität|la inmunidad|l'immunité|l'immunità
+implementation|die Umsetzung|la implementación|la mise en œuvre|l'attuazione
+imprisonment|die Haftstrafe|el encarcelamiento|l'emprisonnement|la reclusione
+inability|die Unfähigkeit|la incapacidad|l'incapacité|l'incapacità
+inadequate|unzureichend|inadecuado|inadéquat|inadeguato
+inappropriate|unangebracht|inapropiado|inapproprié|inappropriato
+incidence|die Häufigkeit|la incidencia|l'incidence|l'incidenza
+inclined|geneigt|inclinado|enclin|incline
+inclusion|die Einbeziehung|la inclusión|l'inclusion|l'inclusione
+to incur|sich zuziehen|incurrir|encourir|incorrere
+indicator|der Indikator|el indicador|l'indicateur|l'indicatore
+indictment|die Anklage|la acusación formal|l'inculpation|l'atto d'accusa
+indigenous|einheimisch|indígena|indigène|indigeno
+to induce|hervorrufen|inducir|induire|indurre
+to indulge|frönen|consentir|se laisser aller|concedersi
+inequality|die Ungleichheit|la desigualdad|l'inégalité|la disuguaglianza
+infamous|berüchtigt|infame|tristement célèbre|famigerato
+infant|der Säugling|el bebé|le nourrisson|il neonato
+infectious|ansteckend|infeccioso|infectieux|contagioso
+to inflict|zufügen|infligir|infliger|infliggere
+influential|einflussreich|influyente|influent|influente
+inherent|innewohnend|inherente|inhérent|intrinseco
+to inhibit|hemmen|inhibir|inhiber|inibire
+to initiate|einleiten|iniciar|initier|avviare
+to inject|einspritzen|inyectar|injecter|iniettare
+injustice|die Ungerechtigkeit|la injusticia|l'injustice|l'ingiustizia
+inmate|der Häftling|el recluso|le détenu|il detenuto
+insider|der Insider|el conocedor|l'initié|l'insider
+inspiration|die Inspiration|la inspiración|l'inspiration|l'ispirazione
+instinct|der Instinkt|el instinto|l'instinct|l'istinto
+institutional|institutionell|institucional|institutionnel|istituzionale
+instrumental|ausschlaggebend|fundamental|déterminant|determinante
+insufficient|unzureichend|insuficiente|insuffisant|insufficiente
+intact|unversehrt|intacto|intact|intatto
+integral|wesentlich|integral|intégral|integrale
+integrity|die Integrität|la integridad|l'intégrité|l'integrità
+to intensify|verstärken|intensificar|intensifier|intensificare
+intensity|die Intensität|la intensidad|l'intensité|l'intensità
+interactive|interaktiv|interactivo|interactif|interattivo
+interference|die Einmischung|la interferencia|l'ingérence|l'interferenza
+to intervene|eingreifen|intervenir|intervenir|intervenire
+intervention|der Eingriff|la intervención|l'intervention|l'intervento
+intriguing|faszinierend|intrigante|intrigant|intrigante
+investigator|der Ermittler|el investigador|l'enquêteur|l'investigatore
+ironically|ironischerweise|irónicamente|ironiquement|ironicamente
+irony|die Ironie|la ironía|l'ironie|l'ironia
+irrelevant|irrelevant|irrelevante|sans importance|irrilevante
+judicial|gerichtlich|judicial|judiciaire|giudiziario
+jurisdiction|die Zuständigkeit|la jurisdicción|la juridiction|la giurisdizione
+justification|die Rechtfertigung|la justificación|la justification|la giustificazione
+kingdom|das Königreich|el reino|le royaume|il regno
+lad|der Bursche|el muchacho|le garçon|il ragazzo
+landmark|das Wahrzeichen|el hito|le monument|il punto di riferimento
+lap|der Schoß|el regazo|les genoux|il grembo
+large-scale|großflächig|a gran escala|à grande échelle|su larga scala
+laser|der Laser|el láser|le laser|il laser
+latter|letztere|este último|ce dernier|quest'ultimo
+layout|das Layout|el diseño|la mise en page|l'impaginazione
+leap|der Sprung|el salto|le bond|il salto
+legacy|das Erbe|el legado|l'héritage|l'eredità
+legendary|legendär|legendario|légendaire|leggendario
+legislation|die Gesetzgebung|la legislación|la législation|la legislazione
+legislative|gesetzgebend|legislativo|législatif|legislativo
+legislature|die Legislative|el poder legislativo|le pouvoir législatif|il legislativo
+lengthy|langwierig|largo|long|lungo
+lesbian|lesbisch|lesbiana|lesbienne|lesbica
+lesser|geringer|menor|moindre|minore
+levy|die Abgabe|el gravamen|le prélèvement|il prelievo
+to license|lizenzieren|dar licencia|accorder une licence|concedere in licenza
+lifelong|lebenslang|de por vida|de toute une vie|per tutta la vita
+likelihood|die Wahrscheinlichkeit|la probabilidad|la probabilité|la probabilità
+limb|das Glied|el miembro|le membre|l'arto
+linear|linear|lineal|linéaire|lineare
+line-up|die Aufstellung|la alineación|la composition|la formazione
+to linger|verweilen|demorarse|s'attarder|indugiare
+listing|das Verzeichnis|el listado|la liste|l'elenco
+literacy|die Lese- und Schreibfähigkeit|la alfabetización|l'alphabétisation|l'alfabetizzazione
+lobby|die Lobby|el vestíbulo|le hall|la hall
+long-standing|langjährig|de larga data|de longue date|di lunga data
+long-time|langjährig|de toda la vida|de longue date|di vecchia data
+to loom|sich abzeichnen|vislumbrarse|se profiler|incombere
+loop|die Schleife|el bucle|la boucle|il ciclo
+loyalty|die Treue|la lealtad|la loyauté|la lealtà
+machinery|die Maschinen|la maquinaria|les machines|i macchinari
+magical|magisch|mágico|magique|magico
+magistrate|der Amtsrichter|el magistrado|le magistrat|il magistrato
+magnetic|magnetisch|magnético|magnétique|magnetico
+magnitude|das Ausmaß|la magnitud|l'ampleur|la portata
+mainland|das Festland|el continente|le continent|la terraferma
+mainstream|der Mainstream|la corriente principal|le courant dominant|il mainstream
+maintenance|die Wartung|el mantenimiento|l'entretien|la manutenzione
+mandate|das Mandat|el mandato|le mandat|il mandato
+mandatory|verpflichtend|obligatorio|obligatoire|obbligatorio
+to manipulate|manipulieren|manipular|manipuler|manipolare
+manipulation|die Manipulation|la manipulación|la manipulation|la manipolazione
+marginal|geringfügig|marginal|marginal|marginale
+marine|Meeres-|marino|marin|marino
+marketplace|der Marktplatz|el mercado|la place du marché|la piazza del mercato
+mask|die Maske|la máscara|le masque|la maschera
+massacre|das Massaker|la masacre|le massacre|il massacro
+mathematical|mathematisch|matemático|mathématique|matematico
+to maximize|maximieren|maximizar|maximiser|massimizzare
+meantime|die Zwischenzeit|el ínterin|l'intervalle|l'intervallo
+medieval|mittelalterlich|medieval|médiéval|medievale
+meditation|die Meditation|la meditación|la méditation|la meditazione
+memoir|die Memoiren|las memorias|les mémoires|le memorie
+mentor|der Mentor|el mentor|le mentor|il mentore
+mercy|die Gnade|la misericordia|la pitié|la pietà
+merely|lediglich|meramente|simplement|semplicemente
+merger|die Fusion|la fusión|la fusion|la fusione
+merit|das Verdienst|el mérito|le mérite|il merito
+methodology|die Methodik|la metodología|la méthodologie|la metodologia
+milestone|der Meilenstein|el hito|l'étape clé|la pietra miliare
+militant|kämpferisch|militante|militant|militante
+militia|die Miliz|la milicia|la milice|la milizia
+mill|die Mühle|el molino|le moulin|il mulino
+mindset|die Denkweise|la mentalidad|l'état d'esprit|la mentalità
+to minimize|minimieren|minimizar|minimiser|minimizzare
+mining|der Bergbau|la minería|l'exploitation minière|l'attività mineraria
+ministry|das Ministerium|el ministerio|le ministère|il ministero
+misery|das Elend|la miseria|la misère|la miseria
+misleading|irreführend|engañoso|trompeur|fuorviante
+missile|die Rakete|el misil|le missile|il missile
+to mitigate|abmildern|mitigar|atténuer|mitigare
+mob|der Mob|la turba|la foule|la folla
+to mobilize|mobilisieren|movilizar|mobiliser|mobilitare
+momentum|der Schwung|el impulso|l'élan|lo slancio
+monopoly|das Monopol|el monopolio|le monopole|il monopolio
+nationwide|landesweit|en todo el país|dans tout le pays|a livello nazionale
+neighbouring|angrenzend|vecino|voisin|confinante
+newsletter|der Newsletter|el boletín|la lettre d'information|la newsletter
+niche|die Nische|el nicho|la niche|la nicchia
+to nominate|nominieren|nominar|nommer|candidare
+nomination|die Nominierung|la nominación|la nomination|la candidatura
+nonetheless|nichtsdestotrotz|no obstante|néanmoins|nondimeno
+non-profit|gemeinnützig|sin ánimo de lucro|à but non lucratif|senza scopo di lucro
+nonsense|der Unsinn|la tontería|le non-sens|l'assurdità
+notably|insbesondere|notablemente|notamment|in particolare
+to notify|benachrichtigen|notificar|notifier|notificare
+notorious|berüchtigt|notorio|notoire|famigerato
+objection|der Einwand|la objeción|l'objection|l'obiezione
+to oblige|verpflichten|obligar|obliger|obbligare
+to obsess|besessen machen|obsesionar|obséder|ossessionare
+obsession|die Besessenheit|la obsesión|l'obsession|l'ossessione
+occasional|gelegentlich|ocasional|occasionnel|occasionale
+to offset|ausgleichen|compensar|compenser|compensare
+offshore|vor der Küste|en alta mar|en mer|al largo
+operational|betriebsbereit|operativo|opérationnel|operativo
+to opt|sich entscheiden für|optar|opter|optare
+optical|optisch|óptico|optique|ottico
+optimism|der Optimismus|el optimismo|l'optimisme|l'ottimismo
+organizational|organisatorisch|organizativo|organisationnel|organizzativo
+orientation|die Orientierung|la orientación|l'orientation|l'orientamento
+outbreak|der Ausbruch|el brote|l'épidémie|lo scoppio
+outlet|der Verkaufsstand|el punto de venta|le point de vente|il punto vendita
+outlook|der Ausblick|la perspectiva|les perspectives|le prospettive
+outrage|die Empörung|la indignación|l'indignation|l'indignazione
+outsider|der Außenseiter|el forastero|l'outsider|l'estraneo
+to overlook|übersehen|pasar por alto|négliger|trascurare
+overly|übermäßig|excesivamente|excessivement|eccessivamente
+to overturn|umstoßen|anular|annuler|ribaltare
+to overwhelm|überwältigen|abrumar|submerger|sopraffare
+overwhelming|überwältigend|abrumador|écrasant|schiacciante
+pad|der Block|el bloc|le bloc|il blocco
+parameter|der Parameter|el parámetro|le paramètre|il parametro
+parental|elterlich|parental|parental|genitoriale
+parish|die Pfarrgemeinde|la parroquia|la paroisse|la parrocchia
+parliamentary|parlamentarisch|parlamentario|parlementaire|parlamentare
+passing|vorübergehend|pasajero|passager|passeggero
+pastor|der Pfarrer|el pastor|le pasteur|il pastore
+patch|der Flicken|el parche|la pièce|la toppa
+patent|das Patent|la patente|le brevet|il brevetto
+pathway|der Pfad|el camino|le chemin|il percorso
+patrol|die Streife|la patrulla|la patrouille|la pattuglia
+patron|der Gönner|el mecenas|le mécène|il mecenate
+to persist|andauern|persistir|persister|persistere
+persistent|hartnäckig|persistente|persistant|persistente
+petition|die Petition|la petición|la pétition|la petizione
+pharmaceutical|pharmazeutisch|farmacéutico|pharmaceutique|farmaceutico
+philosopher|der Philosoph|el filósofo|le philosophe|il filosofo
+physician|der Mediziner|el médico|le médecin|il medico
+pioneer|der Pionier|el pionero|le pionnier|il pioniere
+pipeline|die Pipeline|el oleoducto|le pipeline|l'oleodotto
+pirate|der Pirat|el pirata|le pirate|il pirata
+pit|die Grube|el pozo|la fosse|la fossa
+to plead|flehen|suplicar|supplier|supplicare
+pole|der Pol|el polo|le pôle|il polo
+portfolio|das Portfolio|la cartera|le portefeuille|il portafoglio
+to portray|porträtieren|retratar|dépeindre|ritrarre
+practitioner|der Praktiker|el profesional|le praticien|il professionista
+precedent|der Präzedenzfall|el precedente|le précédent|il precedente
+predator|das Raubtier|el depredador|le prédateur|il predatore
+predecessor|der Vorgänger|el predecesor|le prédécesseur|il predecessore
+predominantly|überwiegend|predominantemente|principalement|prevalentemente
+prejudice|das Vorurteil|el prejuicio|le préjugé|il pregiudizio
+premium|die Prämie|la prima|la prime d'assurance|il premio assicurativo
+presently|derzeit|actualmente|actuellement|attualmente
+preservation|die Erhaltung|la conservación|la préservation|la preservazione
+to preside|den Vorsitz führen|presidir|présider|presiedere
+presidency|die Präsidentschaft|la presidencia|la présidence|la presidenza
+presidential|präsidial|presidencial|présidentiel|presidenziale
+to prevail|vorherrschen|prevalecer|prévaloir|prevalere
+prevalence|die Verbreitung|la prevalencia|la prévalence|la prevalenza
+prevention|die Vorbeugung|la prevención|la prévention|la prevenzione
+prey|die Beute|la presa|la proie|la preda
+to prioritize|priorisieren|priorizar|prioriser|dare priorità
+privilege|das Privileg|el privilegio|le privilège|il privilegio
+probe|die Sonde|la sonda|la sonde|la sonda
+problematic|problematisch|problemático|problématique|problematico
+proceeding|das Verfahren|el procedimiento|la procédure|il procedimento
+proceeds|der Erlös|los ingresos|le produit|il ricavato
+processing|die Verarbeitung|el procesamiento|le traitement|l'elaborazione
+processor|der Prozessor|el procesador|le processeur|il processore
+to proclaim|verkünden|proclamar|proclamer|proclamare
+productivity|die Produktivität|la productividad|la productivité|la produttività
+profitable|rentabel|rentable|rentable|redditizio
+profound|tiefgreifend|profundo|profond|profondo
+projection|die Prognose|la proyección|la projection|la proiezione
+prominent|bedeutend|prominente|éminent|eminente
+pronounced|ausgeprägt|marcado|prononcé|marcato
+propaganda|die Propaganda|la propaganda|la propagande|la propaganda
+to prosecute|strafrechtlich verfolgen|procesar|poursuivre en justice|perseguire legalmente
+prosecution|die Staatsanwaltschaft|la fiscalía|le ministère public|la pubblica accusa
+prosecutor|der Staatsanwalt|el fiscal|le procureur|il pubblico ministero
+prosperity|der Wohlstand|la prosperidad|la prospérité|la prosperità
+protective|schützend|protector|protecteur|protettivo
+protocol|das Protokoll|el protocolo|le protocole|il protocollo
+province|die Provinz|la provincia|la province|la provincia
+provincial|provinziell|provincial|provincial|provinciale
+punch|der Faustschlag|el puñetazo|le coup de poing|il pugno
+radar|das Radar|el radar|le radar|il radar
+radical|radikal|radical|radical|radicale
+rage|die Wut|la rabia|la rage|la rabbia
+raid|die Razzia|la redada|la descente|il blitz
+rally|die Kundgebung|el mitin|le rassemblement|il raduno
+ranking|die Rangliste|la clasificación|le classement|la classifica
+rape|die Vergewaltigung|la violación|le viol|lo stupro
+rational|rational|racional|rationnel|razionale
+ray|der Strahl|el rayo|le rayon|il raggio
+readily|bereitwillig|fácilmente|volontiers|prontamente
+realization|die Erkenntnis|la toma de conciencia|la prise de conscience|la consapevolezza
+reasoning|die Argumentation|el razonamiento|le raisonnement|il ragionamento
+rebel|der Rebell|el rebelde|le rebelle|il ribelle
+rebellion|die Rebellion|la rebelión|la rébellion|la ribellione
+reconstruction|der Wiederaufbau|la reconstrucción|la reconstruction|la ricostruzione
+to recount|schildern|relatar|raconter|raccontare
+referendum|der Volksentscheid|el referéndum|le référendum|il referendum
+reflection|die Spiegelung|el reflejo|le reflet|il riflesso
+refuge|die Zuflucht|el refugio|le refuge|il rifugio
+refusal|die Weigerung|la negativa|le refus|il rifiuto
+to regain|zurückgewinnen|recuperar|regagner|riconquistare
+regime|das Regime|el régimen|le régime|il regime
+regulator|die Aufsichtsbehörde|el regulador|le régulateur|l'autorità di vigilanza
+regulatory|regulatorisch|regulatorio|réglementaire|normativo
+rehabilitation|die Rehabilitation|la rehabilitación|la réadaptation|la riabilitazione
+reign|die Herrschaft|el reinado|le règne|il regno
+rejection|die Ablehnung|el rechazo|le rejet|il rifiuto
+reliability|die Zuverlässigkeit|la fiabilidad|la fiabilité|l'affidabilità
+reluctant|widerwillig|reacio|réticent|riluttante
+remains|die Überreste|los restos|les restes|i resti
+remedy|das Heilmittel|el remedio|le remède|il rimedio
+renowned|renommiert|renombrado|renommé|rinomato
+reportedly|angeblich|según se informa|selon certaines informations|stando a quanto riferito
+to reproduce|vervielfältigen|reproducir|reproduire|riprodurre
+to resemble|ähneln|parecerse a|ressembler à|assomigliare a
+to reside|ansässig sein|residir|résider|risiedere
+residential|Wohn-|residencial|résidentiel|residenziale
+resignation|der Rücktritt|la dimisión|la démission|le dimissioni
+resilience|die Widerstandsfähigkeit|la resiliencia|la résilience|la resilienza
+resistance|der Widerstand|la resistencia|la résistance|la resistenza
+respective|jeweilig|respectivo|respectif|rispettivo
+restoration|die Restaurierung|la restauración|la restauration|il restauro
+restraint|die Zurückhaltung|la moderación|la retenue|la moderazione
+to resume|wieder aufnehmen|reanudar|reprendre|riprendere
+retreat|der Rückzug|la retirada|la retraite|la ritirata
+to retrieve|abrufen|recuperar|récupérer|recuperare
+revelation|die Enthüllung|la revelación|la révélation|la rivelazione
+revenge|die Rache|la venganza|la vengeance|la vendetta
+revival|die Wiederbelebung|el renacimiento|le renouveau|la rinascita
+to revive|wiederbeleben|reanimar|raviver|rianimare
+revolutionary|revolutionär|revolucionario|révolutionnaire|rivoluzionario
+rhetoric|die Rhetorik|la retórica|la rhétorique|la retorica
+rifle|das Gewehr|el rifle|le fusil|il fucile
+riot|der Aufruhr|el disturbio|l'émeute|la rivolta
+to rip|reißen|rasgar|déchirer|strappare
+robust|robust|robusto|robuste|robusto
+to rotate|rotieren|girar|tourner|ruotare
+rotation|die Drehung|la rotación|la rotation|la rotazione
+rumour|das Gerücht|el rumor|la rumeur|la voce
+sake|zuliebe|por el bien de|pour l'amour de|per amore di
+scam|der Betrug|la estafa|l'arnaque|la truffa
+scattered|verstreut|disperso|éparpillé|sparso
+sceptical|skeptisch|escéptico|sceptique|scettico
+scrap|der Fetzen|el trozo|le bout|il pezzo
+seasonal|saisonal|estacional|saisonnier|stagionale
+secular|weltlich|laico|laïque|laico
+seemingly|scheinbar|aparentemente|apparemment|apparentemente
+to seize|ergreifen|apoderarse|saisir|sequestrare
+selective|selektiv|selectivo|sélectif|selettivo
+senator|der Senator|el senador|le sénateur|il senatore
+sensitivity|die Empfindlichkeit|la sensibilidad|la sensibilité|la sensibilità
+serial|seriell|en serie|en série|seriale
+settlement|die Siedlung|el asentamiento|le règlement|l'insediamento
+set-up|der Aufbau|la configuración|l'installation|l'allestimento
+sexuality|die Sexualität|la sexualidad|la sexualité|la sessualità
+shareholder|der Aktionär|el accionista|l'actionnaire|l'azionista
+to shatter|zerschmettern|romper en pedazos|fracasser|frantumare
+to shed|vergießen|derramar|verser|versare
+simulation|die Simulation|la simulación|la simulation|la simulazione
+sin|die Sünde|el pecado|le péché|il peccato
+sketch|die Skizze|el boceto|l'esquisse|lo schizzo
+to slam|zuschlagen|dar un portazo|claquer|sbattere
+to slap|ohrfeigen|abofetear|gifler|schiaffeggiare
+to slash|aufschlitzen|rajar|taillader|squarciare
+slavery|die Sklaverei|la esclavitud|l'esclavage|la schiavitù
+slot|der Schlitz|la ranura|la fente|la fessura
+to smash|zerschlagen|aplastar|fracasser|fracassare
+to snap|abbrechen|romper|casser|spezzare
+to soar|in die Höhe schnellen|dispararse|monter en flèche|salire alle stelle
+socialist|sozialistisch|socialista|socialiste|socialista
+solicitor|der Rechtsberater|el procurador|le notaire|il consulente legale
+solidarity|die Solidarität|la solidaridad|la solidarité|la solidarietà
+solo|solo|solo|en solo|solista
+span|die Spannweite|el lapso|l'envergure|l'estensione
+to spark|entfachen|desencadenar|déclencher|innescare
+specialized|spezialisiert|especializado|spécialisé|specializzato
+specification|die Spezifikation|la especificación|la spécification|la specifica
+specimen|das Exemplar|el espécimen|le spécimen|l'esemplare
+spectacle|das Spektakel|el espectáculo|le spectacle|lo spettacolo
+spectrum|das Spektrum|el espectro|le spectre|lo spettro
+sphere|die Kugel|la esfera|la sphère|la sfera
+spin|die Drehung|el giro|la rotation|il giro
+spotlight|das Rampenlicht|el foco|le projecteur|il riflettore
+spray|das Spray|el spray|le spray|lo spray
+to stab|erstechen|apuñalar|poignarder|pugnalare
+to stabilize|stabilisieren|estabilizar|stabiliser|stabilizzare
+stake|der Einsatz|la apuesta|l'enjeu|la posta
+stark|schroff|crudo|austère|netto
+start-up|das Start-up|la empresa emergente|la start-up|la startup
+stem|der Stiel|el tallo|la tige|lo stelo
+stereotype|das Klischee|el estereotipo|le stéréotype|lo stereotipo
+stimulus|der Reiz|el estímulo|le stimulus|lo stimolo
+storage|die Lagerung|el almacenamiento|le stockage|l'immagazzinamento
+straightforward|unkompliziert|sencillo|simple|semplice
+strategic|strategisch|estratégico|stratégique|strategico
+streaming|das Streaming|el streaming|le streaming|lo streaming
+striking|auffallend|llamativo|frappant|sorprendente
+strip|der Streifen|la tira|la bande|la striscia
+to strive|streben|esforzarse|s'efforcer|adoperarsi
+structural|strukturell|estructural|structurel|strutturale
+to stumble|stolpern|tropezar|trébucher|inciampare
+to stun|betäuben|aturdir|assommer|stordire
+submission|die Einreichung|la presentación|la soumission|la presentazione
+subscriber|der Abonnent|el suscriptor|l'abonné|l'abbonato
+subsidy|die Subvention|la subvención|la subvention|il sussidio
+substantial|beträchtlich|sustancial|considérable|sostanziale
+substantially|erheblich|sustancialmente|substantiellement|sostanzialmente
+substitution|die Ersetzung|la sustitución|la substitution|la sostituzione
+subtle|subtil|sutil|subtil|sottile
+suburban|vorstädtisch|suburbano|de banlieue|suburbano
+succession|die Nachfolge|la sucesión|la succession|la successione
+successive|aufeinanderfolgend|sucesivo|successif|successivo
+successor|der Nachfolger|el sucesor|le successeur|il successore
+to suck|saugen|chupar|sucer|succhiare
+suicide|der Selbstmord|el suicidio|le suicide|il suicidio
+suite|die Suite|la suite|la suite|la suite
+summit|der Gipfel|la cumbre|le sommet|il vertice
+supervision|die Aufsicht|la supervisión|la supervision|la supervisione
+supervisor|der Vorgesetzte|el supervisor|le superviseur|il supervisore
+supplement|die Ergänzung|el suplemento|le complément|il supplemento
+supportive|unterstützend|solidario|bienveillant|di supporto
+to suppress|unterdrücken|suprimir|réprimer|reprimere
+surge|der Anstieg|el aumento repentino|la hausse soudaine|l'impennata
+surgical|chirurgisch|quirúrgico|chirurgical|chirurgico
+to surpass|übertreffen|superar|dépasser|superare
+surplus|der Überschuss|el excedente|l'excédent|l'eccedenza
+surveillance|die Überwachung|la vigilancia|la surveillance|la sorveglianza
+suspension|die Suspendierung|la suspensión|la suspension|la sospensione
+to sustain|aufrechterhalten|sostener|soutenir|sostenere
+sustainability|die Nachhaltigkeit|la sostenibilidad|la durabilité|la sostenibilità
+sword|das Schwert|la espada|l'épée|la spada
+symbolic|symbolisch|simbólico|symbolique|simbolico
+syndrome|das Syndrom|el síndrome|le syndrome|la sindrome
+systematic|systematisch|sistemático|systématique|sistematico
+tactic|die Taktik|la táctica|la tactique|la tattica
+tactical|taktisch|táctico|tactique|tattico
+taxpayer|der Steuerzahler|el contribuyente|le contribuable|il contribuente
+tenure|die Amtszeit|la titularidad|le mandat|il mandato
+terrain|das Gelände|el terreno|le terrain|il terreno
+terrific|großartig|estupendo|formidable|magnifico
+texture|die Beschaffenheit|la textura|la texture|la consistenza
+thankfully|zum Glück|afortunadamente|heureusement|per fortuna
+thereby|dadurch|con ello|de ce fait|in tal modo
+threshold|die Schwelle|el umbral|le seuil|la soglia
+to thrive|gedeihen|prosperar|prospérer|prosperare
+to tighten|festziehen|apretar|serrer|stringere
+timber|das Bauholz|la madera de construcción|le bois d'œuvre|il legname
+tobacco|der Tabak|el tabaco|le tabac|il tabacco
+tolerance|die Toleranz|la tolerancia|la tolérance|la tolleranza
+toll|die Maut|el peaje|le péage|il pedaggio
+trafficking|der Menschenhandel|el tráfico|le trafic|il traffico
+trail|der Wanderweg|el sendero|le sentier|il sentiero
+trailer|der Anhänger|el remolque|la remorque|il rimorchio
+transcript|das Protokoll|la transcripción|la transcription|la trascrizione
+transformation|die Umwandlung|la transformación|la transformation|la trasformazione
+transit|der Transit|el tránsito|le transit|il transito
+transmission|die Übertragung|la transmisión|la transmission|la trasmissione
+transparency|die Transparenz|la transparencia|la transparence|la trasparenza
+transparent|transparent|transparente|transparent|trasparente
+trauma|das Trauma|el trauma|le traumatisme|il trauma
+tremendous|gewaltig|tremendo|énorme|enorme
+tribal|Stammes-|tribal|tribal|tribale
+tribunal|das Tribunal|el tribunal|le tribunal|il tribunale
+tribute|die Würdigung|el homenaje|l'hommage|l'omaggio
+trio|das Trio|el trío|le trio|il trio
+triumph|der Triumph|el triunfo|le triomphe|il trionfo
+troubled|beunruhigt|problemático|troublé|turbato
+trustee|der Treuhänder|el administrador fiduciario|le fiduciaire|il fiduciario
+turnout|die Wahlbeteiligung|la participación|la participation|l'affluenza
+turnover|die Fluktuation|la rotación|le roulement|il turnover
+twist|die Wendung|el giro|le retournement|la svolta
+underlying|zugrunde liegend|subyacente|sous-jacent|sottostante
+to undermine|untergraben|socavar|saper|minare
+undoubtedly|zweifellos|sin duda|sans aucun doute|senza dubbio
+to unify|vereinigen|unificar|unifier|unificare
+unprecedented|beispiellos|sin precedentes|sans précédent|senza precedenti
+to unveil|enthüllen|desvelar|dévoiler|svelare
+upgrade|das Upgrade|la mejora|la mise à niveau|l'aggiornamento
+to uphold|aufrechterhalten|mantener|maintenir|mantenere
+utility|das Versorgungsunternehmen|el servicio público|le service public|il servizio pubblico
+vacuum|das Vakuum|el vacío|le vide|il vuoto
+varied|abwechslungsreich|variado|varié|vario
+vegan|vegan|vegano|végétalien|vegano
+verbal|verbal|verbal|verbal|verbale
+verse|die Strophe|el verso|le vers|il verso
+vessel|das Gefäß|el recipiente|le récipient|il recipiente
+veteran|der Veteran|el veterano|le vétéran|il veterano
+viable|realisierbar|viable|viable|fattibile
+vibrant|lebendig|vibrante|vibrant|vibrante
+vicious|bösartig|cruel|cruel|crudele
+villager|der Dorfbewohner|el aldeano|le villageois|il paesano
+violation|der Verstoß|la violación|la violation|la violazione
+viral|viral|viral|viral|virale
+vocal|stimmlich|vocal|vocal|vocale
+to vow|schwören|jurar|jurer|giurare
+vulnerability|die Verwundbarkeit|la vulnerabilidad|la vulnérabilité|la vulnerabilità
+vulnerable|verwundbar|vulnerable|vulnérable|vulnerabile
+warfare|die Kriegsführung|la guerra|la guerre|la guerra
+warrant|der Haftbefehl|la orden judicial|le mandat|il mandato
+warrior|der Krieger|el guerrero|le guerrier|il guerriero
+to weaken|schwächen|debilitar|affaiblir|indebolire
+weed|das Unkraut|la mala hierba|la mauvaise herbe|l'erbaccia
+to whip|auspeitschen|azotar|fouetter|frustare
+to widen|erweitern|ensanchar|élargir|allargare
+wildfire|der Waldbrand|el incendio forestal|l'incendie de forêt|l'incendio boschivo
+willingness|die Bereitschaft|la disposición|la volonté|la disponibilità
+to worsen|verschlechtern|empeorar|empirer|peggiorare
+worship|die Anbetung|el culto|le culte|il culto
+worthwhile|lohnend|que vale la pena|qui en vaut la peine|che vale la pena
+worthy|würdig|digno|digne|degno
 `;
