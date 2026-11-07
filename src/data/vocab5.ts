@@ -2581,7 +2581,7 @@ peanut|die Erdnuss|el cacahuete|la cacahuète|l'arachide
 popcorn|das Popcorn|las palomitas|le pop-corn|i popcorn
 candy|das Bonbon|el caramelo|le bonbon|la caramella
 snack|der Snack|el aperitivo|le en-cas|lo spuntino
-barbecue|das Grillfest|la barbacoa|le barbecue|il barbecue
+barbecue|das Barbecue|la barbacoa|le barbecue|il barbecue
 ingredient|die Zutat|el ingrediente|l'ingrédient|l'ingrediente
 lemonade|die Limonade|la limonada|la limonade|la limonata
 alcohol|der Alkohol|el alcohol|l'alcool|l'alcol
@@ -4017,7 +4017,7 @@ neutral|neutral|neutral|neutre|neutrale
 noble|edel|noble|noble|nobile
 organic|biologisch|orgánico|biologique|biologico
 outstanding|hervorragend|sobresaliente|remarquable|eccezionale (notevole)
-overseas|überseeisch|de ultramar|d'outre-mer|d'oltremare
+overseas|in Übersee|de ultramar|d'outre-mer|d'oltremare
 apron|die Schürze|el delantal|le tablier|il grembiule
 ashtray|der Aschenbecher|el cenicero|le cendrier|il posacenere
 axe|die Axt|el hacha|la hache|l'ascia
@@ -4056,7 +4056,7 @@ jar|das Glas (Einmach)|el tarro|le bocal|il barattolo
 keyring|der Schlüsselbund|el llavero|le porte-clés|il portachiavi
 lid|der Deckel|la tapa|le couvercle|il coperchio
 magnet|der Magnet|el imán|l'aimant|la calamita
-mop|der Wischmopp|la fregona|la serpillière|il mocio
+mop|der Mopp|la fregona|la serpillière|il mocio
 padlock|das Vorhängeschloss|el candado|le cadenas|il lucchetto
 paintbrush|der Pinsel|el pincel|le pinceau|il pennello
 pencil case|das Federmäppchen|el estuche|la trousse|l'astuccio
@@ -4395,7 +4395,7 @@ to dominate|dominieren|dominar|dominer|dominare
 donation|die Spende|la donación|le don|la donazione
 draft|der Entwurf|el borrador|le brouillon|la bozza
 dramatically|dramatisch|drásticamente|de façon spectaculaire|drasticamente
-to dump|abladen|vertir|décharger|scaricare
+to dump|abladen|verter|décharger|scaricare
 dynamic|dynamisch|dinámico|dynamique|dinamico
 ecosystem|das Ökosystem|el ecosistema|l'écosystème|l'ecosistema
 editorial|redaktionell|editorial|éditorial|editoriale
@@ -4942,7 +4942,7 @@ Dutch|niederländisch|neerlandés|néerlandais|olandese
 Polish|polnisch|polaco|polonais|polacco
 Arabic|arabisch|árabe|arabe|arabo
 astronaut|der Astronaut|el astronauta|l'astronaute|l'astronauta
-barber|der Herrenfriseur|el barbero|le barbier|il barbiere
+barber|der Barbier|el barbero|le barbier|il barbiere
 biologist|der Biologe|el biólogo|le biologiste|il biologo
 builder|der Bauarbeiter|el albañil|le maçon|il muratore
 chemist|der Chemiker|el químico|le chimiste|il chimico
@@ -5355,7 +5355,7 @@ interpreter|der Dolmetscher|el intérprete|l'interprète|l'interprete
 lifeguard|der Bademeister|el socorrista|le maître-nageur|il bagnino
 mathematician|der Mathematiker|el matemático|le mathématicien|il matematico
 physicist|der Physiker|el físico|le physicien|il fisico
-receptionist|der Empfangsmitarbeiter|el recepcionista|le réceptionniste|il receptionist
+receptionist|der Rezeptionist|el recepcionista|le réceptionniste|il receptionist
 sculptor|der Bildhauer|el escultor|le sculpteur|lo scultore
 taxi driver|der Taxifahrer|el taxista|le chauffeur de taxi|il tassista
 welder|der Schweißer|el soldador|le soudeur|il saldatore
@@ -5699,7 +5699,7 @@ to attain|erlangen|lograr|parvenir à|raggiungere
 to authorize|bevollmächtigen|autorizar|habiliter|autorizzare
 blend|das Gemisch|la combinación|l'association|l'insieme
 cluster|der Haufen|el racimo|la grappe|il grappolo
-commerce|der Handelsverkehr|el tráfico mercantil|les échanges commerciaux|gli scambi commerciali
+commerce|der Warenhandel|el tráfico mercantil|les échanges commerciaux|gli scambi commerciali
 compel|nötigen|forzar|contraindre|obbligare
 convict|der Sträfling|el convicto|le condamné|il condannato
 to correlate|korrelieren|correlacionar|être en corrélation|essere correlato
@@ -6018,7 +6018,7 @@ optimism|der Optimismus|el optimismo|l'optimisme|l'ottimismo
 organizational|organisatorisch|organizativo|organisationnel|organizzativo
 orientation|die Orientierung|la orientación|l'orientation|l'orientamento
 outbreak|der Ausbruch|el brote|l'épidémie|lo scoppio
-outlet|der Verkaufsstand|el punto de venta|le point de vente|il punto vendita
+outlet|die Verkaufsstelle|el punto de venta|le point de vente|il punto vendita
 outlook|der Ausblick|la perspectiva|les perspectives|le prospettive
 outrage|die Empörung|la indignación|l'indignation|l'indignazione
 outsider|der Außenseiter|el forastero|l'outsider|l'estraneo
@@ -6184,7 +6184,7 @@ to smash|zerschlagen|aplastar|fracasser|fracassare
 to snap|abbrechen|romper|casser|spezzare
 to soar|in die Höhe schnellen|dispararse|monter en flèche|salire alle stelle
 socialist|sozialistisch|socialista|socialiste|socialista
-solicitor|der Rechtsberater|el procurador|le notaire|il consulente legale
+solicitor|der Rechtsbeistand|el procurador|le notaire|il consulente legale
 solidarity|die Solidarität|la solidaridad|la solidarité|la solidarietà
 solo|solo|solo|en solo|solista
 span|die Spannweite|el lapso|l'envergure|l'estensione
