@@ -23,10 +23,10 @@ npx expo start           # mit Expo Go auf dem Handy testen
 
 ## Web-Testversion
 
-Jeder Push auf `main` baut die Web-Version und veröffentlicht sie über GitHub Pages unter `https://<benutzer>.github.io/memoro/`.
+Jeder Push auf `main` baut die Web-Version und veröffentlicht sie über GitHub Pages unter `https://<benutzer>.github.io/vokabula/`.
 Einmalig nötig: Repo → Settings → Pages → Source: **GitHub Actions**.
 
-Der Pfad `/memoro` ist in `app.json` unter `experiments.baseUrl` hinterlegt. Bei anderem Repo-Namen dort anpassen.
+Der Pfad `/vokabula` ist in `app.json` unter `experiments.baseUrl` hinterlegt. Bei anderem Repo-Namen dort anpassen.
 
 ## Später: App Store / Play Store
 

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Vokabula",
-    "slug": "memoro",
+    "slug": "vokabula",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,7 +28,7 @@
       "lang": "de"
     },
     "experiments": {
-      "baseUrl": "/memoro"
+      "baseUrl": "/vokabula"
     },
     "plugins": [
       [
