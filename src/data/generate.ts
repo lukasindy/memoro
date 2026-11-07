@@ -219,7 +219,7 @@ export function clozeFor(c: Course, w: Word) {
   return null;
 }
 
-// Kann Memoro für diesen Kurs gerade Lückensätze bilden? Mit Begründung und Anzahl fehlender Wörter.
+// Kann Vokabula für diesen Kurs gerade Lückensätze bilden? Mit Begründung und Anzahl fehlender Wörter.
 export function clozeStatus(c: Course): { ready: boolean; reason: string; missing: number | null } {
   if (c.words.some((w) => ownCloze(c, w))) return { ready: true, reason: '', missing: 0 };
   const a = (c.gen?.a as LangCode | undefined) ?? codeOf(c.langA);
@@ -243,7 +243,7 @@ export function clozeStatus(c: Course): { ready: boolean; reason: string; missin
     return {
       ready: false,
       missing: null,
-      reason: 'In deinem Kurs stehen kaum Wörter, die Memoro für Sätze nutzen kann. Trag Beispielsätze in der Vokabelliste ein oder füge Grundwortschatz hinzu.',
+      reason: 'In deinem Kurs stehen kaum Wörter, die Vokabula für Sätze nutzen kann. Trag Beispielsätze in der Vokabelliste ein oder füge Grundwortschatz hinzu.',
     };
   }
   const missing = Math.min(...reach.map(missingOf));
