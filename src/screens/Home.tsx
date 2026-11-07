@@ -13,7 +13,7 @@ import { BUILD_ID } from '../update';
 import { Platform } from 'react-native';
 
 // Schnellwahl bei der Kurserstellung. Bewusst nur diese vier Stufen und auch dann so lassen, wenn der
-// Wortschatz weiter wächst (aktuell rund 3000 Wörter). Größere oder genaue Mengen gibt man von Hand ein.
+// Wortschatz weiter wächst (aktuell rund 4000 Wörter). Größere oder genaue Mengen gibt man von Hand ein.
 const QUICK_PICKS = [150, 300, 600, 1000];
 
 // Begrüßungsfeld in beiden Farbmodi gleich: Tafelgrün mit weißer Schrift
@@ -227,7 +227,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
   const [langB, setLangB] = useState('Deutsch');
   const [genA, setGenA] = useState<LangCode>('en');
   const [genB, setGenB] = useState<LangCode>('de');
-  const max = GEN_MAX();
+  const max = GEN_MAX(genA);
   const [count, setCount] = useState(Math.min(FREE_WORD_LIMIT, max));
   const [countText, setCountText] = useState('');
   const limitReached = !data.premium && data.courses.length >= FREE_COURSE_LIMIT;
