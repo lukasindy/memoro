@@ -1744,7 +1744,7 @@ physical|körperlich|físico|physique|fisico
 professional|beruflich|profesional|professionnel|professionale
 practical|praktisch|práctico|pratique|pratico
 lucky|glücklich (Glück habend)|afortunado|chanceux|fortunato
-sour|sauer|ácido|aigre|aspro
+sour|sauer|agrio|aigre|aspro
 patient (calm)|geduldig|paciente (calmo)|patient (calme)|paziente (calmo)
 certainly|sicherlich|ciertamente|certainement|certamente
 definitely|bestimmt (sicher)|sin duda|sans aucun doute|sicuramente
@@ -1792,7 +1792,7 @@ to chat|plaudern|charlar|bavarder|chiacchierare
 to communicate|kommunizieren|comunicar|communiquer|comunicare
 to consider|erwägen|considerar|considérer|considerare
 to dare|wagen|atreverse|oser|osare
-to disagree|widersprechen|discrepar|désapprouver|dissentire
+to disagree|widersprechen|discrepar|ne pas être d'accord|dissentire
 to disappear|verschwinden|desaparecer|disparaître|scomparire
 to exchange|tauschen|intercambiar|échanger|scambiare
 to express|ausdrücken|expresar|exprimer|esprimere
@@ -2167,7 +2167,7 @@ intake|die Aufnahme|la ingesta|l'apport|l'assunzione
 introduction|die Einführung|la introducción|l'introduction|l'introduzione
 invention|die Erfindung|el invento|l'invention|l'invenzione
 jazz|der Jazz|el jazz|le jazz|il jazz
-jewellery|der Schmuck|la joyería|la bijouterie|la gioielleria
+jewellery|der Schmuck|las joyas|les bijoux|i gioielli
 lab|das Labor|el laboratorio|le labo|il laboratorio
 laughter|das Gelächter|la risa|le rire|la risata
 leader|der Anführer|el líder|le chef|il capo
@@ -2334,7 +2334,7 @@ to chew|kauen|masticar|mâcher|masticare
 to sneeze|niesen|estornudar|éternuer|starnutire
 to yawn|gähnen|bostezar|bâiller|sbadigliare
 to blink|blinzeln|parpadear|cligner des yeux|sbattere le palpebre
-to clap|klatschen|aplaudir|applaudir|applaudire
+to clap|klatschen|dar palmas|battre des mains|battere le mani
 to whistle|pfeifen|silbar|siffler|fischiare
 to hum|summen|tararear|fredonner|canticchiare
 to mumble|nuscheln|murmurar|marmonner|borbottare
@@ -2479,7 +2479,7 @@ iron|das Eisen|el hierro|le fer|il ferro
 steel|der Stahl|el acero|l'acier|l'acciaio
 computer mouse|die Computermaus|el ratón (ordenador)|la souris d'ordinateur|il mouse
 folder|der Ordner|la carpeta|le dossier|la cartella
-software|die Software|el programa|le logiciel|il software
+software|die Software|el software|le logiciel|il software
 signal|das Signal|la señal|le signal|il segnale
 charger|das Ladegerät|el cargador|le chargeur|il caricabatterie
 headphones|die Kopfhörer|los auriculares|les écouteurs|le cuffie
@@ -2552,7 +2552,7 @@ tuna|der Thunfisch|el atún|le thon|il tonno
 salmon|der Lachs|el salmón|le saumon|il salmone
 pancake|der Pfannkuchen|la tortita|la crêpe|la frittella
 waffle|die Waffel|el gofre|la gaufre|il waffle
-cereal|das Müsli|los cereales|les céréales|i cereali
+cereal|das Getreide|los cereales|les céréales|i cereali
 yoghurt|der Joghurt|el yogur|le yaourt|lo yogurt
 mustard|der Senf|la mostaza|la moutarde|la senape
 ketchup|der Ketchup|el kétchup|le ketchup|il ketchup
@@ -3173,14 +3173,14 @@ crooked|schief|torcido|tordu|storto
 damp|feucht|húmedo|humide|umido
 dependent|abhängig|dependiente|dépendant|dipendente
 drunk|betrunken|borracho|ivre|ubriaco
-elderly|älter|anciano|âgé|anziano
+elderly|betagt|anciano|âgé|anziano
 eternal|ewig|eterno|éternel|eterno
 experienced|erfahren|experimentado|expérimenté|esperto
 fascinating|faszinierend|fascinante|fascinant|affascinante
 fashionable|modisch|de moda|à la mode|alla moda
 frightened|verängstigt|asustado|effrayé|spaventato
 frozen|gefroren|congelado|gelé|congelato
-imaginary|eingebildet|imaginario|imaginaire|immaginario
+imaginary|imaginär|imaginario|imaginaire|immaginario
 impressive|beeindruckend|impresionante|impressionnant|impressionante
 indirect|indirekt|indirecto|indirect|indiretto
 liquid|flüssig|líquido|liquide|liquido
@@ -3192,7 +3192,7 @@ outdoor|im Freien|al aire libre|extérieur|all'aperto
 parallel|parallel|paralelo|parallèle|parallelo
 peaceful|friedlich|pacífico|paisible|pacifico
 pleasant|angenehm|agradable|agréable|piacevole
-plenty|reichlich viel|mucho|beaucoup|molto
+plenty|jede Menge|mucho|beaucoup|molto
 powerful|mächtig|poderoso|puissant|potente
 primary|primär|primario|primaire|primario
 reasonable|vernünftig|razonable|raisonnable|ragionevole
@@ -3294,7 +3294,7 @@ attempt|der Versuch|el intento|la tentative|il tentativo
 attraction|die Attraktion|la atracción|l'attraction|l'attrazione
 backing|die Unterstützung|el respaldo|le soutien|il sostegno
 backup|die Sicherung|la copia de seguridad|la sauvegarde|il backup
-ballot|die Wahl|la papeleta|le bulletin de vote|la scheda elettorale
+ballot|der Stimmzettel|la papeleta|le bulletin de vote|la scheda elettorale
 base|die Basis|la base|la base|la base
 to base|gründen auf|basar|baser|basare
 battle|die Schlacht|la batalla|la bataille|la battaglia
@@ -3472,7 +3472,7 @@ intelligence|die Intelligenz|la inteligencia|l'intelligence|l'intelligenza
 intensive|intensiv|intensivo|intensif|intensivo
 intent|die Absicht|la intención|l'intention|l'intento
 interim|vorläufig|provisional|provisoire|provvisorio
-interior|innen|interior|intérieur|interno
+interior|das Innere|interior|intérieur|interno
 involved|beteiligt|implicado|impliqué|coinvolto
 jail|das Gefängnis|la cárcel|la prison|la prigione
 journal|die Fachzeitschrift|la revista especializada|la revue|la rivista specializzata
@@ -3515,7 +3515,7 @@ narrative|die Erzählung|la narrativa|le récit|la narrazione
 native|einheimisch|nativo|natif|nativo
 necessarily|notwendigerweise|necesariamente|nécessairement|necessariamente
 nevertheless|trotzdem|sin embargo|néanmoins|tuttavia
-nominee|der Kandidat|el candidato nominado|le nominé|il candidato designato
+nominee|der Nominierte|el candidato nominado|le nominé|il candidato designato
 northern|nördlich|del norte|du nord|settentrionale
 nuclear|nuklear|nuclear|nucléaire|nucleare
 nutrition|die Ernährung|la nutrición|la nutrition|la nutrizione
@@ -3745,7 +3745,7 @@ universe|das Universum|el universo|l'univers|l'universo
 shallow|seicht|poco profundo|peu profond|poco profondo
 golden|golden|dorado|doré|dorato
 sensitive|empfindlich|sensible|sensible|sensibile
-ashamed|beschämt|avergonzado (de algo)|honteux|vergognoso
+ashamed|beschämt|avergonzado (de algo)|honteux|mortificato
 unique|einzigartig|único|unique|unico
 rural|ländlich|rural|rural|rurale
 military|militärisch|militar|militaire|militare
@@ -4225,7 +4225,7 @@ tragic|tragisch|trágico|tragique|tragico
 universal|universell|universal|universel|universale
 unknown|unbekannt|desconocido|inconnu|sconosciuto
 upper|obere|superior|supérieur|superiore
-vast|riesig weit|vasto|vaste|vasto
+vast|ausgedehnt|vasto|vaste|vasto
 vital|lebenswichtig|vital|vital|vitale
 wealthy|wohlhabend|adinerado|fortuné|benestante
 composer|der Komponist|el compositor|le compositeur|il compositore
@@ -4554,7 +4554,7 @@ operator|der Betreiber|el operador|l'opérateur|l'operatore
 to oppose|bekämpfen|oponerse|s'opposer|opporsi
 organ|das Organ|el órgano|l'organe|l'organo
 outer|äußere|exterior|extérieur|esterno
-outfit|das Outfit|el conjunto|la tenue|l'abbinamento
+outfit|das Outfit|el conjunto|la tenue|il completo
 outline|der Umriss|el esquema|le contour|lo schema
 overnight|über Nacht|de la noche a la mañana|du jour au lendemain|dall'oggi al domani
 oxygen|der Sauerstoff|el oxígeno|l'oxygène|l'ossigeno
@@ -4757,7 +4757,7 @@ to tolerate|dulden|tolerar|tolérer|tollerare
 to verify|verifizieren|verificar|vérifier|verificare
 to yield|nachgeben|ceder|céder|cedere
 to sigh|seufzen|suspirar|soupirer|sospirare
-to applaud|Beifall spenden|ovacionar|ovationner|acclamare
+to applaud|Beifall spenden|aplaudir|applaudir|applaudire
 to spy|spionieren|espiar|espionner|spiare
 to kidnap|entführen|secuestrar|enlever|rapire
 to torture|foltern|torturar|torturer|torturare
@@ -5073,7 +5073,7 @@ to fly away|wegfliegen|echar a volar|s'envoler|volare via
 to fold laundry|Wäsche zusammenlegen|doblar la ropa|plier le linge|piegare il bucato
 to forbid smoking|das Rauchen verbieten|prohibir fumar|interdire de fumer|vietare di fumare
 to forecast weather|das Wetter vorhersagen|pronosticar el tiempo|prévoir le temps|prevedere il tempo
-to forget about|vergessen auf|olvidarse de|oublier|dimenticarsi di
+to forget about|etwas vergessen|olvidarse de|oublier|dimenticarsi di
 to form a group|eine Gruppe bilden|formar un grupo|former un groupe|formare un gruppo
 to gamble|zocken|jugar|jouer de l'argent|giocare d'azzardo
 to gather information|Informationen sammeln|recopilar información|recueillir des informations|raccogliere informazioni
@@ -5195,7 +5195,7 @@ to set off|aufbrechen|ponerse en camino|se mettre en route|mettersi in cammino
 to shake hands|sich die Hand geben|darse la mano|se serrer la main|stringersi la mano
 to shop online|online einkaufen|comprar en línea|faire des achats en ligne|fare acquisti online
 to shrink|schrumpfen|encoger|rétrécir|restringersi
-to sit still|stillsitzen|estarse quieto|rester assis|stare seduto
+to sit still|stillsitzen|estarse quieto|se tenir tranquille|stare fermo
 to skip|überspringen|saltarse|sauter|saltare
 to sleep in|ausschlafen|dormir hasta tarde|faire la grasse matinée|dormire fino a tardi
 to slow down|langsamer werden|reducir la velocidad|ralentir|rallentare
@@ -5204,7 +5204,7 @@ to soak|einweichen|remojar|tremper|mettere a bagno
 to spell a word|ein Wort buchstabieren|deletrear una palabra|épeler un mot|compitare una parola
 to spread butter|Butter streichen|untar mantequilla|tartiner du beurre|spalmare il burro
 to sprinkle|streuen|espolvorear|saupoudrer|spolverare
-to stand for|stehen für|representar|signifier|stare per
+to stand for|stehen für|representar|signifier|simboleggiare
 to start a car|ein Auto starten|arrancar un coche|démarrer une voiture|avviare un'auto
 to stay at home|zu Hause bleiben|quedarse en casa|rester à la maison|stare a casa
 to steer|lenken|dirigir|diriger|sterzare
@@ -5291,7 +5291,7 @@ admirable|bewundernswert|admirable|admirable|ammirevole
 adorable|entzückend|adorable|adorable|adorabile
 affectionate|liebevoll|cariñoso|affectueux|affettuoso
 agile|flink|ágil|agile|agile
-amateur|laienhaft|aficionado|amateur|dilettante
+amateur|der Laie|aficionado|amateur|dilettante
 ample|reichlich bemessen|amplio|ample|ampio
 awkward|unbeholfen|torpe|maladroit|goffo
 bare|nackt|desnudo|nu|nudo
@@ -5500,7 +5500,7 @@ aesthetic|ästhetisch|estético|esthétique|estetico
 affection|die Zuneigung|el cariño|l'affection|l'affetto
 aggression|die Aggression|la agresión|l'agression|l'aggressione
 agricultural|landwirtschaftlich|agrícola|agricole|agricolo
-aide|der Berater|el asesor|le conseiller|il collaboratore
+aide|der Helfer|el ayudante|le collaborateur|il collaboratore
 albeit|wenngleich|aunque|bien que|sebbene
 algorithm|der Algorithmus|el algoritmo|l'algorithme|l'algoritmo
 alignment|die Ausrichtung|la alineación|l'alignement|l'allineamento
@@ -5588,7 +5588,7 @@ charming|reizvoll|encantador|charmant|affascinante
 charter|die Charta|la carta|la charte|la carta
 chill|die Kühle|el frío|la fraîcheur|il brivido
 chronic|chronisch|crónico|chronique|cronico
-chunk|der Brocken|el trozo grande|le gros morceau|il pezzo grosso
+chunk|der Brocken|el trozo grande|le gros morceau|il grosso pezzo
 to circulate|zirkulieren|circular|circuler|circolare
 circulation|der Kreislauf|la circulación|la circulation|la circolazione
 citizenship|die Staatsbürgerschaft|la ciudadanía|la citoyenneté|la cittadinanza
@@ -5840,7 +5840,7 @@ governance|die Regierungsführung|la gobernanza|la gouvernance|la governance
 grace|die Anmut|la gracia|la grâce|la grazia
 gravity|die Schwerkraft|la gravedad|la gravité|la gravità
 grid|das Gitter|la cuadrícula|la grille|la griglia
-grief|die Trauer|el dolor|le chagrin|il lutto
+grief|die Trauer|el dolor|le chagrin|il cordoglio
 gut|der Darm|el intestino|l'intestin|l'intestino
 hack|hacken|hackear|pirater|hackerare
 handful|die Handvoll|el puñado|la poignée|il pugno
@@ -6006,7 +6006,7 @@ to notify|benachrichtigen|notificar|notifier|notificare
 notorious|berüchtigt|notorio|notoire|famigerato
 objection|der Einwand|la objeción|l'objection|l'obiezione
 to oblige|verpflichten|obligar|obliger|obbligare
-to obsess|besessen machen|obsesionar|obséder|ossessionare
+to obsess|zwanghaft beschäftigen|obsesionar|obséder|ossessionare
 obsession|die Besessenheit|la obsesión|l'obsession|l'ossessione
 occasional|gelegentlich|ocasional|occasionnel|occasionale
 to offset|ausgleichen|compensar|compenser|compensare
@@ -6097,7 +6097,7 @@ punch|der Faustschlag|el puñetazo|le coup de poing|il pugno
 radar|das Radar|el radar|le radar|il radar
 radical|radikal|radical|radical|radicale
 rage|die Wut|la rabia|la rage|la rabbia
-raid|die Razzia|la redada|la descente|il blitz
+raid|die Razzia|la redada|la descente|la retata
 rally|die Kundgebung|el mitin|le rassemblement|il raduno
 ranking|die Rangliste|la clasificación|le classement|la classifica
 rape|die Vergewaltigung|la violación|le viol|lo stupro
