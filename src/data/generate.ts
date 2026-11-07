@@ -3,6 +3,7 @@ import { Course, Word, uid } from '../store';
 import { VOCAB } from './vocab';
 import { VOCAB2 } from './vocab2';
 import { VOCAB3 } from './vocab3';
+import { VOCAB4 } from './vocab4';
 import { SENTENCES } from './sentences';
 
 export const GEN_LANGS = [
@@ -22,7 +23,7 @@ let rows: Row[] | null = null;
 function vocab(): Row[] {
   if (!rows) {
     const seen = new Set<string>();
-    rows = (VOCAB.trim() + '\n' + VOCAB2.trim() + '\n' + VOCAB3.trim())
+    rows = (VOCAB.trim() + '\n' + VOCAB2.trim() + '\n' + VOCAB3.trim() + '\n' + VOCAB4.trim())
       .split('\n')
       .map((l) => l.split('|').map((x) => x.trim()))
       .filter((p) => p.length === COLS.length && p.every(Boolean))
