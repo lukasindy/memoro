@@ -230,7 +230,7 @@ export function confirm(message: string, onYes: () => void) {
 
 export function notify(message: string) {
   if (Platform.OS === 'web') window.alert(tr(message));
-  else Alert.alert('Memoro', tr(message));
+  else Alert.alert('Vokabula', tr(message));
 }
 
 const s = StyleSheet.create({

@@ -37,7 +37,7 @@ export const EXACT: Record<string, string> = {
  "Statistik": "Stats",
  "Einstellungen": "Settings",
  "Setz dir ein Lernziel": "Set a learning goal",
- "Bis wann willst du alle Wörter können? Memoro rechnet dir aus, wie viel du pro Tag schaffen musst.": "By when do you want to know all the words? Memoro works out how much you need to do per day.",
+ "Bis wann willst du alle Wörter können? Vokabula rechnet dir aus, wie viel du pro Tag schaffen musst.": "By when do you want to know all the words? Vokabula works out how much you need to do per day.",
  "Lernziel setzen": "Set goal",
  "Nicht jetzt": "Not now",
  "Du kannst das Lernziel jederzeit in den Einstellungen eintragen.": "You can set the goal at any time in the settings.",
@@ -59,7 +59,7 @@ export const EXACT: Record<string, string> = {
  "Noch keine Wörter": "No words yet",
  "Fast startklar": "Almost ready",
  "Füge mindestens": "Add at least",
- "Wörter hinzu. Memoro sortiert sie nach Schwierigkeit in Leicht, Mittel und Schwer und baut daraus deinen Lernpfad.": "words. Memoro sorts them by difficulty into Easy, Medium and Hard and builds your learning path from them.",
+ "Wörter hinzu. Vokabula sortiert sie nach Schwierigkeit in Leicht, Mittel und Schwer und baut daraus deinen Lernpfad.": "words. Vokabula sorts them by difficulty into Easy, Medium and Hard and builds your learning path from them.",
  "Zu den Vokabeln": "Go to words",
  "Schließe zuerst die vorherigen Lektionen ab.": "Finish the previous lessons first.",
  "Lektionen": "lessons",
@@ -128,7 +128,7 @@ export const EXACT: Record<string, string> = {
  "Lückensatz": "Fill in the blank",
  "Satz mit bekannten Wörtern vervollständigen": "Complete a sentence with known words",
  "Mit eigenen Beispielsätzen in der Vokabelliste": "With your own example sentences in the word list",
- "Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.": "At least one exercise must be active, otherwise Memoro introduces each word once.",
+ "Mindestens eine Übung muss aktiv sein, sonst stellt Vokabula jedes Wort einmal vor.": "At least one exercise must be active, otherwise Vokabula introduces each word once.",
  "Lernpfad": "Learning path",
  "Wörter pro Lektion": "Words per lesson",
  "Lektionen pro Abschnitt": "Lessons per section",
@@ -144,7 +144,7 @@ export const EXACT: Record<string, string> = {
  "Ein paar Minuten am Tag reichen, damit die Wörter hängen bleiben.": "A few minutes a day are enough for the words to stick.",
  "Premium ist aktiv": "Premium is active",
  "Premium holen": "Get Premium",
- "Hol dir mehr aus Memoro heraus.": "Get more out of Memoro.",
+ "Hol dir mehr aus Vokabula heraus.": "Get more out of Vokabula.",
  "Premium aktiv": "Premium active",
  ", es liegt etwas bereit": ", something is waiting",
  "Tag in Folge": "day in a row",
@@ -152,7 +152,7 @@ export const EXACT: Record<string, string> = {
  "So einfach geht’s": "It's that easy",
  "Kurs anlegen": "Create a course",
  "z. B. „Latein Kapitel 1–5“ oder „Englisch Business“": "e.g. “Latin chapters 1–5” or “Business English”",
- "Egal welches Format, Memoro erkennt Wort und Übersetzung": "Whatever the format, Memoro recognizes word and translation",
+ "Egal welches Format, Vokabula erkennt Wort und Übersetzung": "Whatever the format, Vokabula recognizes word and translation",
  "Loslernen": "Start learning",
  "Lektionen von leicht bis schwer, mit Mini-Prüfungen": "Lessons from easy to hard, with mini exams",
  "Ersten Kurs anlegen": "Create first course",
@@ -171,7 +171,7 @@ export const EXACT: Record<string, string> = {
  "z. B. Latein": "e.g. Latin",
  "Die Lernsprache steht in deiner Liste links, deine Sprache rechts. Falls es andersherum ist, kannst du das beim Einfügen tauschen.": "The target language is on the left of your list, your language on the right. If it is the other way round, you can swap them when pasting.",
  "Kurs anlegen und Wörter hinzufügen": "Create course and add words",
- "Memoro erstellt dir einen Kurs mit dem Grundwortschatz, sortiert nach Häufigkeit: die wichtigsten Wörter zuerst, sauber gedrittelt in Leicht, Mittel und Schwer. Dazu gibt es Lückensätze mit Wörtern, die du schon kennst.": "Memoro creates a course with the core vocabulary, sorted by frequency: the most important words first, neatly split into thirds of Easy, Medium and Hard. It also includes fill-in-the-blank sentences with words you already know.",
+ "Vokabula erstellt dir einen Kurs mit dem Grundwortschatz, sortiert nach Häufigkeit: die wichtigsten Wörter zuerst, sauber gedrittelt in Leicht, Mittel und Schwer. Dazu gibt es Lückensätze mit Wörtern, die du schon kennst.": "Vokabula creates a course with the core vocabulary, sorted by frequency: the most important words first, neatly split into thirds of Easy, Medium and Hard. It also includes fill-in-the-blank sentences with words you already know.",
  "Gratis-Version": "Free version",
  "Eigene Anzahl:": "Custom amount:",
  "Eigene Anzahl Wörter": "Custom number of words",
@@ -184,7 +184,7 @@ export const EXACT: Record<string, string> = {
  "Schwer": "Hard",
  "Backup laden? Deine aktuellen Kurse werden dabei ersetzt.": "Load backup? Your current courses will be replaced.",
  "Backup geladen.": "Backup loaded.",
- "Diese Datei ist kein Memoro-Backup.": "This file is not a Memoro backup.",
+ "Diese Datei ist kein Vokabula-Backup.": "This file is not a Vokabula backup.",
  "Premium (Test)": "Premium (test)",
  "Schaltet Premium-Funktionen zum Testen frei. In der Store-Version ersetzt das der In-App-Kauf.": "Unlocks Premium features for testing. In the store version this is replaced by the in-app purchase.",
  "Premium testen": "Test Premium",
@@ -194,7 +194,7 @@ export const EXACT: Record<string, string> = {
  "Backup-Inhalt hier einfügen": "Paste backup content here",
  "Alle Daten löschen": "Delete all data",
  "Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.": "Delete all courses, words and progress? This cannot be undone.",
- "Memoro 3.8 – Testversion": "Memoro 3.8 – Test version",
+ "Vokabula 3.8 – Testversion": "Vokabula 3.8 – Test version",
  "Kamera": "Camera",
  "Vokabellisten aus Buch oder Heft einfach abfotografieren": "Just photograph vocabulary lists from a book or notebook",
  "Beliebig viele Kurse": "Any number of courses",
@@ -290,12 +290,12 @@ export const EXACT: Record<string, string> = {
  "Speichern und später fortsetzen": "Save and continue later",
  "Beenden ohne Speichern": "Quit without saving",
  "Stimme wählen": "Choose voice",
- "Memoro nimmt die beste Stimme": "Memoro uses the best voice",
+ "Vokabula nimmt die beste Stimme": "Vokabula uses the best voice",
  "· empfohlen": "· recommended",
  "Auf diesem Gerät meldet der Browser keine Stimmen.": "On this device the browser reports no voices.",
  "Klingt es roboterhaft?": "Does it sound robotic?",
- "Am iPhone nutzt Memoro die Stimmen des Geräts. Lade eine bessere herunter: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Sprache wählen → eine Stimme mit „Verbessert“ oder „Premium“ laden. Danach hier auswählen.": "On iPhone Memoro uses the device's voices. Download a better one: Settings → Accessibility → Spoken Content → Voices → choose language → download a voice marked “Enhanced” or “Premium”. Then choose it here.",
- "Memoro nutzt die Stimmen deines Geräts. Bessere Stimmen kannst du in den Systemeinstellungen laden.": "Memoro uses your device's voices. You can download better voices in the system settings.",
+ "Am iPhone nutzt Vokabula die Stimmen des Geräts. Lade eine bessere herunter: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Sprache wählen → eine Stimme mit „Verbessert“ oder „Premium“ laden. Danach hier auswählen.": "On iPhone Vokabula uses the device's voices. Download a better one: Settings → Accessibility → Spoken Content → Voices → choose language → download a voice marked “Enhanced” or “Premium”. Then choose it here.",
+ "Vokabula nutzt die Stimmen deines Geräts. Bessere Stimmen kannst du in den Systemeinstellungen laden.": "Vokabula uses your device's voices. You can download better voices in the system settings.",
  "Fertig": "Done",
  "Zurück": "Back",
  "‹ Zurück": "‹ Back",
@@ -324,7 +324,7 @@ export const EXACT: Record<string, string> = {
  "Spanisch": "Spanish",
  "Französisch": "French",
  "Italienisch": "Italian",
- "In deinem Kurs stehen kaum Wörter, die Memoro für Sätze nutzen kann. Trag Beispielsätze in der Vokabelliste ein oder füge Grundwortschatz hinzu.": "Your course has hardly any words Memoro can use for sentences. Add example sentences in the word list or add core vocabulary.",
+ "In deinem Kurs stehen kaum Wörter, die Vokabula für Sätze nutzen kann. Trag Beispielsätze in der Vokabelliste ein oder füge Grundwortschatz hinzu.": "Your course has hardly any words Vokabula can use for sentences. Add example sentences in the word list or add core vocabulary.",
  "fehlt dir noch 1 Wort": "you still need 1 word",
  "Gedankenstrich": "em dash",
  "Bindestrich": "hyphen",
@@ -352,8 +352,8 @@ export const RULES: [string, string][] = [
   "Saves your error-free streak if you make a mistake after 5 correct answers in a row. Used automatically. You get one every 2nd level and at streak milestones. Your longest streak: $1."
  ],
  [
-  "Gilt für ${} Wörter. Bei ${} Wörtern pro Lektion rechnet Memoro automatisch auf ${} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${} → ${}.",
-  "Applies to $1 words. With $2 words per lesson Memoro automatically scales up to $3 tasks so each word comes up about equally often. New words first appear in direction $4 → $5."
+  "Gilt für ${} Wörter. Bei ${} Wörtern pro Lektion rechnet Vokabula automatisch auf ${} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${} → ${}.",
+  "Applies to $1 words. With $2 words per lesson Vokabula automatically scales up to $3 tasks so each word comes up about equally often. New words first appear in direction $4 → $5."
  ],
  [
   "Für ${} gibt es keine eingebauten Sätze. Trag in der Vokabelliste zu einigen Wörtern Beispielsätze ein, dann kommen Lückensätze.",
@@ -384,12 +384,12 @@ export const RULES: [string, string][] = [
   "You need at least $1% for the final exam. Practice a bit more and then try again."
  ],
  [
-  "In der Gratis-Version sind bis zu ${} Wörter möglich, Memoro nimmt ${}. Mit Premium wählst du mehr.",
-  "The free version allows up to $1 words, Memoro takes $2. With Premium you can choose more."
+  "In der Gratis-Version sind bis zu ${} Wörter möglich, Vokabula nimmt ${}. Mit Premium wählst du mehr.",
+  "The free version allows up to $1 words, Vokabula takes $2. With Premium you can choose more."
  ],
  [
-  "Derzeit sind ${} Wörter im Grundwortschatz verfügbar, Memoro nimmt alle davon.",
-  "Currently $1 words are available in the core vocabulary, Memoro takes all of them."
+  "Derzeit sind ${} Wörter im Grundwortschatz verfügbar, Vokabula nimmt alle davon.",
+  "Currently $1 words are available in the core vocabulary, Vokabula takes all of them."
  ],
  [
   "${} ${} darauf, hinzugefügt zu werden. Mit Premium gibt es kein Limit.",
