@@ -61,12 +61,12 @@ export function Home({ data, go }: ScreenProps) {
     <View style={{ gap: 22 }}>
       {/* Kopfzeile: Premium + Einstellungen */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 44 }}>
-        <Text style={{ color: t.primary, fontSize: 22, fontWeight: '900', letterSpacing: -0.5 }}>Memoro</Text>
+        <Text style={{ color: t.primary, fontSize: 22, fontWeight: '900', letterSpacing: -0.5 }}>Vokabula</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={data.premium ? 'Premium ist aktiv' : 'Premium holen'}
-            onPress={() => go({ name: 'premium', reason: 'Hol dir mehr aus Memoro heraus.' })}
+            onPress={() => go({ name: 'premium', reason: 'Hol dir mehr aus Vokabula heraus.' })}
             style={({ pressed }) => ({
               flexDirection: 'row',
               alignItems: 'center',
@@ -152,7 +152,7 @@ export function Home({ data, go }: ScreenProps) {
           <H2>So einfach geht’s</H2>
           {[
             { icon: 'add-circle' as const, title: 'Kurs anlegen', text: 'z. B. „Latein Kapitel 1–5“ oder „Englisch Business“' },
-            { icon: 'clipboard' as const, title: 'Liste einfügen', text: 'Egal welches Format, Memoro erkennt Wort und Übersetzung' },
+            { icon: 'clipboard' as const, title: 'Liste einfügen', text: 'Egal welches Format, Vokabula erkennt Wort und Übersetzung' },
             { icon: 'map' as const, title: 'Loslernen', text: 'Lektionen von leicht bis schwer, mit Mini-Prüfungen' },
           ].map((x, k) => (
             <View key={x.title} style={{ flexDirection: 'row', gap: 14, alignItems: 'center' }}>
@@ -326,7 +326,7 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
         </>
       ) : (
         <>
-          <P muted>Memoro erstellt dir einen Kurs mit dem Grundwortschatz, sortiert nach Häufigkeit: die wichtigsten Wörter zuerst, sauber gedrittelt in Leicht, Mittel und Schwer. Dazu gibt es Lückensätze mit Wörtern, die du schon kennst.</P>
+          <P muted>Vokabula erstellt dir einen Kurs mit dem Grundwortschatz, sortiert nach Häufigkeit: die wichtigsten Wörter zuerst, sauber gedrittelt in Leicht, Mittel und Schwer. Dazu gibt es Lückensätze mit Wörtern, die du schon kennst.</P>
           <View style={{ gap: 8 }}>
             <Text style={{ color: t.muted, fontSize: 14, fontWeight: '600' }}>Lernsprache</Text>
             {chips(genA, (v) => { setGenA(v); if (v === genB) setGenB(v === 'de' ? 'en' : 'de'); }, '' as LangCode)}
@@ -376,8 +376,8 @@ export function NewCourse({ data, update, back, replace, go }: ScreenProps) {
                 {parseInt(countText, 10) > cap && (
                   <P muted style={{ fontSize: 13 }}>
                     {!data.premium && cap < max
-                      ? `In der Gratis-Version sind bis zu ${FREE_WORD_LIMIT} Wörter möglich, Memoro nimmt ${cap}. Mit Premium wählst du mehr.`
-                      : `Derzeit sind ${max} Wörter im Grundwortschatz verfügbar, Memoro nimmt alle davon.`}
+                      ? `In der Gratis-Version sind bis zu ${FREE_WORD_LIMIT} Wörter möglich, Vokabula nimmt ${cap}. Mit Premium wählst du mehr.`
+                      : `Derzeit sind ${max} Wörter im Grundwortschatz verfügbar, Vokabula nimmt alle davon.`}
                   </P>
                 )}
                 {amount < MIN_WORDS && <P muted style={{ fontSize: 13 }}>Für Lektionen brauchst du mindestens {MIN_WORDS} Wörter.</P>}
@@ -414,7 +414,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         notify('Backup geladen.');
       });
     } catch {
-      notify('Diese Datei ist kein Memoro-Backup.');
+      notify('Diese Datei ist kein Vokabula-Backup.');
     }
   };
 
@@ -476,7 +476,7 @@ export function Settings({ data, update, back }: ScreenProps) {
         label="Alle Daten löschen"
         onPress={() => confirm('Alle Kurse, Wörter und Fortschritte löschen? Das lässt sich nicht rückgängig machen.', () => update((d0) => ({ ...emptyData(), ui: d0.ui })))}
       />
-      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Memoro 3.8 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
+      <P muted style={{ textAlign: 'center', fontSize: 13 }}>Vokabula 3.8 – Testversion{BUILD_ID ? ` · Build ${BUILD_ID.slice(0, 7)}` : ''}</P>
     </View>
   );
 }
@@ -495,7 +495,7 @@ export function Premium({ back, update, data, reason }: ScreenProps & { reason: 
         <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: t.onCard, alignItems: 'center', justifyContent: 'center' }}>
           <Ionicons name="diamond" size={32} color={t.card} />
         </View>
-        <Text style={{ color: t.onCard, fontSize: 28, fontWeight: '900', letterSpacing: -0.5 }}>Memoro Premium</Text>
+        <Text style={{ color: t.onCard, fontSize: 28, fontWeight: '900', letterSpacing: -0.5 }}>Vokabula Premium</Text>
         <Text style={{ color: t.onCard, fontSize: 15, textAlign: 'center', opacity: 0.9 }}>{reason}</Text>
       </View>
       <Panel style={{ gap: 16 }}>

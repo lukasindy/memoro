@@ -111,7 +111,7 @@ function LearnGoal({ c, setCourse, openSettings }: { c: CourseT; setCourse: SetC
           </View>
           <View style={{ flex: 1, gap: 2 }}>
             <Text style={{ color: t.ink, fontSize: 16, fontWeight: '900' }}>Setz dir ein Lernziel</Text>
-            <Text style={{ color: t.muted, fontSize: 14 }}>Bis wann willst du alle Wörter können? Memoro rechnet dir aus, wie viel du pro Tag schaffen musst.</Text>
+            <Text style={{ color: t.muted, fontSize: 14 }}>Bis wann willst du alle Wörter können? Vokabula rechnet dir aus, wie viel du pro Tag schaffen musst.</Text>
           </View>
         </View>
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
@@ -225,7 +225,7 @@ function LearnTab({ c, go, sec, setSec, openVocab }: { c: CourseT; go: ScreenPro
     return (
       <Panel>
         <H2>{c.words.length === 0 ? 'Noch keine Wörter' : 'Fast startklar'}</H2>
-        <P muted>Füge mindestens {MIN_WORDS} Wörter hinzu. Memoro sortiert sie nach Schwierigkeit in Leicht, Mittel und Schwer und baut daraus deinen Lernpfad.</P>
+        <P muted>Füge mindestens {MIN_WORDS} Wörter hinzu. Vokabula sortiert sie nach Schwierigkeit in Leicht, Mittel und Schwer und baut daraus deinen Lernpfad.</P>
         <Btn label="Zu den Vokabeln" onPress={openVocab} />
       </Panel>
     );
@@ -397,7 +397,7 @@ function MiniStep({ node, color, best, offset, onPress }: { node: PathNode; colo
   );
 }
 
-// Lernpfad-Schritt als Karteikarte (Memoro-eigene Optik)
+// Lernpfad-Schritt als Karteikarte (Vokabula-eigene Optik)
 function PathStep(props: { node: PathNode; color: string; best?: number; paused?: boolean; offset: number; onPress: () => void }) {
   if (props.node.kind === 'unitTest') return <MiniStep {...props} />;
   const { node, color, best, paused, offset, onPress } = props;
@@ -939,7 +939,7 @@ function SettingsTab({ c, setCourse, onDelete }: { c: CourseT; setCourse: SetCou
         <Stepper label="Buchstaben-Puzzle" hint="Wort aus Buchstaben zusammensetzen" value={m.build} min={0} max={10} onChange={(v) => setMix('build', v)} />
         <Stepper label="Lückensatz" hint={codeOf(c.langA) || c.gen ? 'Satz mit bekannten Wörtern vervollständigen' : 'Mit eigenen Beispielsätzen in der Vokabelliste'} value={m.cloze} min={0} max={10} onChange={(v) => setMix('cloze', v)} />
         <ClozeInfo c={c} setCourse={setCourse} />
-        <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Memoro jedes Wort einmal vor.' : `Gilt für ${MIX_BASE_WORDS} Wörter. Bei ${c.wordsPerLesson} Wörtern pro Lektion rechnet Memoro automatisch auf ${scaledTotal(m, c.wordsPerLesson)} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
+        <P muted>{total === 0 ? 'Mindestens eine Übung muss aktiv sein, sonst stellt Vokabula jedes Wort einmal vor.' : `Gilt für ${MIX_BASE_WORDS} Wörter. Bei ${c.wordsPerLesson} Wörtern pro Lektion rechnet Vokabula automatisch auf ${scaledTotal(m, c.wordsPerLesson)} Aufgaben hoch, damit jedes Wort etwa gleich oft drankommt. Neue Wörter kommen zuerst in Richtung ${c.langA} → ${c.langB}.`}</P>
       </Panel>
 
       <Panel>

@@ -40,15 +40,15 @@ export function VoiceSheet({ visible, langName, onClose }: { visible: boolean; l
         <Pressable onPress={() => {}} style={{ width: '100%', maxWidth: 620, maxHeight: '85%', backgroundColor: t.surface, borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 22, gap: 12 }}>
           <Text style={{ color: t.ink, fontSize: 22, fontWeight: '900' }}>Stimme wählen</Text>
           <ScrollView contentContainerStyle={{ gap: 8 }}>
-            {row('auto', 'Automatisch', 'Memoro nimmt die beste Stimme', sel === null, () => pick(null))}
+            {row('auto', 'Automatisch', 'Vokabula nimmt die beste Stimme', sel === null, () => pick(null))}
             {list.map((v) => row(v.id, v.name, `${v.tag}${v.best ? ' · empfohlen' : ''}`, sel === v.id, () => pick(v.id)))}
             {list.length === 0 && <Text style={{ color: t.muted, fontSize: 14 }}>Auf diesem Gerät meldet der Browser keine Stimmen.</Text>}
             <View style={{ backgroundColor: t.bg, borderRadius: 14, padding: 14, marginTop: 6 }}>
               <Text style={{ color: t.ink, fontSize: 14, fontWeight: '800', marginBottom: 4 }}>Klingt es roboterhaft?</Text>
               <Text style={{ color: t.muted, fontSize: 14, lineHeight: 20 }}>
                 {Platform.OS === 'web'
-                  ? 'Am iPhone nutzt Memoro die Stimmen des Geräts. Lade eine bessere herunter: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Sprache wählen → eine Stimme mit „Verbessert“ oder „Premium“ laden. Danach hier auswählen.'
-                  : 'Memoro nutzt die Stimmen deines Geräts. Bessere Stimmen kannst du in den Systemeinstellungen laden.'}
+                  ? 'Am iPhone nutzt Vokabula die Stimmen des Geräts. Lade eine bessere herunter: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Sprache wählen → eine Stimme mit „Verbessert“ oder „Premium“ laden. Danach hier auswählen.'
+                  : 'Vokabula nutzt die Stimmen deines Geräts. Bessere Stimmen kannst du in den Systemeinstellungen laden.'}
               </Text>
             </View>
           </ScrollView>
