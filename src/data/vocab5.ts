@@ -590,8 +590,8 @@ to stand|stehen|estar de pie|être debout|stare in piedi
 to get dressed|sich anziehen|vestirse|s'habiller|vestirsi
 to have a shower|duschen|ducharse|se doucher|fare la doccia
 to listen|zuhören|escuchar|écouter|ascoltare
-to watch|anschauen|mirar|regarder|guardare
-to look|schauen|observar|observer|osservare
+to watch|anschauen|observar|observer|osservare
+to look|schauen|mirar|regarder|guardare
 to study|studieren|estudiar|étudier|studiare
 to teach|unterrichten|enseñar|enseigner|insegnare
 to spell|buchstabieren|deletrear|épeler|compitare
@@ -824,7 +824,7 @@ taxi|das Taxi|el taxi|le taxi|il taxi
 tram|die Straßenbahn|el tranvía|le tramway|il tram
 platform|der Bahnsteig|el andén|le quai|il binario
 customs|der Zoll|la aduana|la douane|la dogana
-sightseeing|die Sehenswürdigkeit|el lugar de interés|le site touristique|l'attrazione turistica
+sightseeing|das Sightseeing|las visitas turísticas|la visite touristique|il giro turistico
 guide|der Reiseführer|el guía|le guide|la guida
 brochure|die Broschüre|el folleto|la brochure|l'opuscolo
 excursion|der Ausflug|la excursión|l'excursion|la gita
